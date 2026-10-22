@@ -128,11 +128,17 @@ details.card summary{cursor:pointer}
   body{background:#fff}
   main>*:not(#printArea){display:none!important}
   #printArea{display:block}
-  .slips{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-  .slip{border:1px dashed #999;padding:14px 10px;text-align:center;font-size:12pt;break-inside:avoid}
-  .slip b{display:block;font-size:26pt;letter-spacing:.1em;margin:4px 0}
-  .slip .slipname{display:block;font-size:13pt;font-weight:700;margin-bottom:4px}
-  .keylist{border-collapse:collapse;width:100%;font-size:12pt;break-before:page}
+  .slips{width:100%;border-collapse:collapse;table-layout:fixed;break-after:page;page-break-after:always}
+  .slips tr{break-inside:avoid;page-break-inside:avoid}
+  .slip{border:1px dashed #999;height:35mm;padding:1.5mm 2mm;text-align:center;vertical-align:middle;font-size:9pt;line-height:1.2;overflow:hidden;break-inside:avoid;page-break-inside:avoid}
+  .slip .sliplbl{display:block;color:#555}
+  .slip.empty{border:none}
+  .slip small{display:block;font-size:6.5pt;color:#555}
+  .slip b{display:block;font-size:22pt;letter-spacing:.1em;margin:1mm 0}
+  .slip .slipname{display:block;font-size:11pt;font-weight:700;margin-bottom:1mm}
+  .keylist{border-collapse:collapse;width:100%;font-size:12pt}
+  .keylist tr{break-inside:avoid;page-break-inside:avoid}
+  @page{size:A4;margin:12mm}
   .keylist td,.keylist th{border:1px solid #999;padding:6px 8px;text-align:left}
   .keylist td:first-child{width:5em;font-weight:700;text-align:center}
 }
@@ -211,3 +217,5 @@ button.mini{padding:.3rem .9rem;font-size:.95rem;min-height:40px}
 .keys .key.del{color:#b42318}
 .tprev{min-height:1.6em;margin:.2rem 0 .4rem}
 .tprev .prevterm{font-size:1.25rem;font-weight:600;margin-left:.3em}
+.filebtn{display:inline-flex;align-items:center;min-height:44px;padding:.55rem .9rem;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:600}
+.filebtn.primaryfile{background:var(--sea);border-color:var(--sea);color:#fff}
