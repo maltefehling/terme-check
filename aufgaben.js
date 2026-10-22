@@ -371,25 +371,6 @@ const G = {
       hint: 'Löse die erste Klammer mit der binomischen Formel auf. Das Minus vor der zweiten Klammer dreht jedes Vorzeichen darin um.',
       sol: [`= ${poly([1, X2(v)], [2 * a, v], [a * a, ''])} ${MI} ${X2(v)} ${MI} ${b}x`, `= ${res}`] });
   },
-  raetselMaschine() {
-    const a = R(2, 5), x0 = R(2, 12), c = 2 * a * x0 + a * a;
-    return { title: 'Zahlenrätsel', q: `„Ich denke mir eine Zahl. Ich addiere <b>${a}</b>, nehme das Ergebnis mal sich selbst und ziehe dann meine Zahl mal sich selbst ab. Ich erhalte <b>${c}</b>.“<br>Welche Zahl habe ich mir gedacht?`, type: 'num', ans: x0, pre: 'Zahl:',
-      hint: `Schreibe x für die gedachte Zahl: (x + ${a})² − x² = ${c}. Löse die Klammer mit der binomischen Formel auf – x² fällt weg.`,
-      sol: [`(x + ${a})² − x² = ${c}`, `x² + ${2 * a}x + ${a * a} − x² = ${c}`, `${2 * a}x + ${a * a} = ${c}`, `${2 * a}x = ${c - a * a}`, `x = ${x0}`] };
-  },
-  raetselMal() {
-    const a = R(2, 9), k = R(2, 7), x0 = R(1, 12), c = k * (x0 + a);
-    return { title: 'Zahlenrätsel', q: `„Ich addiere zu meiner Zahl <b>${a}</b> und nehme die Summe mal <b>${k}</b>. Ich erhalte <b>${c}</b>.“<br>Welche Zahl ist es?`, type: 'num', ans: x0, pre: 'Zahl:',
-      hint: `Schreibe x für die Zahl. Die Summe kommt in eine Klammer: (x + ${a}) · ${k} = ${c}.`,
-      sol: [`(x + ${a}) · ${k} = ${c}`, `${k}x + ${k * a} = ${c}`, `${k}x = ${c - k * a}`, `x = ${x0}`] };
-  },
-  raetselRechteck() {
-    const d = R(2, 6), x0 = R(3, 12), u = 2 * (2 * x0 + d);
-    return { title: 'Sachaufgabe', q: `Ein Rechteck ist <b>${d} cm</b> länger als breit. Sein Umfang beträgt <b>${u} cm</b>. Wie breit ist das Rechteck?`, type: 'num', ans: x0, pre: 'Breite:', post: 'cm',
-      hint: `Breite = x, Länge = x + ${d}. Umfang = 2 · (Länge + Breite).`,
-      sol: [`2 · (x + x + ${d}) = ${u}`, `4x + ${2 * d} = ${u}`, `4x = ${u - 2 * d}`, `x = ${x0}  (Breite ${x0} cm, Länge ${x0 + d} cm)`] };
-  },
-
   /* ===== I.6 Bruchgleichungen ===== */
   bruchX() {   // k/x + a = b
     const x0 = R(2, 6), a = R(1, 4), m = R(1, 4), b = a + m, k = m * x0;
@@ -455,7 +436,7 @@ function faktor3Task(a, k) {
 /* Taschenrechner: in Übung und Test erlaubt (Malte 22.10.2026) – es gibt deshalb keine reinen Rechen-Ergebnisse beim Kopfrechnen. */
 const MIT_TR = new Set();
 
-/* ---------- Die Aufgabenplätze: 12 zum aktuellen Thema (je einer pro „Ich kann …“-Zeile des Kompetenzrasters)
+/* ---------- Die Aufgabenplätze: 11 zum aktuellen Thema (je einer pro „Ich kann …“-Zeile des Kompetenzrasters)
    + 1 Wiederholung aus einem früheren Thema (review: true, farblich abgesetzt, im Test immer zuletzt) ----------
    Reihenfolge NICHT ändern, solange Ergebnisse aus laufenden Tests eingesammelt werden.
    area = Stunde im Skript (= Abschnitt im Kompetenzraster), name = Themenname für „Gezielt üben“.
@@ -472,7 +453,6 @@ const SLOTS = [
   { area: 'I.4 Faktorisieren mit binomischen Formeln', name: 'Faktorisieren mit der 3. Formel', gens: ['faktor3'], practiceGens: ['faktor3', 'faktor3k'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Gleichungen mit Klammern', gens: ['gleichungBinom'], practiceGens: ['gleichungBinom', 'gleichungLinear'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Minus vor einer Klammer', gens: ['minusBinom'], practiceGens: ['minusBinom', 'minusLinear'] },
-  { area: 'I.5 Gleichungen mit Klammern', name: 'Zahlenrätsel', gens: ['raetselMaschine', 'raetselMal'], practiceGens: ['raetselMaschine', 'raetselMal', 'raetselRechteck'] },
   { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchHN'], practiceGens: ['bruchX', 'bruchHN', 'bruch2x'], tauschbar: true },
   { area: 'Wiederholung: Zuordnungen (Klasse 7)', name: 'Dreisatz', gens: ['dreisatz'], review: true }   // bei künftigen Tests hier ein anderes altes Thema eintragen
 ];
@@ -487,7 +467,6 @@ const CAN = [
   'Terme mit der 3. binomischen Formel faktorisieren.',
   'Gleichungen mit Klammern lösen und die Probe machen.',
   'ein Minus vor einer Klammer mit Hochzahl richtig auflösen.',
-  'Zahlenrätsel und Sachaufgaben als Gleichung aufschreiben und lösen.',
   'Bruchgleichungen mit dem Hauptnenner lösen und angeben, welche Zahl x nicht sein darf.',
   'mit dem Dreisatz rechnen.'
 ];
@@ -521,8 +500,8 @@ function practiceTasks(slotIdx = null, n = 5) {
    die Zahlen hängen von Testcode + Listennummer ab (jeder bekommt andere). */
 /* Bruchgleichungen tauschen (sie kommen erst nach den Ferien dran, die Schüler üben aber schon vorher):
    in der Übung per Knopf, im Test, wenn die Lehrkraft den Test „ohne Bruchgleichungen“ anlegt (steckt im Testcode: 1. Ziffer ungerade).
-   Ersatz im Test: eine Gleichung bzw. ein Zahlenrätsel aus I.5. */
-const ERSATZ_TEST = [{ slot: 8, gen: 'gleichungLinear' }, { slot: 10, gen: 'raetselRechteck' }];
+   Ersatz im Test: eine Gleichung bzw. ein Minus-vor-der-Klammer-Term aus I.5. */
+const ERSATZ_TEST = [{ slot: 8, gen: 'gleichungLinear' }, { slot: 9, gen: 'minusLinear' }];
 const ohneBruch = code => +String(code)[0] % 2 === 1;
 function swapTask() {
   rand = Math.random;
@@ -619,7 +598,7 @@ function decPractice(s) {
 const SALT = 'Hoeri-Terme';
 /* Stand der Aufgaben: bei jeder Änderung an Generatoren/SLOTS erhöhen (und ?v= in index.html/lehrer.html anpassen).
    Steckt im Ergebnis-Code, damit die Lehrerseite merkt, wenn ein Schülergerät eine andere Fassung hatte. */
-const APPV = '20261022b';
+const APPV = '20261022c';
 const sig = s => hash32(SALT + '|' + s).toString(36).toUpperCase().padStart(7, '0').slice(-5);
 function encAnswers(answers) {
   return answers.map(a => !a ? '' : a.k != null ? '#' + a.k : [a.a1 || '', a.a2 || ''].map(x => encodeURIComponent(String(x).trim()).replace(/!/g, '%21').replace(/~/g, '%7E')).join('~')).join('!');
