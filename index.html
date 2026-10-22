@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terme-Check</title>
+<link rel="stylesheet" href="style.css?v=20261022b">
+</head>
+<body>
+<main>
+
+<!-- ============ START ============ -->
+<section id="vHome">
+  <h1>Terme-Check</h1>
+  <p class="muted" style="margin-top:0">Terme und Gleichungen · 12 Aufgaben zu den Punkten des Kompetenzrasters + 1 Wiederholungsaufgabe</p>
+  <div id="resumeBox"></div>
+  <div id="openBox"></div>
+  <div class="card" id="nrCard"></div>
+  <div class="modes">
+    <button class="card mode" id="goPractice"><b>🔁 Probetest üben</b>
+      Alle Aufgaben wie im Test – jedes Mal mit neuen Zahlen und in anderer Reihenfolge. Wie im Test ohne Taschenrechner. Rechne im Heft, tippe nur das Ergebnis ein. Du bekommst sofort Rückmeldung, Tipps und den Lösungsweg. So oft du willst.</button>
+    <button class="card mode test" id="goTest"><b>📝 Test schreiben</b>
+      Nur in der Stunde mit dem Testcode deiner Lehrkraft. Keine Rückmeldung während des Tests.</button>
+  </div>
+  <div class="card">
+    <h2>Gezielt üben</h2>
+    <p class="muted" style="margin:.2rem 0">Fünf Aufgaben zu genau einem Thema:</p>
+    <div class="topics" id="topics"></div>
+  </div>
+  <details class="card" id="dsBox">
+    <summary><b>🔒 Datenschutz – welche Daten gibt es hier?</b></summary>
+    <ul class="tight">
+      <li><b>Kein Name, kein Konto, kein Server.</b> Zum Üben brauchst du gar nichts, nur für den Test deine Terme-Check-Nummer. Welche Nummer zu wem gehört, weiß nur deine Lehrkraft.</li>
+      <li><b>Auf deinem Gerät</b> (im Browser) werden gespeichert: wie oft du geübt hast (Runden, Aufgaben, richtige Antworten, Übungstage, Übungszeit) und im Test deine Antworten.</li>
+      <li><b>Zu deiner Lehrkraft</b> kommen diese Daten nur, wenn du ihr den QR-Code zeigst und sie ihn scannt – direkt von Gerät zu Gerät, ohne Internet.</li>
+      <li><b>Wofür:</b> Bewertung des Tests und ein Überblick, wie viel du geübt hast (z. B. für Elterngespräche).</li>
+      <li><b>Löschen:</b> Nach dem Test kannst du alles mit einem Knopf löschen. Testdaten löschen sich nach 14 Tagen von selbst, Übungsdaten nach 90 Tagen ohne Übung. Deine Lehrkraft löscht ihre Daten, sobald sie sie in ihre Notenverwaltung übertragen hat.</li>
+      <li>Die Seite liegt bei GitHub. Beim Aufrufen speichert GitHub wie jede Webseite deine IP-Adresse, aber keine Antworten oder Ergebnisse.</li>
+    </ul>
+    <div class="btns"><button class="danger" id="wipeAll">Alle Terme-Check-Daten von diesem Gerät löschen</button></div>
+  </details>
+</section>
+
+<!-- ============ ÜBUNGSNACHWEIS ============ -->
+<section id="vProof" class="hidden">
+  <div class="card result" id="proofCard"></div>
+</section>
+
+<!-- ============ ÜBUNG ============ -->
+<section id="vPractice" class="hidden">
+  <div class="bar"><span class="chip" id="pProgress"></span><span class="chip" id="pScore"></span><span class="spacer"></span><button id="pHome">← Startseite</button></div>
+  <div class="card" id="pCard"></div>
+</section>
+
+<!-- ============ TEST-ANMELDUNG ============ -->
+<section id="vLogin" class="hidden">
+  <div class="card">
+    <h2>📝 Test schreiben</h2>
+    <p>Melde dich mit deiner <b>Terme-Check-Nummer</b> an – <b>nicht</b> mit deinem Namen. Den <b>Testcode</b> zeigt dir deine Lehrkraft.</p>
+    <label for="inNr">Deine Terme-Check-Nummer (3 Ziffern)</label>
+    <input id="inNr" class="field" inputmode="numeric" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="3" placeholder="z. B. 417">
+    <label for="inCode">Testcode</label>
+    <input id="inCode" class="field" inputmode="numeric" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="5" placeholder="5 Ziffern">
+    <div id="loginErr" class="err"></div>
+    <div class="btns"><button class="testbtn" id="loginGo">Weiter</button><button id="loginBack">← Startseite</button></div>
+    <div id="loginConfirm"></div>
+  </div>
+</section>
+
+<!-- ============ TEST ============ -->
+<section id="vTest" class="hidden">
+  <div class="bar"><span class="chip test" id="tWho"></span><span class="chip" id="tCount"></span><span class="spacer"></span><button class="testbtn" id="tSubmit">Abgeben</button></div>
+  <div class="notr">✏️ Der ganze Test ist <b>ohne Taschenrechner</b>.</div>
+  <div id="tWarn"></div>
+  <div class="nav" id="tNav"></div>
+  <div class="card" id="tCard"></div>
+  <div class="card hidden" id="tConfirm"></div>
+</section>
+
+<!-- ============ ABGEGEBEN ============ -->
+<section id="vDone" class="hidden">
+  <div class="card result" id="doneCard"></div>
+</section>
+
+<footer>Terme-Check · eigene Aufgaben, zufällig erzeugt · keine Namen, kein Konto, kein Server – Ergebnisse gibst du per QR-Code direkt an deine Lehrkraft</footer>
+</main>
+
+<script src="lib/qrcode.js"></script>
+<script src="aufgaben.js?v=20261022b"></script>
+<script>
+"use strict";
+const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
+function show(v) { VIEWS.forEach(x => $(x).classList.toggle('hidden', x !== v)); window.scrollTo(0, 0); if (typeof keepAwake === 'function') keepAwake(v === 'vTest' || v === 'vDone'); }
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const ACTIVE = 'termecheck.aktiv', NRKEY = 'termecheck.nummer', PKEY = 'termecheck.uebung';
+const DAY = 86400000;
+
+/* ---------- Übungsstatistik ---------- */
+function getPractice() {
+  let p = store.get(PKEY);
+  if (!p) p = { dev: Math.random().toString(36).slice(2, 8), rounds: 0, drills: 0, tasks: 0, correct: 0, days: [], minutes: 0, last: '' };
+  return p;
+}
+/* Gezählt wird nur echtes Üben: eine Aufgabe ab 5 s Bearbeitungszeit, ein Übungstag ab 3 solchen Aufgaben,
+   eine Runde/Themen-Übung nur, wenn mindestens 80 % ihrer Aufgaben echt bearbeitet wurden. Bloßes Öffnen zählt nie. */
+const MIN_SECS = 5, DAY_MIN_TASKS = 3, ROUND_SHARE = 0.8;
+function notePractice(fn) { const p = getPractice(); fn(p); store.set(PKEY, p); }
+function noteTask(correctFirst, secs) {
+  notePractice(p => {
+    p.tasks++; if (correctFirst) p.correct++; p.minutes += Math.min(5, secs / 60);   // höchstens 5 min pro Aufgabe anrechnen
+    const d = today(); p.dayTasks = p.dayTasks || {}; p.dayTasks[d] = (p.dayTasks[d] || 0) + 1;
+    if (p.dayTasks[d] >= DAY_MIN_TASKS && !p.days.includes(d)) p.days.push(d);
+    p.last = d;
+  });
+}
+
+/* ---------- Automatisches Aufräumen: Tests nach 14 Tagen, Übung nach 90 Tagen ohne Aktivität ---------- */
+function cleanup() {
+  try {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('termecheck.test.')) { const st = store.get(k); if (!st || Date.now() - st.start > 14 * DAY) localStorage.removeItem(k); }
+    }
+    const act = store.get(ACTIVE); if (act && !store.get(tkey(act.code, act.nr))) localStorage.removeItem(ACTIVE);
+    const p = store.get(PKEY); if (p && p.last && Date.now() - new Date(p.last).getTime() > 90 * DAY) localStorage.removeItem(PKEY);
+  } catch (e) {}
+}
+function wipeAll() {
+  try { for (let i = localStorage.length - 1; i >= 0; i--) { const k = localStorage.key(i); if (k && k.startsWith('termecheck.')) localStorage.removeItem(k); } } catch (e) {}
+  T = null;
+}
+const tkey = (code, nr) => `termecheck.test.${code}.${nr}`;
+
+/* ---------- gemeinsame Eingabe-Bausteine ---------- */
+function inputHtml(t, a = {}) {
+  const v = x => (x == null ? '' : String(x).replace(/"/g, '&quot;'));
+  if (t.type === 'num') return `<div class="answer">${t.pre ? `<span>${t.pre}</span>` : ''}<input id="a1" inputmode="decimal" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Antwort" value="${v(a.a1)}">${t.post ? `<span>${t.post}</span>` : ''}</div>`;
+  if (t.type === 'term') {
+    const keys = [...(t.vars || ['x']), '²', '(', ')', '+', '−', '·'];
+    return `<div class="answer term"><input id="a1" class="termin" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Dein Term" placeholder="Term eintippen" value="${v(a.a1)}"></div>
+      <div class="keys">${keys.map(k => `<button type="button" class="key" data-ins="${k}">${k}</button>`).join('')}<button type="button" class="key del" data-ins="⌫" aria-label="Löschen">⌫</button></div>
+      <div class="tprev" id="tprev"></div>`;
+  }
+  if (t.type === 'mc') return `<div class="mc">${t.options.map((o, k) => `<button class="opt ${a.k === k ? 'sel' : ''}" data-k="${k}">${o}</button>`).join('')}</div>`;
+}
+function taskHtml(t, head, a, extra = '') {
+  const rev = SLOTS[t.slot] && SLOTS[t.slot].review;
+  return `${rev ? `<div class="revbadge">🔁 Wiederholung aus einem früheren Thema</div>` : ''}<div class="task ${t.sketch ? '' : 'nosketch'}">
+    ${t.sketch ? `<div class="sketch">${t.sketch}</div>` : ''}
+    <div>
+      <div class="qtitle">${head}</div>
+      ${t.tr ? '<span class="trbadge ja">🧮 Zusatzaufgabe – hier ist der Taschenrechner erlaubt (kommt so nicht im Test)</span>' : ''}
+      <div class="q">${t.q}</div>
+      <div id="infoBox" class="infobox hidden"></div>
+      ${inputHtml(t, a || {})}
+      ${extra}
+    </div>
+  </div>`;
+}
+function wireBegriffe(root) {
+  root.querySelectorAll('.begriff').forEach(b => b.onclick = () => {
+    const box = $('infoBox'), same = !box.classList.contains('hidden') && box.dataset.b === b.dataset.b;
+    box.innerHTML = BEGRIFFE[b.dataset.b] || ''; box.dataset.b = b.dataset.b;
+    box.classList.toggle('hidden', same);
+  });
+}
+/* Term-Eingabe: Tasten fügen an der Schreibmarke ein (ohne dass die Tastatur zugeht), darunter die Vorschau */
+function wireTerm(root, onChange) {
+  const inp = root.querySelector('.termin');
+  if (!inp) return;
+  const prev = () => {
+    const r = termParse(inp.value);
+    $('tprev').innerHTML = r.empty ? '<small class="muted">Zahlen über die Tastatur, x, ² und Klammern auch über die Tasten. Statt ² kannst du auch x2 tippen.</small>'
+      : r.error ? '<small class="err">⚠ Das kann ich noch nicht lesen – fehlt eine Klammer oder ein Rechenzeichen?</small>'
+      : `<small class="muted">So lese ich deine Eingabe:</small> <span class="prevterm">${termHtml(inp.value)}</span>`;
+  };
+  root.querySelectorAll('.key').forEach(b => {
+    b.addEventListener('pointerdown', e => e.preventDefault());   // Fokus im Eingabefeld behalten
+    b.addEventListener('click', () => {
+      if (inp.disabled) return;
+      const k = b.dataset.ins, s0 = inp.selectionStart ?? inp.value.length, s1 = inp.selectionEnd ?? s0;
+      if (k === '⌫') { const from = s0 === s1 ? Math.max(0, s0 - 1) : s0; inp.value = inp.value.slice(0, from) + inp.value.slice(s1); inp.setSelectionRange(from, from); }
+      else { inp.value = inp.value.slice(0, s0) + k + inp.value.slice(s1); inp.setSelectionRange(s0 + k.length, s0 + k.length); }
+      inp.focus({ preventScroll: true }); inp.dispatchEvent(new Event('input'));
+    });
+  });
+  inp.addEventListener('input', () => { prev(); if (onChange) onChange(); });
+  prev();
+}
+const readInputs = () => ({ a1: $('a1') ? $('a1').value : '', a2: $('a2') ? $('a2').value : '' });
+
+/* ================= STARTSEITE ================= */
+function renderHome() {
+  let lastArea = '';
+  $('topics').innerHTML = SLOTS.map((s, i) => { const h = s.area !== lastArea ? `<div class="tarea">${s.area}</div>` : ''; lastArea = s.area; return `${h}<button data-i="${i}">${s.name}</button>`; }).join('');
+  $('topics').querySelectorAll('button').forEach(b => b.onclick = () => startPractice(+b.dataset.i));
+  const act = store.get(ACTIVE), st = act && store.get(tkey(act.code, act.nr));
+  $('resumeBox').innerHTML = st && !st.submitted
+    ? `<div class="card mode test"><b>📝 Dein Test läuft noch</b>Nr. ${st.nr} · Testcode ${st.code}<div class="btns"><button class="testbtn" id="resumeGo">Test fortsetzen</button></div></div>`
+    : st && st.submitted ? `<div class="card"><b>✅ Test abgegeben</b> (Nr. ${st.nr}) <button id="resumeGo" style="margin-left:8px">Ergebnis-Code noch einmal zeigen</button></div>` : '';
+  if ($('resumeGo')) $('resumeGo').onclick = () => openTest(st.code, st.nr);
+  renderNrCard();
+  $('openBox').innerHTML = openTopicsHtml(); wireOpenTopics($('openBox'));
+  show('vHome');
+}
+/* Startseite: keine Nummern-Abfrage mehr (zum Üben unnötig). Nur der eigene Übungsstand –
+   und der Übungsnachweis für ein zweites Gerät, der erst dann nach der Nummer fragt. */
+function renderNrCard() {
+  const p = store.get(PKEY);
+  if (!p || !p.tasks) { $('nrCard').classList.add('hidden'); return; }
+  $('nrCard').classList.remove('hidden');
+  $('nrCard').innerHTML = `<div class="row"><div style="flex:1;min-width:220px">Dein Übungsstand: <b>${p.rounds}</b> ${p.rounds === 1 ? 'Runde' : 'Runden'} · <b>${p.drills}</b> Themen-Übungen · ${p.tasks} Aufgaben an ${p.days.length} ${p.days.length === 1 ? 'Tag' : 'Tagen'}<br>
+      <small class="muted">Zählt automatisch und steckt später in deinem Test-Ergebnis.</small></div>
+    <button id="proofGo">📋 Übungsnachweis</button></div>
+    <p class="muted" style="margin:.4rem 0 0"><small>Den Übungsnachweis brauchst du nur, wenn du <b>hier</b> übst, den Test aber auf einem <b>anderen Gerät</b> schreibst.</small></p>`;
+  $('proofGo').onclick = () => store.get(NRKEY) ? showProof() : askNrForProof();
+}
+function askNrForProof() {
+  $('proofCard').innerHTML = `<h2>📋 Übungsnachweis</h2>
+    <label for="inMyNr">Deine Terme-Check-Nummer (3 Ziffern, von deinem Kärtchen)</label>
+    <div class="row"><input id="inMyNr" class="field" inputmode="numeric" maxlength="3" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="z. B. 417"><button class="primary" id="nrSave">Weiter</button></div>
+    <div id="nrErr" class="err"></div>
+    <div class="btns" style="justify-content:center"><button id="proofBack">← Startseite</button></div>`;
+  $('nrSave').onclick = () => {
+    const v = $('inMyNr').value.trim();
+    if (!validNr(v)) { $('nrErr').textContent = 'Diese Nummer gibt es nicht. Schau noch einmal auf dein Kärtchen.'; return; }
+    store.set(NRKEY, +v); showProof();
+  };
+  $('inMyNr').addEventListener('keydown', e => { if (e.key === 'Enter') $('nrSave').click(); });
+  $('proofBack').onclick = renderHome;
+  show('vProof');
+}
+function qrSvg(text) { const q = qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); }
+function showProof() {
+  const nr = store.get(NRKEY), p = getPractice();
+  $('proofCard').innerHTML = `<h2>📋 Übungsnachweis · Nr. ${nr}</h2>
+    <p>${p.rounds} ${p.rounds === 1 ? 'Runde' : 'Runden'} · ${p.drills} Themen-Übungen · ${p.tasks} Aufgaben, davon ${p.correct} beim 1. Versuch richtig · an ${p.days.length} ${p.days.length === 1 ? 'Tag' : 'Tagen'} · ca. ${Math.round(p.minutes)} min</p>
+    <p><b>Zeige diesen QR-Code deiner Lehrkraft.</b> Das brauchst du nur, wenn du auf einem <b>anderen Gerät</b> geübt hast als dem, auf dem du den Test schreibst – sonst steckt dein Übungsnachweis schon im Test-Code.</p>
+    <div class="qrbox">${qrSvg(makePracticePayload(nr, p))}</div>
+    <div class="btns" style="justify-content:center"><button id="proofBack">← Startseite</button><button id="proofNr">Andere Nummer</button></div>`;
+  $('proofBack').onclick = renderHome;
+  $('proofNr').onclick = () => { try { localStorage.removeItem(NRKEY); } catch (e) {} askNrForProof(); };
+  show('vProof');
+}
+$('wipeAll').onclick = () => { if (confirm('Wirklich alle Terme-Check-Daten (Nummer, Übungsstatistik, Tests) von diesem Gerät löschen?')) { wipeAll(); renderHome(); } };
+$('goPractice').onclick = () => startPractice(null);
+$('goTest').onclick = () => { $('loginErr').textContent = ''; $('loginConfirm').innerHTML = ''; const n = store.get(NRKEY); $('inNr').value = n || ''; show('vLogin'); (n ? $('inCode') : $('inNr')).focus(); };
+$('pHome').onclick = renderHome;
+$('loginBack').onclick = renderHome;
+
+/* ================= ÜBUNG ================= */
+let P = null;
+function startPractice(slot) {
+  P = { slot, tasks: practiceTasks(slot), i: 0, first: [], fg: [], tries: 0, done: false, a: {}, t0: Date.now(), counted: 0 };
+  show('vPractice'); renderPractice();
+}
+function renderPractice() {
+  const t = P.tasks[P.i];
+  $('pProgress').textContent = `Aufgabe ${P.i + 1} von ${P.tasks.length}`;
+  $('pScore').textContent = `✓ beim 1. Versuch: ${P.first.filter(x => x === 2).length}`;
+  P.tries = 0; P.done = false; P.a = {}; P.t0 = Date.now();
+  const head = `${SLOTS[t.slot].area} · ${SLOTS[t.slot].name}`;
+  $('pCard').innerHTML = taskHtml(t, head, {},
+    `${t.type === 'mc' ? '<p class="muted" style="margin:.2rem 0 0"><small>Tippe deine Antwort an und bestätige dann mit „Prüfen“.</small></p>' : ''}<div class="btns"><button class="primary" id="pCheck">Prüfen ✓</button><button id="pHint">💡 Tipp</button></div><div id="fb"></div>`);
+  $('pCard').classList.toggle('review', !!SLOTS[t.slot].review);
+  wireBegriffe($('pCard'));
+  wireTerm($('pCard'), () => { if ($('fb').querySelector('.warn')) $('fb').innerHTML = ''; });
+  if (t.type === 'mc') {
+    // Antippen markiert nur (versehentliches Antippen wird nicht gewertet); bewertet wird erst mit „Prüfen“
+    $('pCard').querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      if (P.done) return;
+      P.a = { k: +b.dataset.k };
+      $('pCard').querySelectorAll('.opt').forEach(x => x.classList.toggle('sel', x === b));
+      if ($('fb').querySelector('.warn')) $('fb').innerHTML = '';
+    });
+    $('pCheck').onclick = () => practiceCheck();
+  }
+  else {
+    $('pCheck').onclick = () => { P.a = readInputs(); practiceCheck(); };
+    $('pCard').querySelectorAll('input').forEach(inp => inp.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (inp.id === 'a1' && $('a2') && $('a2').value.trim() === '') { e.preventDefault(); $('a2').focus(); return; }   // erst ins zweite Feld
+      P.a = readInputs(); practiceCheck();
+    }));
+    setTimeout(() => $('a1') && $('a1').focus({ preventScroll: true }), 50);
+  }
+  $('pHint').onclick = () => { if (!P.done) $('fb').innerHTML = `<div class="fb hint">💡 ${t.hint}</div>`; };
+}
+function practiceCheck() {
+  if (P.done) return;
+  const t = P.tasks[P.i], g = grade(t, P.a);
+  const solHtml = `<ol class="sol">${t.sol.map(s => `<li>${s}</li>`).join('')}</ol>`;
+  const next = `<div class="btns"><button class="primary" id="pNext">${P.i + 1 < P.tasks.length ? 'Nächste Aufgabe →' : 'Auswertung →'}</button></div>`;
+  if (t.type === 'term' && termParse(P.a.a1 || '').error) { $('fb').innerHTML = '<div class="fb warn">Das kann ich noch nicht lesen. Schau auf die Vorschau unter dem Feld: Fehlt eine Klammer oder ein Rechenzeichen?</div>'; return; }
+  if (g === -1) { $('fb').innerHTML = `<div class="fb warn">${t.type === 'mc' ? 'Bitte tippe zuerst eine Antwort an.' : 'Bitte trage zuerst eine Antwort ein.'}</div>`; return; }
+  if (P.fg[P.i] === undefined) P.fg[P.i] = g;   // erste Abgabe zählt für die Note – wie im Test
+  if (g === 1) { $('fb').innerHTML = `<div class="fb hint">Fast! ${HALF_TIP[t.form] || ''} Verbessere noch.</div>`; return; }
+  if (g === 2) {
+    if (P.tries === 0) P.first[P.i] = 2;
+    $('pScore').textContent = `✓ beim 1. Versuch: ${P.first.filter(x => x === 2).length}`;
+    if (t.type === 'mc') $('pCard').querySelectorAll('.opt').forEach(b => b.classList.toggle('sel', +b.dataset.k === P.a.k));
+    $('fb').innerHTML = `<div class="fb ok">✅ Richtig!${solHtml}</div>${next}`;
+  } else if (P.tries === 0) {
+    P.tries = 1; P.first[P.i] = 0;
+    if (t.type === 'mc') { $('pCard').querySelectorAll('.opt').forEach(b => { if (+b.dataset.k === P.a.k) b.disabled = true; b.classList.remove('sel'); }); P.a = {}; }
+    $('fb').innerHTML = `<div class="fb bad">Leider falsch. Schau dir den Tipp an und versuche es noch einmal.</div><div class="fb hint">💡 ${t.hint}</div>`;
+    return;
+  } else {
+    $('fb').innerHTML = `<div class="fb bad">Leider wieder falsch. Richtig ist: <b>${correctText(t)}</b>${solHtml}</div>${next}`;
+  }
+  P.done = true;
+  const secs = (Date.now() - P.t0) / 1000;
+  if (secs >= MIN_SECS) { noteTask(P.first[P.i] === 2, secs); P.counted++; }   // Durchklicken zählt nicht
+  $('pCard').querySelectorAll('input,.opt,.key,#pCheck,#pHint').forEach(x => x.disabled = true);
+  $('pNext').onclick = () => { P.i++; P.i < P.tasks.length ? renderPractice() : practiceSummary(); };
+  $('pNext').focus();
+}
+/* Offene Themen aus dem letzten Probetest: bleiben gespeichert, bis alle geübt sind oder ein neuer Probetest kommt */
+const OKEY = 'termecheck.offen';
+/* Was im letzten Durchlauf (Probetest oder Test) nicht geklappt hat – bleibt auf der Startseite stehen */
+function setOpenTopics(tasks, grades, source, key = '') {
+  const slots = [...new Set(tasks.map((t, i) => grades[i] !== 2 ? t.slot : null).filter(x => x !== null))].sort((a, b) => a - b);
+  store.set(OKEY, { slots, done: [], source, key, date: today() });
+}
+function openTopicsHtml(cur = null) {
+  const o = store.get(OKEY);
+  if (!o || !o.slots) return '';
+  const was = o.source === 'test' ? 'Test' : 'Probetest';
+  const wann = o.date ? (o.date === today() ? 'heute' : `am ${o.date.slice(8, 10)}.${o.date.slice(5, 7)}.`) : '';
+  if (!o.slots.length) return `<div class="card opentopics"><h2 style="margin:0">🎉 In deinem letzten ${was} ${wann} hat alles geklappt!</h2></div>`;
+  const left = o.slots.filter(sl => !o.done.includes(sl));
+  return `<div class="card opentopics">
+    <h2 style="margin-top:0">${left.length ? `Das hat in deinem letzten ${was} ${wann} nicht geklappt <span class="muted" style="font-weight:400">(${o.done.length} von ${o.slots.length} geübt)</span>` : `✅ Alles aus deinem letzten ${was} nachgeübt!`}</h2>
+    ${left.length ? '<p class="muted" style="margin-top:0">Tippe ein Thema an – fünf Aufgaben dazu. Danach kommst du hierher zurück.</p>' : '<p style="margin-top:0">Stark! Jetzt am besten noch einmal einen ganzen Probetest machen.</p>'}
+    <div class="topics">${o.slots.map(sl => `<button data-i="${sl}" class="${o.done.includes(sl) ? 'donetopic' : ''} ${sl === cur ? 'curtopic' : ''}">${o.done.includes(sl) ? '✓ ' : ''}${SLOTS[sl].name}<br><small class="muted">${SLOTS[sl].area}</small></button>`).join('')}</div>
+  </div>`;
+}
+function wireOpenTopics(root) { root.querySelectorAll('.opentopics .topics button').forEach(b => b.onclick = () => startPractice(+b.dataset.i)); }
+
+function practiceSummary() {
+  $('pCard').classList.remove('review');
+  if (P.counted >= ROUND_SHARE * P.tasks.length) notePractice(p => { if (P.slot === null) p.rounds++; else p.drills++; });
+  const n = P.first.filter(x => x === 2).length, N = P.tasks.length;
+  const pts = P.fg.reduce((s, g) => s + points(g), 0), full = P.slot === null;
+  $('pProgress').textContent = 'Auswertung'; $('pScore').textContent = full ? `${fmtPts(pts)} von ${N} Punkten` : `${n} von ${N}`;
+  if (full) {
+    // neue Liste offener Themen (✗ und ½), in der Reihenfolge des Kompetenzrasters
+    setOpenTopics(P.tasks, P.fg, 'probe');
+    const open = store.get(OKEY).slots;
+    $('pCard').innerHTML = `<div class="result">
+      <div class="score">${fmtPts(pts)} / ${N} Punkte</div>
+      <div class="note">Das wäre die Note <b>${fmtNote(noteFor(pts))}</b></div>
+      <p class="muted"><small>Gewertet wird wie im Test: jeweils dein erster Versuch, ½ Punkt, wenn der Term gleichwertig, aber noch nicht fertig umgeformt ist.</small></p>
+      <p>${!open.length ? 'Alles beim ersten Versuch richtig – stark! 🎉' : n >= N * 0.75 ? 'Schon richtig gut! Übe die offenen Themen unten noch einmal gezielt.' : 'Übe die offenen Themen unten gezielt – dann gleich noch eine Runde!'}</p>
+      </div>
+      ${openTopicsHtml()}
+      <h2>Dein Stand im Kompetenzraster</h2>
+      <p class="muted" style="margin-top:0">✗ und ½ zeigen dir, welche Zeilen im Kompetenzraster du noch üben solltest – dort stehen auch die passenden Buchaufgaben.</p>
+      ${rasterReport(P.tasks, P.fg, true)}
+      <div class="btns" style="margin-top:14px"><button class="primary" id="pAgain">🔁 Neue Runde mit neuen Zahlen</button><button id="pBack">← Startseite</button></div>`;
+    $('pCard').querySelectorAll('.rreport button').forEach(b => b.onclick = () => startPractice(+b.dataset.i));
+  } else {
+    // Themen-Übung fertig: in der Liste abhaken und dorthin zurückführen
+    const o = store.get(OKEY);
+    if (o && o.slots.includes(P.slot) && !o.done.includes(P.slot)) { o.done.push(P.slot); store.set(OKEY, o); }
+    $('pCard').innerHTML = `<div class="result">
+      <div class="qtitle">${SLOTS[P.slot].area} · ${SLOTS[P.slot].name}</div>
+      <div class="score">${n} / ${N}</div>
+      <p>${n === N ? 'Alles beim ersten Versuch richtig – stark! 🎉' : n >= N - 1 ? 'Gut gemacht!' : 'Noch nicht ganz sicher – übe dieses Thema ruhig noch einmal.'}</p>
+      </div>
+      ${openTopicsHtml(P.slot)}
+      <div class="btns" style="margin-top:14px"><button class="primary" id="pRepeat">🔁 Dieses Thema noch einmal</button><button id="pAgain">Neuer Probetest</button><button id="pBack">← Startseite</button></div>`;
+    $('pRepeat').onclick = () => startPractice(P.slot);
+  }
+  wireOpenTopics($('pCard'));
+  $('pAgain').onclick = () => startPractice(null);
+  $('pBack').onclick = renderHome;
+}
+
+/* ================= TEST ================= */
+let T = null;   // { code, nr, tasks, st }
+$('loginGo').onclick = () => {
+  const nrTxt = $('inNr').value.trim(), nr = parseInt(nrTxt, 10), code = $('inCode').value.trim();
+  $('loginConfirm').innerHTML = '';
+  if (!validNr(nrTxt)) { $('loginErr').textContent = 'Diese Terme-Check-Nummer gibt es nicht. Schau noch einmal auf deinen Zettel.'; return; }
+  if (!validCode(code)) { $('loginErr').textContent = 'Dieser Testcode stimmt nicht. Schau noch einmal genau hin.'; return; }
+  $('loginErr').textContent = '';
+  $('loginConfirm').innerHTML = `<div class="fb warn" style="margin-top:14px">Deine Terme-Check-Nummer ist <b>${nr}</b>. Stimmt das?
+    <div class="btns"><button class="testbtn" id="lcYes">Ja, Test starten</button><button id="lcNo">Nein, ändern</button></div></div>`;
+  $('lcYes').onclick = () => { if (!store.get(NRKEY)) store.set(NRKEY, nr); openTest(code, nr); };
+  $('lcNo').onclick = () => { $('loginConfirm').innerHTML = ''; $('inNr').focus(); };
+};
+['inNr', 'inCode'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') $('loginGo').click(); }));
+
+function openTest(code, nr) {
+  let st = store.get(tkey(code, nr));
+  if (!st) st = { code, nr, answers: Array(SLOTS.length).fill(null), tabs: 0, start: Date.now(), submitted: false, cur: 0 };
+  store.set(tkey(code, nr), st); store.set(ACTIVE, { code, nr });
+  T = { code, nr, tasks: testTasks(code, nr), st };
+  if (st.submitted) return renderDone();
+  show('vTest'); renderTest();
+}
+const saveT = () => store.set(tkey(T.code, T.nr), T.st);
+function answered(a) { return a && (a.k != null || String(a.a1 || '').trim() !== '' || String(a.a2 || '').trim() !== ''); }
+function captureCurrent() {
+  if (!T || T.st.submitted) return;
+  const t = T.tasks[T.st.cur];
+  if (t.type !== 'mc' && $('a1')) { T.st.answers[T.st.cur] = readInputs(); saveT(); }
+}
+function renderTest() {
+  const st = T.st, t = T.tasks[st.cur];
+  $('tWho').textContent = `Test · Nr. ${T.nr}`;
+  $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`;
+  $('tNav').innerHTML = T.tasks.map((x, i) => `<button class="${answered(st.answers[i]) ? 'done' : ''} ${i === st.cur ? 'cur' : ''} ${SLOTS[x.slot].review ? 'rev' : ''}" data-i="${i}" aria-label="Aufgabe ${i + 1}">${SLOTS[x.slot].review ? '🔁' : i + 1}</button>`).join('');
+  $('tNav').querySelectorAll('button').forEach(b => b.onclick = () => { captureCurrent(); st.cur = +b.dataset.i; saveT(); renderTest(); });
+  $('tCard').innerHTML = taskHtml(t, `Aufgabe ${st.cur + 1} · ${SLOTS[t.slot].area}`, st.answers[st.cur],
+    `<div class="btns">${st.cur > 0 ? '<button id="tPrev">← Zurück</button>' : ''}${st.cur + 1 < SLOTS.length ? '<button class="primary" id="tNext">Weiter →</button>' : '<button class="testbtn" id="tEnd">Fertig → Abgeben</button>'}</div>
+     <p class="muted" style="margin-top:10px"><small>Deine Antworten werden automatisch gespeichert. Du kannst jederzeit zu einer Aufgabe zurückspringen.</small></p>`);
+  $('tCard').classList.remove('hidden'); $('tConfirm').classList.add('hidden');
+  $('tCard').classList.toggle('review', !!SLOTS[t.slot].review);
+  // Im Test keine Hilfen: Fachbegriffe sind hier normaler Text (die Erklärung mit Beispielen gibt es nur in der Übung)
+  $('tCard').querySelectorAll('.begriff').forEach(b => { b.replaceWith(document.createTextNode(b.textContent)); });
+  if ($('infoBox')) $('infoBox').remove();
+  if (t.type === 'mc') $('tCard').querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    st.answers[st.cur] = { k: +b.dataset.k }; saveT();
+    $('tCard').querySelectorAll('.opt').forEach(x => x.classList.toggle('sel', x === b));
+    $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`;
+    $('tNav').children[st.cur].classList.add('done');
+  });
+  else if (t.type === 'term') {
+    wireTerm($('tCard'), () => { captureCurrent(); $('tNav').children[st.cur].classList.toggle('done', answered(st.answers[st.cur])); $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`; });
+    $('a1').addEventListener('keydown', e => { if (e.key === 'Enter' && $('tNext')) $('tNext').click(); });
+  }
+  else $('tCard').querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', () => { captureCurrent(); $('tNav').children[st.cur].classList.toggle('done', answered(st.answers[st.cur])); $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`; });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && $('tNext')) $('tNext').click(); });
+  });
+  if ($('tPrev')) $('tPrev').onclick = () => { captureCurrent(); st.cur--; saveT(); renderTest(); };
+  if ($('tNext')) $('tNext').onclick = () => { captureCurrent(); st.cur++; saveT(); renderTest(); };
+  if ($('tEnd')) $('tEnd').onclick = askSubmit;
+}
+$('tSubmit').onclick = askSubmit;
+function askSubmit() {
+  captureCurrent();
+  const open = T.st.answers.map((a, i) => answered(a) ? null : i + 1).filter(Boolean);
+  $('tCard').classList.add('hidden'); $('tConfirm').classList.remove('hidden');
+  $('tConfirm').innerHTML = `<h2>Test abgeben?</h2>
+    ${open.length ? `<p class="err">Noch nicht beantwortet: Aufgabe ${open.join(', ')}</p>` : '<p>Du hast alle Aufgaben beantwortet.</p>'}
+    <p>Nach dem Abgeben kannst du nichts mehr ändern.</p>
+    <div class="btns"><button class="testbtn" id="cYes">Ja, endgültig abgeben</button><button id="cNo">Nein, zurück zum Test</button></div>`;
+  $('cNo').onclick = renderTest;
+  $('cYes').onclick = () => {
+    T.st.submitted = true; T.st.end = Date.now(); saveT(); renderDone();
+  };
+}
+document.addEventListener('visibilitychange', () => {
+  if (!T || T.st.submitted || $('vTest').classList.contains('hidden')) return;
+  if (document.hidden) { captureCurrent(); T.st.tabs++; saveT(); }
+  else if (T.st.tabs > 0) $('tWarn').innerHTML = `<div class="warnbanner">⚠️ Du hast den Test verlassen (${T.st.tabs}×). Das wird deiner Lehrkraft angezeigt.</div>`;
+});
+
+/* ---------- Übersicht für die Klassenarbeit (nach dem Test) ----------
+   Bewusst OHNE Buchseiten/Aufgabennummern: nur Abschnitt + „Ich kann …“-Punkt des Kompetenzrasters.
+   Welche Aufgaben dazu gehören, steht allein im Raster – so bleibt die App richtig, wenn das Raster geändert wird. */
+function buildOverview(T, grades, pts, when) {
+  const note = noteFor(pts), d = new Date(when);
+  const datum = d.toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+  const seen = new Set(), areas = [];
+  T.tasks.map((t, i) => [t, grades[i]]).filter(([, g]) => g !== 2).sort((a, b) => a[0].slot - b[0].slot).forEach(([t, g]) => {
+    if (seen.has(t.can)) return; seen.add(t.can);
+    areas.push({ area: SLOTS[t.slot].area.replace(/^S\.\s*\d+\s*[–-]\s*\d+\s*/, ''), can: t.can, half: g === 1, rev: !!SLOTS[t.slot].review });   // nur das Thema, ohne Buchseiten
+  });
+  let text, next;
+  if (note <= 1.5) {
+    text = 'Sehr gut – deine Grundlagen sitzen! Der Test prüft aber nur die Grundlagen. In der Klassenarbeit kommen auch schwierigere Aufgaben.';
+    next = 'Rechne zur Vorbereitung die schweren Aufgaben (★★★) aus deinem Kompetenzraster.';
+  } else if (note <= 2.5) {
+    text = 'Gut – die meisten Grundlagen sitzen. Der Test prüft nur die Grundlagen; in der Klassenarbeit kommen auch schwierigere Aufgaben.';
+    next = 'Schau dir zuerst die Punkte unten im Kompetenzraster an. Rechne danach die ★★-Aufgaben aus deinem Kompetenzraster.';
+  } else {
+    text = 'Bei den Grundlagen bist du noch nicht sicher. Der Test prüft nur die Grundlagen – und auf ihnen baut die Klassenarbeit auf.';
+    next = 'Übe zuerst die Punkte unten mit den ★-Aufgaben aus deinem Kompetenzraster und mach danach noch einmal Probetests im Terme-Check.';
+  }
+  return { nr: T.nr, datum, note, pts, max: SLOTS.length, text, next, areas };
+}
+function overviewHtml(o) {
+  const areaRow = a => `<div class="ovrow ${a.rev ? 'rev' : ''}"><div class="ovarea">${a.rev ? '🔁 ' : ''}${a.area}${a.rev ? ' <span class="muted" style="font-weight:400">(nicht im Kompetenzraster – im Heft wiederholen)</span>' : ''}</div>
+    <div>${a.half ? '½' : '✗'} Ich kann ${a.can}${a.half ? ' <span class="muted">(fast – nur noch nicht fertig umgeformt)</span>' : ''}</div></div>`;
+  return `<div class="overview" id="overview">
+    <div class="ovhead"><div><b>Meine Übersicht zur Klassenarbeit</b><br><span class="muted">Terme und Gleichungen · Terme-Check-Test vom ${o.datum}</span></div><div class="ovnote">Note <b>${fmtNote(o.note)}</b><br><small>${fmtPts(o.pts)} von ${o.max} Punkten · Nr. ${o.nr}</small></div></div>
+    <p class="ovtext">${o.text}</p>
+    <p class="ovnext">👉 ${o.next}</p>
+    ${o.areas.length ? `<h3>Diese Punkte im Kompetenzraster solltest du dir noch einmal anschauen</h3>${o.areas.map(areaRow).join('')}` : '<h3>🎉 Im Test war alles richtig.</h3>'}
+  </div>`;
+}
+/* Übersicht als Bild (PNG) zeichnen – ohne Zusatzbibliothek, direkt auf ein Canvas */
+function overviewCanvas(o) {
+  const W = 1080, PAD = 56, S = 2, c = document.createElement('canvas'), x = c.getContext('2d');
+  const font = (w, sz) => `${w} ${sz}px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif`;
+  const items = [];
+  const add = (txt, sz, w = '400', col = '#1d2b36', gap = 8, indent = 0) => items.push({ txt, sz, w, col, gap, indent });
+  add('Meine Übersicht zur Klassenarbeit', 40, '800', '#1f4e79', 4);
+  add(`Terme und Gleichungen · Terme-Check-Test vom ${o.datum}`, 24, '400', '#5b6b78', 22);
+  add(`Note ${fmtNote(o.note)}`, 56, '800', '#1f6fa8', 2);
+  add(`${fmtPts(o.pts)} von ${o.max} Punkten · Nr. ${o.nr}`, 24, '400', '#5b6b78', 24);
+  add(o.text, 26, '400', '#1d2b36', 14);
+  add('👉 ' + o.next, 26, '700', '#1d2b36', 26);
+  if (o.areas.length) {
+    add('Diese Punkte im Kompetenzraster solltest du dir noch einmal anschauen:', 28, '700', '#1f4e79', 12);
+    o.areas.forEach(a => {
+      add(`${a.area}${a.rev ? ' (nicht im Kompetenzraster – im Heft wiederholen)' : ''}`, 22, '700', a.rev ? '#0f766e' : '#1f4e79', 2);
+      add(`${a.half ? '½' : '✗'}  Ich kann ${a.can}`, 25, '400', '#1d2b36', 16, 24);
+    });
+  } else add('Im Test war alles richtig. 🎉', 28, '700', '#2e8b57', 16);
+  add('Der Test prüft nur die Grundlagen. Die passenden Aufgaben findest du in deinem Kompetenzraster.', 20, '400', '#5b6b78', 0);
+  const lines = [];
+  items.forEach(it => {
+    x.font = font(it.w, it.sz); const maxW = W - 2 * PAD - it.indent;
+    let line = '';
+    it.txt.split(' ').forEach(word => { const t = line ? line + ' ' + word : word; if (x.measureText(t).width > maxW && line) { lines.push({ ...it, txt: line, gap: 0 }); line = word; } else line = t; });
+    lines.push({ ...it, txt: line });
+  });
+  const H = PAD * 2 + lines.reduce((h, l) => h + l.sz * 1.3 + l.gap, 0);
+  c.width = W * S; c.height = Math.ceil(H) * S; x.scale(S, S);
+  x.fillStyle = '#ffffff'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#1f4e79'; x.fillRect(0, 0, W, 10);
+  let y = PAD;
+  lines.forEach(l => { x.font = font(l.w, l.sz); x.fillStyle = l.col; x.textBaseline = 'top'; x.fillText(l.txt, PAD + l.indent, y); y += l.sz * 1.3 + l.gap; });
+  return c;
+}
+async function saveOverview(o) {
+  const c = overviewCanvas(o), name = `terme-check-uebersicht-${today()}.png`;
+  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  try {
+    const file = new File([blob], name, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Meine Übersicht zur Klassenarbeit' }); return; }   // iPad: „Bild sichern“ → Fotos
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+
+function renderDone() {
+  const st = T.st, grades = T.tasks.map((t, i) => grade(t, st.answers[i]));
+  // Liste für die Startseite nur einmal pro Test anlegen (beim erneuten Öffnen des Ergebnisses nicht zurücksetzen)
+  const o = store.get(OKEY), key = `test|${T.code}|${T.nr}`;
+  if (!o || o.key !== key) setOpenTopics(T.tasks, grades, 'test', key);
+  const pts = grades.reduce((s, g) => s + points(g), 0);
+  const minutes = Math.max(1, Math.round(((st.end || Date.now()) - st.start) / 60000));
+  const payload = makePayload(T.code, T.nr, st.tabs, minutes, st.answers, store.get(PKEY));
+  const short = makeShortCode(T.code, T.nr, st.tabs, grades);
+  let qrHtml = '';
+  try { qrHtml = qrSvg(payload); }
+  catch (e) { qrHtml = '<p class="err">QR-Code konnte nicht erzeugt werden – nutze den Code darunter.</p>'; }
+  const ov = buildOverview(T, grades, pts, st.end || Date.now());
+  $('doneCard').innerHTML = `
+    <h2>✅ Test abgegeben · Nr. ${T.nr}</h2>
+    <div class="score">${fmtPts(pts)} / ${SLOTS.length} Punkte</div>
+    <div class="note">Note <b>${fmtNote(noteFor(pts))}</b></div>
+    <p><b>Zeige diesen QR-Code deiner Lehrkraft zum Scannen</b> – so, wie sie es in der Stunde ansagt. Lass die Seite so lange offen.</p>
+    <div class="qrbox">${qrHtml}</div>
+    <p class="muted" style="margin:.2rem 0">Falls der Scan nicht klappt, diesen Code ansagen:</p>
+    <div class="shortcode">${short}</div>
+    ${overviewHtml(ov)}
+    <div class="btns" style="justify-content:center"><button class="primary" id="dSave">📥 Übersicht als Bild speichern</button></div>
+    <p class="muted" style="margin:.2rem 0 0"><small>Oder einfach einen Screenshot machen (obere Taste + Lauter-Taste gleichzeitig).</small></p>
+    <h2 style="margin-top:18px">Alle Aufgaben im Überblick</h2>
+    ${rasterReport(T.tasks, grades)}
+    <p class="muted"><small>½ = Term gleichwertig, aber noch nicht fertig umgeformt (nicht zusammengefasst bzw. nicht vollständig ausgeklammert).</small></p>
+    <div class="btns" style="justify-content:center"><button id="dHome">← Startseite</button><button class="danger" id="dWipe">Fertig – Daten von diesem Gerät löschen</button></div>
+    <div id="dWipeAsk"></div>`;
+  $('dHome').onclick = renderHome;
+  $('dSave').onclick = () => saveOverview(ov);
+  $('dWipe').onclick = () => {
+    $('dWipeAsk').innerHTML = `<div class="fb warn" style="margin-top:12px">Hat deine Lehrkraft deinen QR-Code schon gescannt? Danach ist alles weg: Test, Nummer und Übungsstatistik.
+      <div class="btns" style="justify-content:center"><button class="danger" id="dWipeYes">Ja, gescannt – jetzt löschen</button><button id="dWipeNo">Nein, noch nicht</button></div></div>`;
+    $('dWipeNo').onclick = () => $('dWipeAsk').innerHTML = '';
+    $('dWipeYes').onclick = () => { wipeAll(); renderHome(); };
+  };
+  show('vDone');
+}
+
+/* ---------- iPad: Bildschirm im Test und beim Ergebnis-QR wach halten ----------
+   Sonst sperrt sich das iPad beim Nachdenken, und das würde als „Test verlassen“ gezählt. */
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); }
+    if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) { wakeLock = null; }
+}
+const inTestOrDone = () => !$('vTest').classList.contains('hidden') || !$('vDone').classList.contains('hidden');
+document.addEventListener('visibilitychange', () => { if (!document.hidden && inTestOrDone()) keepAwake(true); });
+/* Beim Antippen eines Eingabefelds: Feld samt Knöpfen mittig rücken, damit die Bildschirmtastatur nichts verdeckt */
+document.addEventListener('focusin', e => {
+  if (e.target.matches('.answer input, .fracin input')) setTimeout(() => (e.target.closest('.answer') || e.target).scrollIntoView({ block: 'center', behavior: 'smooth' }), 350);
+});
+
+/* ---------- Start ---------- */
+cleanup();
+renderHome();
+if (location.hash === '#test') $('goTest').click();
+</script>
+</body>
+</html>

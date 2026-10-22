@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Terme-Check · Lehrkraft</title>
+<link rel="stylesheet" href="style.css?v=20261022b">
+</head>
+<body>
+<main>
+<h1>Terme-Check · Lehrkraft</h1>
+<p class="muted" style="margin-top:0">Alle Daten bleiben in diesem Browser auf diesem Gerät. Nichts wird hochgeladen. Namen gibst du hier nirgends ein – die Zuordnung Nummer → Name steht nur auf deiner ausgedruckten Liste.</p>
+
+<!-- ============ 1. TEST STARTEN ============ -->
+<div class="card">
+  <h2>1 · Test starten</h2>
+  <div class="row">
+    <label for="selTest" style="margin:0">Test:</label>
+    <select id="selTest" style="font:inherit;padding:.4rem;border-radius:8px;border:1px solid var(--line);max-width:100%"></select>
+    <button id="btnNew">➕ Neuen Test anlegen</button>
+  </div>
+  <div id="newBox" class="hidden" style="margin-top:10px">
+    <label for="inLabel">Bezeichnung (nur für dich, z. B. „8a – Terme“; keine Schülernamen!)</label>
+    <div class="row"><input id="inLabel" class="field" style="width:14em;letter-spacing:0;text-align:left;font-size:1.05rem"></div>
+    <label for="selCopy">Nummernliste</label>
+    <div class="row"><select id="selCopy" style="font:inherit;padding:.4rem;border-radius:8px;border:1px solid var(--line);max-width:100%"></select>
+      <button class="primary" id="btnCreate">Test anlegen</button></div>
+  </div>
+  <div id="oldWarn"></div>
+  <div id="nrBox"></div>
+  <div id="codeBox"></div>
+</div>
+
+<!-- ============ 2. EINSAMMELN ============ -->
+<div class="card" id="collectCard">
+  <h2>2 · Ergebnisse einsammeln</h2>
+  <p class="muted" style="margin-top:0">Schüler zeigen nach dem Abgeben einen QR-Code (enthält auch ihre Übungsstatistik). Wer auf einem anderen Gerät geübt hat, zeigt zusätzlich den „Übungsnachweis“ von der Startseite. Beides kannst du jederzeit scannen, auch schon vor dem Test.</p>
+  <p style="margin:.4rem 0">Du kannst auf zwei Arten scannen – such dir aus, was in der Stunde besser passt:</p>
+  <div class="modes">
+    <div class="card mode" style="margin:0"><b>📷 Herumgehen</b>Du gehst mit dem iPad (Rückkamera) durch die Klasse und scannst die Codes an den Plätzen. Nach jedem Scan siehst du kurz Nummer, Punkte und Note.
+      <div class="btns"><button class="primary" id="btnCam">Kamera starten</button><button id="btnCamStop" class="hidden">Kamera stoppen</button></div></div>
+    <div class="card mode" style="margin:0"><b>🖥 Scanstation</b>Das iPad (Frontkamera) oder ein Laptop mit Webcam steht vorne. Wer fertig ist, hält seinen Code kurz vor die Kamera. Angezeigt wird nur „Nr. … erfasst“, keine Punkte – dazu, welche Nummern noch fehlen.
+      <div class="btns"><button class="primary" id="btnStation">Scanstation öffnen</button></div></div>
+  </div>
+  <div class="scanwrap" style="margin-top:10px"><video id="video" playsinline muted class="hidden"></video></div>
+  <canvas id="canvas" class="hidden"></canvas>
+  <div id="collectCount" class="counter"></div>
+  <label for="inShort">Oder Code von Hand eingeben (z. B. 417-222120222202-0-K3F9A)</label>
+  <div class="row"><input id="inShort" class="field" style="width:16em;font-size:1.05rem;letter-spacing:0" autocomplete="off"><button id="btnShort">Übernehmen</button></div>
+</div>
+
+<!-- ============ 3. ERGEBNISSE ============ -->
+<div class="card">
+  <div class="row"><h2 style="margin:0">3 · Ergebnisse</h2><span class="spacer" style="flex:1"></span>
+    <button class="primary" id="btnGrades">📄 Notenliste (Drucken / PDF)</button><button id="btnCsv">⬇︎ CSV für Excel</button><button class="danger" id="btnDel">Test löschen</button></div>
+  <p class="muted" style="margin:.4rem 0"><small>Gespeichert wird jeder Scan sofort hier im Browser dieses Geräts (nicht im Internet). Safari kann Daten von Webseiten löschen, die man länger nicht geöffnet hat – sichere die Notenliste deshalb noch am Testtag als PDF.</small></p>
+  <div id="stats" style="margin:10px 0"></div>
+  <div style="overflow-x:auto"><table class="res" id="resTable"></table></div>
+  <div id="csvReminder"></div>
+  <p class="muted"><small>Klick auf eine Zeile zeigt die Aufgaben und Antworten. ½ = Wert richtig, Form nicht (z. B. nicht ganz vereinfacht). „Hand“ = per Code eingetragen, dann ohne Einzelantworten. „verl.“ = so oft hat das Gerät den Test verlassen (App gewechselt, Home-Taste; die automatische Bildschirmsperre wird während des Tests verhindert). Übung (gezählt wird nur echtes Üben: eine Aufgabe ab 5 s Bearbeitung, ein Tag ab 3 Aufgaben, eine Runde nur, wenn mind. 80 % ihrer Aufgaben echt bearbeitet wurden): Runden = komplette Probetests, Themen = Fünfer-Übungen, % = beim 1. Versuch richtig. Die Übungszahlen stammen vom Schülergerät; wer auf mehreren Geräten übt, wird zusammengezählt, sobald alle Geräte gescannt sind.</small></p>
+</div>
+<div class="card hidden detail" id="detail"></div>
+
+<div id="beamer" class="beamer hidden"></div>
+<div id="printArea"></div>
+<div id="station" class="station hidden">
+  <div class="stHead"><b>📝 Terme-Check · Abgabe</b><span style="flex:1"></span>
+    <select id="stFacing"><option value="user">Frontkamera</option><option value="environment">Rückkamera</option></select>
+    <button id="stClose">Beenden</button></div>
+  <div class="stBody">
+    <video id="stVideo" playsinline muted></video>
+    <div class="stSide">
+      <h3>Halte deinen QR-Code vor die Kamera</h3>
+      <div>Erfasst</div><div class="stCount" id="stCount"></div>
+      <div style="margin-top:14px">Es fehlen noch:</div><div class="nrgrid" id="stMissing"></div>
+    </div>
+  </div>
+  <div id="stFlash" class="stFlash hidden"></div>
+</div>
+<footer>Terme-Check · Lehrerseite</footer>
+</main>
+
+<script src="lib/qrcode.js"></script>
+<script src="lib/jsQR.js"></script>
+<script src="aufgaben.js?v=20261022b"></script>
+<script>
+"use strict";
+const LKEY = 'termecheck.lehrer';
+let D = { tests: [], active: null };
+try { const s = JSON.parse(localStorage.getItem(LKEY)); if (s) D = s; } catch (e) {}
+const saveD = () => { try { localStorage.setItem(LKEY, JSON.stringify(D)); } catch (e) { toast('Speichern nicht möglich (privater Modus?)', true); } };
+const cur = () => D.tests.find(t => t.code === D.active);
+const testUrl = () => new URL('./#test', location.href).href;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function toast(msg, bad = false) {
+  document.querySelectorAll('.toast').forEach(x => x.remove());
+  const el = document.createElement('div'); el.className = 'toast' + (bad ? ' bad' : ''); el.textContent = msg;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 2600);
+}
+function beep(ok) {
+  try {
+    const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain();
+    o.frequency.value = ok ? 880 : 220; g.gain.value = .08; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .15);
+  } catch (e) {}
+}
+function qrSvg(text) { const q = qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); }
+
+/* ---------- 1. Test starten ---------- */
+const revealed = {};   // Code nur in dieser Sitzung aufgedeckt
+function renderTests() {
+  $('selTest').innerHTML = D.tests.length
+    ? D.tests.slice().reverse().map(t => `<option value="${t.code}" ${t.code === D.active ? 'selected' : ''}>${esc(t.label || 'ohne Bezeichnung')} · Code ${t.code} · ${Object.keys(t.results).length} Erg.</option>`).join('')
+    : '<option>— noch kein Test angelegt —</option>';
+  const t = cur();
+  $('codeBox').innerHTML = t && !revealed[t.code] ? `
+    <div class="btns"><button class="testbtn" id="btnReveal">▶ Test jetzt starten – Testcode anzeigen</button></div>
+    <p class="muted"><small>Der Code bleibt verborgen, bis du ihn in der Teststunde aufdeckst – so kann niemand den Test vorher schreiben.</small></p>`
+  : t ? `
+    <p style="margin:.8rem 0 0">Testcode für die Klasse:</p>
+    <div class="bigcode">${t.code}</div>
+    <p class="muted" style="text-align:center;margin:0">Schüler öffnen <b>${esc(testUrl())}</b>, geben ihre Terme-Check-Nummer und diesen Code ein.</p>
+    <div class="btns" style="justify-content:center"><button class="primary" id="btnBeamer">🖥 Beamer-Ansicht</button></div>` : '';
+  if ($('btnBeamer')) $('btnBeamer').onclick = showBeamer;
+  if ($('btnReveal')) $('btnReveal').onclick = () => { if (confirm('Testcode jetzt anzeigen? Ab dann kann der Test geschrieben werden.')) { revealed[t.code] = true; renderTests(); } };
+  renderNrBox(t);
+  const age = t ? Math.floor((Date.now() - t.created) / 86400000) : 0;
+  $('oldWarn').innerHTML = t && age > 30 ? `<div class="reminder">🗑 Dieser Test ist ${age} Tage alt. Wenn die Ergebnisse in TeacherTool stehen, lösche ihn bitte (unten „Test löschen“).</div>` : '';
+  ['collectCard'].forEach(id => $(id).classList.toggle('hidden', !t));
+  renderResults();
+  renderCount(t);
+}
+$('selTest').onchange = () => { D.active = $('selTest').value; saveD(); $('detail').classList.add('hidden'); renderTests(); };
+$('btnNew').onclick = () => {
+  $('selCopy').innerHTML = '<option value="">neue Zufallsnummern erzeugen (ab der 1. Stunde der Einheit)</option>' +
+    D.tests.filter(t => t.numbers && t.numbers.length).slice().reverse().map(t => `<option value="${t.code}">Nummern übernehmen von: ${esc(t.label || t.code)} (${t.numbers.length})</option>`).join('');
+  $('newBox').classList.toggle('hidden'); $('inLabel').focus();
+};
+function renderNrBox(t) {
+  if (!t) { $('nrBox').innerHTML = ''; return; }
+  $('nrBox').innerHTML = t.numbers && t.numbers.length
+    ? `<details style="margin-top:10px"><summary><b>Terme-Check-Nummern dieser Klasse (${t.numbers.length})</b></summary>
+        <div class="nrgrid">${t.numbers.map(n => `<span>${n}</span>`).join('')}</div>
+        <label for="inNames">Klassenliste einfügen – ein Name pro Zeile, z. B. aus der Schulverwaltung kopiert <span class="muted" style="font-weight:400">(wird <b>nicht gespeichert</b> und nirgends hingeschickt)</span></label>
+        <textarea id="inNames" rows="6" style="width:100%;font:inherit;padding:.5rem;border:1px solid var(--line);border-radius:8px" placeholder="Albrecht, Lena&#10;Bauer, Tim&#10;…" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+        <p class="muted" style="margin:.3rem 0"><small>Die Namen werden alphabetisch sortiert und bekommen die Nummern der Größe nach: erster Name → kleinste Nummer. So ist später auch die Notenliste alphabetisch.</small></p>
+        <div class="btns"><button class="primary" id="btnPrintNames">🖨 Kärtchen mit Namen + Lehrerliste drucken</button><button id="btnPrint">Kärtchen ohne Namen</button><button id="btnMoreNr">+ 5 weitere Nummern</button></div></details>`
+    : `<div class="row" style="margin-top:10px"><label for="inCount" style="margin:0">Schüleranzahl:</label><input id="inCount" class="field" style="width:4em" inputmode="numeric" value="28"><button class="primary" id="btnMakeNr">Nummern erzeugen</button></div>`;
+  if ($('btnMakeNr')) $('btnMakeNr').onclick = () => { const n = Math.max(1, Math.min(60, parseInt($('inCount').value, 10) || 0)); t.numbers = randomNrs(n); saveD(); renderTests(); };
+  if ($('btnMoreNr')) $('btnMoreNr').onclick = () => { const pool = ALL_NRS.filter(n => !t.numbers.includes(n)); t.numbers = t.numbers.concat(pool.sort(() => Math.random() - .5).slice(0, 5)).sort((a, b) => a - b); saveD(); renderTests(); };
+  if ($('btnPrint')) $('btnPrint').onclick = () => printNumbers(t);
+  if ($('btnPrintNames')) $('btnPrintNames').onclick = () => printWithNames(t);
+}
+/* Namen nur im Arbeitsspeicher: sortieren, der Größe nach Nummern zuordnen, drucken, Feld leeren. Nichts wird gespeichert. */
+function printWithNames(t) {
+  const names = $('inNames').value.split(/\r?\n/).map(x => x.replace(/\s+/g, ' ').replace(/\s*;\s*/g, ', ').trim()).filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, 'de', { sensitivity: 'base' }));
+  if (!names.length) return toast('Bitte zuerst die Klassenliste einfügen.', true);
+  if (names.length > t.numbers.length) {
+    const pool = ALL_NRS.filter(n => !t.numbers.includes(n)).sort(() => Math.random() - .5);
+    const add = names.length - t.numbers.length;
+    if (add > pool.length) return toast('So viele Nummern gibt es nicht (höchstens 90).', true);
+    if (!confirm(`Die Liste hat ${names.length} Namen, es gibt aber nur ${t.numbers.length} Nummern. ${add} Nummern ergänzen?`)) return;
+    t.numbers = t.numbers.concat(pool.slice(0, add)).sort((a, b) => a - b); saveD(); renderTests();
+  }
+  const nrs = t.numbers.slice().sort((a, b) => a - b), url = new URL('./', location.href).href;
+  const pairs = nrs.map((n, i) => [n, names[i] || '']);
+  $('printArea').innerHTML = `
+    <h2>Terme-Check-Nummern ${esc(t.label || '')} – zum Ausschneiden</h2>
+    <div class="slips">${pairs.filter(p => p[1]).map(([n, name]) => `<div class="slip"><span class="slipname">${esc(name)}</span>Deine Terme-Check-Nummer<b>${n}</b><small>Gut aufheben (z. B. ins Heft kleben).<br>Üben: ${esc(url)}</small></div>`).join('')}</div>
+    <table class="keylist"><thead><tr><th colspan="2">Lehrerliste ${esc(t.label || '')} – alphabetisch, getrennt aufbewahren</th></tr><tr><th>Nr.</th><th>Name</th></tr></thead>
+    <tbody>${pairs.map(([n, name]) => `<tr><td>${n}</td><td>${esc(name)}</td></tr>`).join('')}</tbody></table>`;
+  // Namen nach dem Drucken sofort wieder vergessen (afterprint statt Zeitgeber – auf dem iPad kehrt print() sofort zurück)
+  window.addEventListener('afterprint', () => { $('printArea').innerHTML = ''; if ($('inNames')) $('inNames').value = ''; }, { once: true });
+  window.print();
+}
+/* Zähler „x von y eingesammelt“ – sichtbar in beiden Scan-Arten */
+function renderCount(t) {
+  if (!t) { $('collectCount').innerHTML = ''; return; }
+  const done = Object.keys(t.results).map(Number), list = t.numbers && t.numbers.length ? t.numbers : null;
+  const n = list ? done.filter(x => list.includes(x)).length : done.length;
+  const missing = list ? list.filter(x => !done.includes(x)) : [];
+  $('collectCount').innerHTML = `<div class="cnt"><b>${n}</b>${list ? ` von ${list.length}` : ''} Ergebnisse eingesammelt</div>
+    ${list ? (missing.length ? `<div class="muted" style="margin-top:4px">Es fehlen noch: ${missing.join(', ')}</div>` : '<div class="g2" style="margin-top:4px">Alle Nummern erfasst ✓</div>') : ''}`;
+}
+/* Notenliste: sortiert nach Nummer wie die gedruckte Lehrerliste, Namensspalte leer zum Übertragen von Hand */
+function printGrades(t) {
+  const nrs = [...new Set([...(t.numbers || []), ...Object.keys(t.results).map(Number)])].sort((a, b) => a - b);
+  const rs = Object.values(t.results);
+  const avgNote = rs.length ? fmtNote(Math.round(rs.reduce((x, r) => x + noteFor(r.pts), 0) / rs.length * 10) / 10) : '–';
+  const d = new Date().toLocaleDateString('de-DE');
+  $('printArea').innerHTML = `
+    <h2>Notenliste Terme-Check – ${esc(t.label || '')}</h2>
+    <p>Stand ${d} · Testcode ${t.code} · ${rs.length} Ergebnisse · Notenschnitt ${avgNote} · Note linear: volle Punktzahl 1,0, halbe Punktzahl 3,5</p>
+    <table class="keylist gradelist"><thead><tr><th>Nr.</th><th>Name</th><th>Punkte (von ${SLOTS.length})</th><th>Note</th><th>verlassen</th><th>Übung: Runden / Themen / % richtig / Tage</th></tr></thead>
+    <tbody>${nrs.map(nr => { const r = t.results[nr], p = practiceSum(t, nr);
+      return `<tr><td>${nr}</td><td></td><td>${r ? fmtPts(r.pts) : 'fehlt'}</td><td><b>${r ? fmtNote(noteFor(r.pts)) : ''}</b></td><td>${r && r.tabs ? r.tabs + '×' : ''}</td>
+        <td>${p ? `${p.rounds} / ${p.drills} / ${p.tasks ? Math.round(100 * p.correct / p.tasks) : '–'} % / ${p.days}` : '–'}</td></tr>`; }).join('')}</tbody></table>
+    <p style="font-size:10pt">Namen von Hand aus der getrennt aufbewahrten Lehrerliste eintragen. Nach dem Übertrag in die Notenverwaltung den Test in der App löschen.</p>`;
+  window.print();
+}
+$('btnGrades').onclick = () => { const t = cur(); if (t) printGrades(t); };
+function printNumbers(t) {
+  const url = new URL('./', location.href).href;
+  $('printArea').innerHTML = `
+    <h2>Terme-Check-Nummern ${esc(t.label || '')} – zum Ausschneiden</h2>
+    <div class="slips">${t.numbers.map(n => `<div class="slip">Deine Terme-Check-Nummer<b>${n}</b><small>Gut aufheben (z. B. ins Heft kleben).<br>Üben: ${esc(url)}</small></div>`).join('')}</div>
+    <table class="keylist"><thead><tr><th colspan="2">Lehrerliste ${esc(t.label || '')} – Name von Hand eintragen, nicht in die App! Getrennt aufbewahren.</th></tr><tr><th>Nr.</th><th>Name</th></tr></thead>
+    <tbody>${t.numbers.map(n => `<tr><td>${n}</td><td></td></tr>`).join('')}</tbody></table>`;
+  window.print();
+}
+$('btnCreate').onclick = () => {
+  let code; do { code = newTestCode(); } while (D.tests.some(t => t.code === code));
+  const src = D.tests.find(t => t.code === $('selCopy').value);
+  D.tests.push({ code, label: $('inLabel').value.trim(), created: Date.now(), results: {}, practice: {}, numbers: src ? src.numbers.slice() : [] });
+  D.active = code; saveD();
+  $('inLabel').value = ''; $('newBox').classList.add('hidden');
+  renderTests(); toast('Test angelegt. Den Code deckst du erst in der Teststunde auf.');
+};
+function showBeamer() {
+  const t = cur(); if (!t) return;
+  $('beamer').innerHTML = `
+    <div style="font-size:1.6rem;font-weight:700">📝 Terme-Check · Test</div>
+    <div style="font-size:1.3rem">1. QR-Code scannen &nbsp;·&nbsp; 2. <b>Terme-Check-Nummer</b> eingeben &nbsp;·&nbsp; 3. Testcode eingeben</div>
+    <div class="bigcode">${t.code}</div>
+    <div class="qrbox" style="margin:0">${qrSvg(testUrl())}</div>
+    <div class="muted">${esc(testUrl())}</div>
+    <button id="beamerClose" style="margin-top:8px">Schließen</button>`;
+  $('beamer').querySelector('.qrbox svg').style.width = 'min(36vh,300px)';
+  $('beamer').classList.remove('hidden');
+  $('beamerClose').onclick = () => $('beamer').classList.add('hidden');
+}
+
+/* ---------- 2. Einsammeln ---------- */
+/* Rückmeldung: normal als Toast mit Details, an der Scanstation groß und ohne Punkte (Umstehende sehen mit) */
+let station = false;
+function say(msg, kind = 'ok', pub = '') {
+  beep(kind === 'ok');
+  if (!station) return toast(msg, kind !== 'ok');
+  const f = $('stFlash'); f.className = 'stFlash' + (kind === 'ok' ? '' : ' ' + kind); f.textContent = pub || msg;
+  clearTimeout(say.t); say.t = setTimeout(() => f.classList.add('hidden'), kind === 'ok' ? 1600 : 3200);
+  renderStation();
+}
+let lastText = '', lastAt = 0;
+function handleScan(text) {
+  const now = Date.now();
+  if (text === lastText && now - lastAt < 4000) return;
+  lastText = text; lastAt = now;
+  const t = cur(); if (!t) return;
+  const p = parsePayload(text);
+  if (!p) return say('Das ist kein Terme-Check-Code.', 'bad', '✗ Kein Terme-Check-Code');
+  if (!p.valid) return say(`Nr. ${p.nr}: Prüfsumme falsch – Code verändert?`, 'bad', `✗ Nr. ${p.nr}: Code ungültig – bitte zur Lehrkraft`);
+  if (!validNr(p.nr)) return say(`Ungültige Nummer ${p.nr}.`, 'bad', `✗ Ungültige Nummer – bitte zur Lehrkraft`);
+  const foreign = t.numbers && t.numbers.length && !t.numbers.includes(p.nr);
+  const fTxt = foreign ? ` · ⚠️ Nr. ${p.nr} steht nicht auf deiner Nummernliste` : '';
+  if (p.practice) storePractice(t, p.nr, p.practice);
+  if (p.kind === 'practice') {
+    saveD(); renderTests();
+    return say(`Übungsnachweis Nr. ${p.nr}: ${p.practice.rounds} Runden, ${p.practice.drills} Themen, ${p.practice.days} Tage${fTxt}`, foreign ? 'warn' : 'ok',
+      foreign ? `⚠ Nr. ${p.nr} steht nicht auf der Liste – bitte zur Lehrkraft` : `✓ Übungsnachweis Nr. ${p.nr} erfasst`);
+  }
+  if (p.code !== t.code) { saveD(); return say(`Nr. ${p.nr} hat einen anderen Testcode (${p.code}) eingegeben! Übungsdaten wurden übernommen.`, 'bad', `✗ Nr. ${p.nr}: falscher Testcode – bitte zur Lehrkraft`); }
+  if (p.version !== APPV) { saveD(); return say(`Nr. ${p.nr} hatte eine ältere Fassung der App (${p.version || 'alt'}). Bitte den Kurzcode unter dem QR-Code ansagen lassen und unten von Hand eintragen – er enthält die Bewertung vom Schülergerät.`, 'bad', `✗ Nr. ${p.nr}: alte App-Fassung – bitte zur Lehrkraft`); }
+  const tasks = testTasks(p.code, p.nr), grades = tasks.map((x, i) => grade(x, p.answers[i]));
+  storeResult(t, { nr: p.nr, grades, tabs: p.tabs, minutes: p.minutes, answers: p.answers, src: 'QR' }, foreign);
+}
+/* Übungsstatistik je Nummer und Gerät; pro Gerät gilt der neueste Stand (die Zähler wachsen nur) */
+function storePractice(t, nr, pr) {
+  t.practice = t.practice || {};
+  const byDev = t.practice[nr] = t.practice[nr] || {};
+  const old = byDev[pr.dev];
+  if (!old || pr.tasks >= old.tasks) byDev[pr.dev] = pr;
+}
+function practiceSum(t, nr) {
+  const devs = Object.values((t.practice || {})[nr] || {});
+  if (!devs.length) return null;
+  const s = { rounds: 0, drills: 0, tasks: 0, correct: 0, days: 0, minutes: 0, last: '', devices: devs.length };
+  devs.forEach(d => { ['rounds', 'drills', 'tasks', 'correct', 'days', 'minutes'].forEach(k => s[k] += d[k]); if (d.last > s.last) s.last = d.last; });
+  return s;
+}
+function storeResult(t, r, foreign = false) {
+  const pts = r.grades.reduce((s, g) => s + points(g), 0);
+  const old = t.results[r.nr];
+  if (old && JSON.stringify(old.grades) === JSON.stringify(r.grades) && old.tabs === r.tabs) return say(`Nr. ${r.nr} ist schon erfasst.`, 'ok', `✓ Nr. ${r.nr} war schon erfasst`);
+  t.results[r.nr] = Object.assign(r, { pts, at: Date.now() });
+  saveD();
+  say(`${old ? 'Aktualisiert' : 'Erfasst'}: Nr. ${r.nr} · ${fmtPts(pts)}/${SLOTS.length} Punkte · Note ${fmtNote(noteFor(pts))}${r.tabs ? ` · ⚠️ ${r.tabs}× verlassen` : ''}${foreign ? ` · ⚠️ Nr. ${r.nr} steht nicht auf deiner Nummernliste` : ''}`,
+    foreign ? 'warn' : 'ok', foreign ? `⚠ Nr. ${r.nr} erfasst – steht nicht auf der Liste, bitte zur Lehrkraft` : `✓ Nr. ${r.nr} erfasst`);
+  renderTests();
+}
+$('btnShort').onclick = () => {
+  const t = cur(); if (!t) return;
+  const txt = $('inShort').value;
+  const p = parseShortCode(txt, t.code);
+  if (!p) return toast('Format passt nicht: Nummer-12 Ziffern-Zahl-Prüfcode', true);
+  if (!p.valid) return toast('Prüfcode stimmt nicht – Tippfehler oder anderer Test?', true);
+  storeResult(t, { nr: p.nr, grades: p.grades, tabs: p.tabs, minutes: null, answers: null, src: 'Hand' }, t.numbers && t.numbers.length && !t.numbers.includes(p.nr));
+  $('inShort').value = '';
+};
+$('inShort').addEventListener('keydown', e => { if (e.key === 'Enter') $('btnShort').click(); });
+
+/* Kamera: eine Schleife für die normale Ansicht und die Scanstation */
+let stream = null, scanTimer = 0, camVideo = null;
+async function startCam(video, facing) {
+  stopCam();
+  try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing }, audio: false }); }
+  catch (e) { toast('Kamera nicht verfügbar oder nicht erlaubt.', true); return false; }
+  camVideo = video; video.srcObject = stream; video.classList.remove('hidden'); await video.play();
+  const c = $('canvas'), ctx = c.getContext('2d', { willReadFrequently: true });
+  scanTimer = setInterval(() => {
+    if (video.readyState < 2) return;
+    const w = Math.min(video.videoWidth, 800), h = Math.round(video.videoHeight * w / video.videoWidth);
+    c.width = w; c.height = h; ctx.drawImage(video, 0, 0, w, h);
+    const res = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' });
+    if (res && res.data) handleScan(res.data);
+  }, 250);
+  return true;
+}
+function stopCam() {
+  clearInterval(scanTimer); if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
+  if (camVideo) { camVideo.srcObject = null; if (camVideo === $('video')) camVideo.classList.add('hidden'); }
+  $('btnCam').classList.remove('hidden'); $('btnCamStop').classList.add('hidden');
+}
+$('btnCam').onclick = async () => { if (await startCam($('video'), 'environment')) { $('btnCam').classList.add('hidden'); $('btnCamStop').classList.remove('hidden'); } };
+$('btnCamStop').onclick = stopCam;
+
+/* Scanstation: Gerät steht vorne, Schüler halten ihren QR-Code vor die Kamera */
+$('btnStation').onclick = async () => {
+  station = true; $('station').classList.remove('hidden'); renderStation();
+  try { document.documentElement.requestFullscreen && await document.documentElement.requestFullscreen(); } catch (e) {}
+  startCam($('stVideo'), $('stFacing').value);
+};
+$('stFacing').onchange = () => startCam($('stVideo'), $('stFacing').value);
+$('stClose').onclick = () => {
+  station = false; stopCam(); $('station').classList.add('hidden'); $('stFlash').classList.add('hidden');
+  try { document.fullscreenElement && document.exitFullscreen(); } catch (e) {}
+  renderTests();
+};
+function renderStation() {
+  const t = cur(); if (!t || !station) return;
+  const done = Object.keys(t.results).map(Number);
+  const list = t.numbers && t.numbers.length ? t.numbers : null;
+  $('stCount').textContent = list ? `${done.filter(n => list.includes(n)).length} von ${list.length}` : `${done.length}`;
+  const missing = list ? list.filter(n => !done.includes(n)) : [];
+  $('stMissing').innerHTML = list ? (missing.length ? missing.map(n => `<span>${n}</span>`).join('') : '<b>Alle erfasst ✓</b>') : '<span class="muted">(keine Nummernliste)</span>';
+}
+
+/* ---------- 3. Ergebnisse ---------- */
+function renderResults() {
+  const t = cur();
+  if (!t) { $('resTable').innerHTML = ''; $('stats').innerHTML = '<span class="muted">Lege oben zuerst einen Test an.</span>'; return; }
+  const rs = Object.values(t.results).sort((a, b) => a.nr - b.nr);
+  const nrs = [...new Set([...rs.map(r => r.nr), ...Object.keys(t.practice || {}).map(Number)])].sort((a, b) => a - b);
+  if (!nrs.length) { $('resTable').innerHTML = ''; $('stats').innerHTML = '<span class="muted">Noch keine Ergebnisse.</span>'; return; }
+  const avg = rs.length ? rs.reduce((s, r) => s + r.pts, 0) / rs.length : 0;
+  const quote = SLOTS.map((_, i) => rs.length ? rs.reduce((s, r) => s + points(r.grades[i]), 0) / rs.length : 0);
+  $('stats').innerHTML = `<b>${rs.length}</b> Testergebnisse${rs.length ? ` · Durchschnitt <b>${fmtPts(Math.round(avg * 10) / 10)}</b> von ${SLOTS.length} Punkten · Notenschnitt <b>${fmtNote(Math.round(rs.reduce((x, r) => x + noteFor(r.pts), 0) / rs.length * 10) / 10)}</b>` : ''} · Übungsdaten von <b>${Object.keys(t.practice || {}).length}</b> Nummern`;
+  const pcell = nr => { const p = practiceSum(t, nr); return p ? `<td>${p.rounds}</td><td>${p.drills}</td><td>${p.tasks ? Math.round(100 * p.correct / p.tasks) : '–'}</td><td>${p.days}</td><td>${Math.round(p.minutes)}</td><td>${p.last ? p.last.slice(8, 10) + '.' + p.last.slice(5, 7) + '.' : '–'}</td>` : '<td colspan="6" class="muted">keine Übungsdaten</td>'; };
+  const empty = '<td colspan="' + (SLOTS.length + 5) + '" class="muted">noch kein Testergebnis</td>';
+  const cell = g => g === 2 ? '<td class="g2">✓</td>' : g === 1 ? '<td class="g1">½</td>' : '<td class="g0">✗</td>';
+  $('resTable').innerHTML = `<thead><tr><th rowspan="2">Nr.</th><th colspan="${SLOTS.length + 5}">Test</th><th colspan="6">Übung</th></tr>
+    <tr><th>Punkte</th><th>Note</th>${SLOTS.map((s, i) => `<th title="${esc(s.area + ' · ' + s.name)}" style="${s.review ? 'background:#ccfbf1' : ''}">${s.review ? '🔁' : i + 1}</th>`).join('')}<th>verl.</th><th>Min.</th><th>Quelle</th>
+    <th title="komplette Probetests">Runden</th><th title="Fünfer-Übungen zu einem Thema">Themen</th><th title="beim 1. Versuch richtig">%</th><th>Tage</th><th>Min.</th><th>zuletzt</th></tr></thead>
+    <tbody>${nrs.map(nr => { const r = t.results[nr]; return `<tr class="${r && r.answers ? 'click' : ''}" data-nr="${nr}"><td><b>${nr}</b></td>${r ? `<td><b>${fmtPts(r.pts)}</b></td><td><b>${fmtNote(noteFor(r.pts))}</b></td>
+      ${r.grades.map(cell).join('')}<td style="${r.tabs ? 'color:var(--bad);font-weight:700' : ''}">${r.tabs ? r.tabs + '×' : '–'}</td><td>${r.minutes ?? '–'}</td><td>${r.src}</td>` : empty}${pcell(nr)}</tr>`; }).join('')}
+    ${rs.length ? `<tr><td colspan="3"><b>Lösungsquote</b></td>${quote.map(q => `<td style="background:${q >= .75 ? '#ecfdf5' : q >= .5 ? '#fffbeb' : '#fef2f2'}">${Math.round(q * 100)}</td>`).join('')}<td colspan="9"></td></tr>` : ''}</tbody>`;
+  $('resTable').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => showDetail(+tr.dataset.nr));
+}
+function showDetail(nr) {
+  const t = cur(), r = t.results[nr]; if (!r || !r.answers) return;
+  const tasks = testTasks(t.code, nr);
+  const sym = g => g === 2 ? '<span class="g2">✓ 1 P.</span>' : g === 1 ? '<span class="g1">½ P.</span>' : '<span class="g0">✗ 0 P.</span>';
+  $('detail').innerHTML = `<div class="row"><h2 style="margin:0">Nr. ${nr} · ${fmtPts(r.pts)}/${SLOTS.length} Punkte · Note ${fmtNote(noteFor(r.pts))}</h2><span style="flex:1"></span><button id="dClose">Schließen</button></div>
+    ${tasks.map((x, i) => `<div class="item"><div class="qtitle">Aufgabe ${i + 1} · ${SLOTS[i].area} · Ich kann ${x.can} · ${sym(r.grades[i])}</div>
+      <div class="q">${x.q}</div>
+      <div>Antwort: <b>${answerText(x, r.answers[i])}</b> &nbsp;·&nbsp; richtig: <b>${correctText(x)}</b></div>
+      <ol class="sol muted">${x.sol.map(s => `<li>${s}</li>`).join('')}</ol></div>`).join('')}`;
+  $('detail').classList.remove('hidden');
+  $('dClose').onclick = () => $('detail').classList.add('hidden');
+  $('detail').scrollIntoView({ behavior: 'smooth' });
+}
+$('btnCsv').onclick = () => {
+  const t = cur(); if (!t) return;
+  const nrs = [...new Set([...Object.keys(t.results), ...Object.keys(t.practice || {})].map(Number))].sort((a, b) => a - b);
+  const lines = [['Nr', 'Punkte', 'Note', ...SLOTS.map((_, i) => 'A' + (i + 1)), 'verlassen', 'Minuten',
+    'Uebung_Runden', 'Uebung_Themen', 'Uebung_Aufgaben', 'Uebung_Prozent_richtig', 'Uebung_Tage', 'Uebung_Minuten', 'Uebung_zuletzt'].join(';')];
+  nrs.forEach(nr => {
+    const r = t.results[nr], p = practiceSum(t, nr);
+    lines.push([nr, ...(r ? [fmtPts(r.pts), fmtNote(noteFor(r.pts)), ...r.grades.map(g => fmtPts(points(g))), r.tabs, r.minutes ?? ''] : Array(SLOTS.length + 4).fill('')),
+      ...(p ? [p.rounds, p.drills, p.tasks, p.tasks ? Math.round(100 * p.correct / p.tasks) : '', p.days, Math.round(p.minutes), p.last] : Array(7).fill(''))].join(';'));
+  });
+  const blob = new Blob(['﻿' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `terme-check_${(t.label || 'test').replace(/[^\wäöüÄÖÜß-]+/g, '_')}_${t.code}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  $('csvReminder').innerHTML = '<div class="reminder">✅ CSV gespeichert. Sobald die Ergebnisse in TeacherTool stehen: oben „Test löschen“ – und die CSV-Datei danach ebenfalls löschen.</div>';
+};
+$('btnDel').onclick = () => {
+  const t = cur(); if (!t) return;
+  if (!confirm(`Test „${t.label || t.code}“ mit ${Object.keys(t.results).length} Ergebnissen und den Übungsdaten von diesem Gerät löschen?`)) return;
+  D.tests = D.tests.filter(x => x !== t); D.active = D.tests.length ? D.tests[D.tests.length - 1].code : null;
+  saveD(); $('detail').classList.add('hidden'); renderTests();
+};
+
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}   // Browser bitten, die Daten nicht automatisch zu löschen
+renderTests();
+</script>
+</body>
+</html>
