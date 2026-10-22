@@ -164,6 +164,10 @@ function gradeTerm(t, src) {
   const sums = f.filter(p => nTerms(p) >= 2);
   if (!sums.length) return 0;
   if (t.form === 'factor') return sums.every(primitive) ? 2 : 1;
+  if (t.form === 'binomK') {   // erst ausklammern, dann binomisch: 3x² − 27 = 3 · (x + 3) · (x − 3)
+    const ok = sums.every(p => primitive(p) && Object.keys(p).every(k => kDeg(k) <= 1)) && f.every(p => nTerms(p) >= 2 || Object.keys(p).every(k => k === ''));
+    return ok ? 2 : 1;
+  }
   if (t.form === 'binom') return sums.every(p => primitive(p) && Object.keys(p).every(k => kDeg(k) <= 1)) && f.every(p => nTerms(p) >= 2 || (nTerms(p) === 1 && Math.abs(p['']) === 1)) ? 2 : 1;
   return 0;
 }
@@ -551,6 +555,7 @@ function grade(t, ans) {
 const HALF_TIP = {
   sum: 'Der Term stimmt, ist aber noch nicht fertig: Löse alle Klammern auf und fasse gleiche Glieder zusammen.',
   factor: 'Richtig umgeformt – aber in der Klammer steckt noch ein gemeinsamer Faktor. Klammere so viel wie möglich aus.',
+  binomK: 'Gleichwertig – aber noch nicht fertig: Klammere zuerst die gemeinsame Zahl aus und schreibe den Rest als binomische Klammer.',
   binom: 'Gleichwertig – aber noch nicht als binomische Klammer geschrieben. Schreibe das Ergebnis als (… + …)², (… − …)² oder (… + …) · (… − …).'
 };
 const points = g => g === 2 ? 1 : g === 1 ? 0.5 : 0;
