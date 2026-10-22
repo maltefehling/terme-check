@@ -378,11 +378,11 @@ const G = {
       hint: 'x darf nicht 0 sein. Der Hauptnenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
       sol: ['x darf nicht 0 sein. Hauptnenner: x', `${k} + ${glied(a, 'x', true)} = ${b}x`, `${k} = ${glied(m, 'x', true)}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${b} ✓`] };
   },
-  bruchHN() {   // x/p + x/q = c
-    const [p, q, hn] = pick([[2, 3, 6], [2, 4, 4], [3, 6, 6], [2, 5, 10], [4, 6, 12], [3, 4, 12]]), x0 = hn * R(1, 3), c = x0 / p + x0 / q;
-    return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac('x', p)} + ${frac('x', q)} = ${c}`)}`, type: 'num', ans: x0, pre: 'x =',
-      hint: `Finde den Hauptnenner von ${p} und ${q} und nimm jeden Teil der Gleichung damit mal. Dann kürzen – die Brüche verschwinden.`,
-      sol: [`Hauptnenner: ${hn}`, `${glied(hn / p, 'x', true)} + ${glied(hn / q, 'x', true)} = ${c * hn}`, `${glied(hn / p + hn / q, 'x', true)} = ${c * hn}`, `x = ${x0}`] };
+  bruchBeide() {   // k/x + a = m/x
+    const x0 = R(2, 6), a = R(1, 4), k = R(1, 9), m = k + a * x0;
+    return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, 'x')} + ${a} = ${frac(m, 'x')}`)}`, type: 'num', ans: x0, pre: 'x =',
+      hint: 'x darf nicht 0 sein. Der Hauptnenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
+      sol: ['x darf nicht 0 sein. Hauptnenner: x', `${k} + ${glied(a, 'x', true)} = ${m}`, `${glied(a, 'x', true)} = ${m - k}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${fmt(m / x0)} ✓`] };
   },
   bruch2x() {   // k/(2x) + a = b
     const x0 = R(1, 5), a = R(1, 3), m = R(1, 3), b = a + m, k = 2 * m * x0;
@@ -453,7 +453,7 @@ const SLOTS = [
   { area: 'I.4 Faktorisieren mit binomischen Formeln', name: 'Faktorisieren mit der 3. Formel', gens: ['faktor3'], practiceGens: ['faktor3', 'faktor3k'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Gleichungen mit Klammern', gens: ['gleichungBinom'], practiceGens: ['gleichungBinom', 'gleichungLinear'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Minus vor einer Klammer', gens: ['minusBinom'], practiceGens: ['minusBinom', 'minusLinear'] },
-  { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchHN'], practiceGens: ['bruchX', 'bruchHN', 'bruch2x'], tauschbar: true },
+  { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchBeide'], practiceGens: ['bruchX', 'bruchBeide', 'bruch2x'], tauschbar: true },
   { area: 'Wiederholung: Zuordnungen (Klasse 7)', name: 'Dreisatz', gens: ['dreisatz'], review: true }   // bei künftigen Tests hier ein anderes altes Thema eintragen
 ];
 const CAN = [
@@ -598,7 +598,7 @@ function decPractice(s) {
 const SALT = 'Hoeri-Terme';
 /* Stand der Aufgaben: bei jeder Änderung an Generatoren/SLOTS erhöhen (und ?v= in index.html/lehrer.html anpassen).
    Steckt im Ergebnis-Code, damit die Lehrerseite merkt, wenn ein Schülergerät eine andere Fassung hatte. */
-const APPV = '20261022c';
+const APPV = '20261022d';
 const sig = s => hash32(SALT + '|' + s).toString(36).toUpperCase().padStart(7, '0').slice(-5);
 function encAnswers(answers) {
   return answers.map(a => !a ? '' : a.k != null ? '#' + a.k : [a.a1 || '', a.a2 || ''].map(x => encodeURIComponent(String(x).trim()).replace(/!/g, '%21').replace(/~/g, '%7E')).join('~')).join('!');
