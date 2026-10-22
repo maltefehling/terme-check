@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261022b">
+<link rel="stylesheet" href="style.css?v=20261022c">
 </head>
 <body>
 <main>
@@ -18,7 +18,7 @@
   <div class="card" id="nrCard"></div>
   <div class="modes">
     <button class="card mode" id="goPractice"><b>🔁 Probetest üben</b>
-      Alle Aufgaben wie im Test – jedes Mal mit neuen Zahlen und in anderer Reihenfolge. Wie im Test ohne Taschenrechner. Rechne im Heft, tippe nur das Ergebnis ein. Du bekommst sofort Rückmeldung, Tipps und den Lösungsweg. So oft du willst.</button>
+      Alle Aufgaben wie im Test – jedes Mal mit neuen Zahlen und in anderer Reihenfolge. Taschenrechner erlaubt. Rechne im Heft, tippe nur das Ergebnis ein. Du bekommst sofort Rückmeldung, Tipps und den Lösungsweg. So oft du willst.</button>
     <button class="card mode test" id="goTest"><b>📝 Test schreiben</b>
       Nur in der Stunde mit dem Testcode deiner Lehrkraft. Keine Rückmeldung während des Tests.</button>
   </div>
@@ -70,7 +70,7 @@
 <!-- ============ TEST ============ -->
 <section id="vTest" class="hidden">
   <div class="bar"><span class="chip test" id="tWho"></span><span class="chip" id="tCount"></span><span class="spacer"></span><button class="testbtn" id="tSubmit">Abgeben</button></div>
-  <div class="notr">✏️ Der ganze Test ist <b>ohne Taschenrechner</b>.</div>
+  <div class="notr">🧮 Im Test ist der <b>Taschenrechner erlaubt</b>.</div>
   <div id="tWarn"></div>
   <div class="nav" id="tNav"></div>
   <div class="card" id="tCard"></div>
@@ -86,7 +86,7 @@
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261022b"></script>
+<script src="aufgaben.js?v=20261022c"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
@@ -263,8 +263,10 @@ function renderPractice() {
   $('pScore').textContent = `✓ beim 1. Versuch: ${P.first.filter(x => x === 2).length}`;
   P.tries = 0; P.done = false; P.a = {}; P.t0 = Date.now();
   const head = `${SLOTS[t.slot].area} · ${SLOTS[t.slot].name}`;
+  const tausch = P.slot === null && SLOTS[t.slot].tauschbar ? '<button id="pSwap">🔄 Aufgabe tauschen</button>' : '';
   $('pCard').innerHTML = taskHtml(t, head, {},
-    `${t.type === 'mc' ? '<p class="muted" style="margin:.2rem 0 0"><small>Tippe deine Antwort an und bestätige dann mit „Prüfen“.</small></p>' : ''}<div class="btns"><button class="primary" id="pCheck">Prüfen ✓</button><button id="pHint">💡 Tipp</button></div><div id="fb"></div>`);
+    `${tausch ? '<p class="muted" style="margin:.2rem 0 0"><small>Bruchgleichungen kannst du im Probetest gegen eine andere Aufgabe tauschen.</small></p>' : ''}${t.type === 'mc' ? '<p class="muted" style="margin:.2rem 0 0"><small>Tippe deine Antwort an und bestätige dann mit „Prüfen“.</small></p>' : ''}<div class="btns"><button class="primary" id="pCheck">Prüfen ✓</button><button id="pHint">💡 Tipp</button>${tausch}</div><div id="fb"></div>`);
+  if ($('pSwap')) $('pSwap').onclick = () => { P.tasks[P.i] = swapTask(); renderPractice(); };
   $('pCard').classList.toggle('review', !!SLOTS[t.slot].review);
   wireBegriffe($('pCard'));
   wireTerm($('pCard'), () => { if ($('fb').querySelector('.warn')) $('fb').innerHTML = ''; });
@@ -314,7 +316,7 @@ function practiceCheck() {
   P.done = true;
   const secs = (Date.now() - P.t0) / 1000;
   if (secs >= MIN_SECS) { noteTask(P.first[P.i] === 2, secs); P.counted++; }   // Durchklicken zählt nicht
-  $('pCard').querySelectorAll('input,.opt,.key,#pCheck,#pHint').forEach(x => x.disabled = true);
+  $('pCard').querySelectorAll('input,.opt,.key,#pCheck,#pHint,#pSwap').forEach(x => x.disabled = true);
   $('pNext').onclick = () => { P.i++; P.i < P.tasks.length ? renderPractice() : practiceSummary(); };
   $('pNext').focus();
 }

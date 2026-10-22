@@ -294,23 +294,24 @@ const G = {
   binom2k() { return binomTask(2, R(2, 3)); },
   binom3() { return binomTask(3, rand() < .3 ? R(2, 3) : 1); },
   binom3k() { return binomTask(3, R(2, 4)); },
+  /* Kopfrechnen: Taschenrechner ist erlaubt – darum wird der Schritt der Formel gefragt, nicht das Ergebnis */
   kopf1() {
-    const t = R(2, 9) * 10, u = pick([1, 1, 2]), n = t + u;
-    return { title: 'Kopfrechnen mit der 1. binomischen Formel', q: `Berechne im Kopf – mit der 1. binomischen Formel.${big(`${n}<sup>2</sup> = ?`)}`, type: 'num', ans: n * n,
-      hint: `Zerlege ${n} in ${t} + ${u}. Dann (${t} + ${u})² = ${t}² + 2 · ${t} · ${u} + ${u}².`,
-      sol: [`${n}² = (${t} + ${u})²`, `= ${t * t} + ${2 * t * u} + ${u * u}`, `= ${fmt(n * n)}`] };
+    const t = R(2, 9) * 10, u = R(1, 3), n = t + u;
+    return { title: 'Kopfrechnen mit der 1. binomischen Formel', q: `So rechnet man ${n}² mit der 1. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} + ${u})<sup>2</sup> = ${fmt(t * t)} + □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
+      hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}.`,
+      sol: [`(${t} + ${u})² = ${t}² + 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} + ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf2() {
-    const t = R(2, 10) * 10, u = pick([1, 1, 2]), n = t - u;
-    return { title: 'Kopfrechnen mit der 2. binomischen Formel', q: `Berechne im Kopf – mit der 2. binomischen Formel.${big(`${n}<sup>2</sup> = ?`)}`, type: 'num', ans: n * n,
-      hint: `Zerlege ${n} in ${t} − ${u}. Dann (${t} − ${u})² = ${t}² − 2 · ${t} · ${u} + ${u}².`,
-      sol: [`${n}² = (${t} − ${u})²`, `= ${fmt(t * t)} − ${2 * t * u} + ${u * u}`, `= ${fmt(n * n)}`] };
+    const t = R(2, 10) * 10, u = R(1, 3), n = t - u;
+    return { title: 'Kopfrechnen mit der 2. binomischen Formel', q: `So rechnet man ${n}² mit der 2. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} − ${u})<sup>2</sup> = ${fmt(t * t)} − □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
+      hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}. Das Minus steht schon davor.`,
+      sol: [`(${t} − ${u})² = ${t}² − 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} − ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf3() {
-    const t = R(2, 10) * 10, u = R(1, 3);
-    return { title: 'Kopfrechnen mit der 3. binomischen Formel', q: `Berechne im Kopf – mit der 3. binomischen Formel.${big(`${t + u} · ${t - u} = ?`)}`, type: 'num', ans: t * t - u * u,
-      hint: `Beide Zahlen liegen gleich weit neben ${t}: ${t + u} = ${t} + ${u} und ${t - u} = ${t} − ${u}. Dann (a + b) · (a − b) = a² − b².`,
-      sol: [`${t + u} · ${t - u} = (${t} + ${u}) · (${t} − ${u})`, `= ${fmt(t * t)} − ${u * u}`, `= ${fmt(t * t - u * u)}`] };
+    const t = R(2, 10) * 10, u = R(2, 4);
+    return { title: 'Kopfrechnen mit der 3. binomischen Formel', q: `So rechnet man ${t + u} · ${t - u} mit der 3. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${t + u} · ${t - u} = (${t} + ${u}) · (${t} − ${u}) = ${fmt(t * t)} − □`)}`, type: 'num', ans: u * u, pre: '□ =',
+      hint: `(a + b) · (a − b) = a² − b². Hier ist b = ${u}.`,
+      sol: [`(${t} + ${u}) · (${t} − ${u}) = ${t}² − ${u}²`, `= ${fmt(t * t)} − ${u * u} = ${fmt(t * t - u * u)}`, `□ = ${u * u}`] };
   },
 
   /* ===== I.4 Faktorisieren mit binomischen Formeln ===== */
@@ -447,7 +448,7 @@ function faktor3Task(a, k) {
     sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}   und   ${a * a} = ${a} · ${a}`, `= ${ans}`] });
 }
 
-/* Taschenrechner: Der ganze Test und die ganze Übung sind ohne Taschenrechner. */
+/* Taschenrechner: in Übung und Test erlaubt (Malte 22.10.2026) – es gibt deshalb keine reinen Rechen-Ergebnisse beim Kopfrechnen. */
 const MIT_TR = new Set();
 
 /* ---------- Die Aufgabenplätze: 12 zum aktuellen Thema (je einer pro „Ich kann …“-Zeile des Kompetenzrasters)
@@ -468,7 +469,7 @@ const SLOTS = [
   { area: 'I.5 Gleichungen mit Klammern', name: 'Gleichungen mit Klammern', gens: ['gleichungBinom'], practiceGens: ['gleichungBinom', 'gleichungLinear'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Minus vor einer Klammer', gens: ['minusBinom'], practiceGens: ['minusBinom', 'minusLinear'] },
   { area: 'I.5 Gleichungen mit Klammern', name: 'Zahlenrätsel', gens: ['raetselMaschine', 'raetselMal'], practiceGens: ['raetselMaschine', 'raetselMal', 'raetselRechteck'] },
-  { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchHN'], practiceGens: ['bruchX', 'bruchHN', 'bruch2x'] },
+  { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchHN'], practiceGens: ['bruchX', 'bruchHN', 'bruch2x'], tauschbar: true },
   { area: 'Wiederholung: Zuordnungen (Klasse 7)', name: 'Dreisatz', gens: ['dreisatz'], review: true }   // bei künftigen Tests hier ein anderes altes Thema eintragen
 ];
 const CAN = [
@@ -514,12 +515,23 @@ function practiceTasks(slotIdx = null, n = 5) {
 
 /* Test: Aufgabentyp hängt nur vom Testcode ab (gleich für die ganze Klasse),
    die Zahlen hängen von Testcode + Listennummer ab (jeder bekommt andere). */
+/* Bruchgleichungen tauschen (sie kommen erst nach den Ferien dran, die Schüler üben aber schon vorher):
+   in der Übung per Knopf, im Test, wenn die Lehrkraft den Test „ohne Bruchgleichungen“ anlegt (steckt im Testcode: 1. Ziffer ungerade).
+   Ersatz im Test: eine Gleichung bzw. ein Zahlenrätsel aus I.5. */
+const ERSATZ_TEST = [{ slot: 8, gen: 'gleichungLinear' }, { slot: 10, gen: 'raetselRechteck' }];
+const ohneBruch = code => +String(code)[0] % 2 === 1;
+function swapTask() {
+  rand = Math.random;
+  const i = pick(SLOTS.map((s, k) => k).filter(k => !SLOTS[k].review && !SLOTS[k].tauschbar)), s = SLOTS[i];
+  return Object.assign(makeTask(pick(s.practiceGens || s.gens)), { slot: i, getauscht: true });
+}
 function testTasks(code, nr) {
   const out = SLOTS.map((s, i) => {
     rand = mulberry32(hash32(`typ|${code}|${i}`));
-    const gen = pick(s.gens);
+    const ers = s.tauschbar && ohneBruch(code) ? pick(ERSATZ_TEST) : null;
+    const gen = ers ? ers.gen : pick(s.gens);
     rand = mulberry32(hash32(`zahl|${code}|${nr}|${i}`));
-    return Object.assign(makeTask(gen), { slot: i });
+    return Object.assign(makeTask(gen), { slot: ers ? ers.slot : i });
   });
   rand = Math.random;
   return out;
@@ -564,7 +576,7 @@ function correctText(t) {
 
 /* ---------- Testcode: 4 Zufallsziffern + 1 Prüfziffer (fängt Tippfehler ab) ---------- */
 function codeCheckDigit(d4) { const w = [3, 7, 9, 1]; return String([...d4].reduce((s, c, i) => s + (+c) * w[i], 0) % 10); }
-function newTestCode() { const d = String(Math.floor(Math.random() * 10000)).padStart(4, '0'); return d + codeCheckDigit(d); }
+function newTestCode(ohneBr = false) { let d; do { d = String(Math.floor(Math.random() * 10000)).padStart(4, '0'); } while ((+d[0] % 2 === 1) !== ohneBr); return d + codeCheckDigit(d); }
 function validCode(c) { return /^\d{5}$/.test(c) && codeCheckDigit(c.slice(0, 4)) === c[4]; }
 
 /* ---------- Schülernummer: 3 Ziffern, die letzte ist Prüfziffer ----------
@@ -602,7 +614,7 @@ function decPractice(s) {
 const SALT = 'Hoeri-Terme';
 /* Stand der Aufgaben: bei jeder Änderung an Generatoren/SLOTS erhöhen (und ?v= in index.html/lehrer.html anpassen).
    Steckt im Ergebnis-Code, damit die Lehrerseite merkt, wenn ein Schülergerät eine andere Fassung hatte. */
-const APPV = '20261022a';
+const APPV = '20261022b';
 const sig = s => hash32(SALT + '|' + s).toString(36).toUpperCase().padStart(7, '0').slice(-5);
 function encAnswers(answers) {
   return answers.map(a => !a ? '' : a.k != null ? '#' + a.k : [a.a1 || '', a.a2 || ''].map(x => encodeURIComponent(String(x).trim()).replace(/!/g, '%21').replace(/~/g, '%7E')).join('~')).join('!');

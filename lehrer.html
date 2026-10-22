@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Terme-Check · Lehrkraft</title>
-<link rel="stylesheet" href="style.css?v=20261022b">
+<link rel="stylesheet" href="style.css?v=20261022c">
 </head>
 <body>
 <main>
@@ -26,6 +26,7 @@
     <label for="selCopy">Nummernliste</label>
     <div class="row"><select id="selCopy" style="font:inherit;padding:.4rem;border-radius:8px;border:1px solid var(--line);max-width:100%"></select>
       <button class="primary" id="btnCreate">Test anlegen</button></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-weight:400"><input type="checkbox" id="chkOhneBruch" style="width:22px;height:22px"> Bruchgleichungen noch nicht im Test – stattdessen eine Gleichung bzw. Sachaufgabe aus I.5</label>
   </div>
   <div id="oldWarn"></div>
   <div id="nrBox"></div>
@@ -83,7 +84,7 @@
 
 <script src="lib/qrcode.js"></script>
 <script src="lib/jsQR.js"></script>
-<script src="aufgaben.js?v=20261022b"></script>
+<script src="aufgaben.js?v=20261022c"></script>
 <script>
 "use strict";
 const LKEY = 'termecheck.lehrer';
@@ -116,7 +117,7 @@ function renderTests() {
   const t = cur();
   $('codeBox').innerHTML = t && !revealed[t.code] ? `
     <div class="btns"><button class="testbtn" id="btnReveal">▶ Test jetzt starten – Testcode anzeigen</button></div>
-    <p class="muted"><small>Der Code bleibt verborgen, bis du ihn in der Teststunde aufdeckst – so kann niemand den Test vorher schreiben.</small></p>`
+    <p class="muted"><small>${ohneBruch(t.code) ? '<b>Test ohne Bruchgleichungen</b> (Aufgabe 12 ist eine Gleichung bzw. Sachaufgabe aus I.5). ' : 'Test mit Bruchgleichungen (Aufgabe 12). '}Der Code bleibt verborgen, bis du ihn in der Teststunde aufdeckst – so kann niemand den Test vorher schreiben.</small></p>`
   : t ? `
     <p style="margin:.8rem 0 0">Testcode für die Klasse:</p>
     <div class="bigcode">${t.code}</div>
@@ -211,7 +212,7 @@ function printNumbers(t) {
   window.print();
 }
 $('btnCreate').onclick = () => {
-  let code; do { code = newTestCode(); } while (D.tests.some(t => t.code === code));
+  let code; do { code = newTestCode($('chkOhneBruch').checked); } while (D.tests.some(t => t.code === code));
   const src = D.tests.find(t => t.code === $('selCopy').value);
   D.tests.push({ code, label: $('inLabel').value.trim(), created: Date.now(), results: {}, practice: {}, numbers: src ? src.numbers.slice() : [] });
   D.active = code; saveD();
@@ -372,7 +373,7 @@ function showDetail(nr) {
   const tasks = testTasks(t.code, nr);
   const sym = g => g === 2 ? '<span class="g2">✓ 1 P.</span>' : g === 1 ? '<span class="g1">½ P.</span>' : '<span class="g0">✗ 0 P.</span>';
   $('detail').innerHTML = `<div class="row"><h2 style="margin:0">Nr. ${nr} · ${fmtPts(r.pts)}/${SLOTS.length} Punkte · Note ${fmtNote(noteFor(r.pts))}</h2><span style="flex:1"></span><button id="dClose">Schließen</button></div>
-    ${tasks.map((x, i) => `<div class="item"><div class="qtitle">Aufgabe ${i + 1} · ${SLOTS[i].area} · Ich kann ${x.can} · ${sym(r.grades[i])}</div>
+    ${tasks.map((x, i) => `<div class="item"><div class="qtitle">Aufgabe ${i + 1} · ${SLOTS[x.slot].area} · Ich kann ${x.can} · ${sym(r.grades[i])}</div>
       <div class="q">${x.q}</div>
       <div>Antwort: <b>${answerText(x, r.answers[i])}</b> &nbsp;·&nbsp; richtig: <b>${correctText(x)}</b></div>
       <ol class="sol muted">${x.sol.map(s => `<li>${s}</li>`).join('')}</ol></div>`).join('')}`;
