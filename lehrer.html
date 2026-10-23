@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Terme-Check · Lehrkraft</title>
-<link rel="stylesheet" href="style.css?v=20261022f">
+<link rel="stylesheet" href="style.css?v=20261023a">
 </head>
 <body>
 <main>
@@ -84,7 +84,7 @@
 
 <script src="lib/qrcode.js"></script>
 <script src="lib/jsQR.js"></script>
-<script src="aufgaben.js?v=20261022f"></script>
+<script src="aufgaben.js?v=20261023a"></script>
 <script>
 "use strict";
 const LKEY = 'termecheck.lehrer';
@@ -210,13 +210,10 @@ async function loadCsv(file, t) {
 /* Kärtchen fest in Seiten zu 3 × 7 aufteilen – jede Seite eine eigene Tabelle mit festen Zellhöhen und Seitenumbruch danach.
    (Ein CSS-Raster über mehrere Seiten schneiden Browser beim Drucken teils mitten durch ein Kärtchen.) */
 function slipPages(cells) {
+  // Seitenblöcke aus Kärtchen mit FESTER Höhe (div, kein Tabellenlayout): ein Block passt immer auf eine Seite,
+  // danach erzwungener Seitenumbruch – so schneidet auch Safari kein Kärtchen durch.
   const PER = 21, pages = [];
-  for (let i = 0; i < cells.length; i += PER) {
-    const page = cells.slice(i, i + PER);
-    while (page.length % 3) page.push('<td class="slip empty"></td>');
-    const rows = []; for (let j = 0; j < page.length; j += 3) rows.push(`<tr>${page.slice(j, j + 3).join('')}</tr>`);
-    pages.push(`<table class="slips">${rows.join('')}</table>`);
-  }
+  for (let i = 0; i < cells.length; i += PER) pages.push(`<div class="slippage">${cells.slice(i, i + PER).join('')}</div>`);
   return pages.join('');
 }
 /* Namen nur im Arbeitsspeicher: sortieren, der Größe nach Nummern zuordnen, drucken, Feld leeren. Nichts wird gespeichert. */
@@ -232,7 +229,7 @@ function printWithNames(t) {
   const pairs = nrs.map((n, i) => [n, names[i] || '']);
   $('printArea').innerHTML = `
     <h2>Terme-Check-Nummern ${esc(t.label || '')} – zum Ausschneiden</h2>
-    ${slipPages(pairs.filter(p => p[1]).map(([n, name]) => `<td class="slip"><span class="slipname">${esc(name)}</span><span class="sliplbl">Terme-Check-Nummer</span><b>${n}</b><small>Ins Heft kleben · Üben: ${esc(url.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</small></td>`))}
+    ${slipPages(pairs.filter(p => p[1]).map(([n, name]) => `<div class="slip"><span class="slipname">${esc(name)}</span><span class="sliplbl">Terme-Check-Nummer</span><b>${n}</b><small>Ins Heft kleben · Üben: ${esc(url.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</small></div>`))}
     <table class="keylist"><thead><tr><th colspan="2">Lehrerliste ${esc(t.label || '')} – alphabetisch, getrennt aufbewahren</th></tr><tr><th>Nr.</th><th>Name</th></tr></thead>
     <tbody>${pairs.map(([n, name]) => `<tr><td>${n}</td><td>${esc(name)}</td></tr>`).join('')}</tbody></table>`;
   // Namen nach dem Drucken sofort wieder vergessen (afterprint statt Zeitgeber – auf dem iPad kehrt print() sofort zurück)
@@ -269,7 +266,7 @@ function printNumbers(t) {
   const url = new URL('./', location.href).href;
   $('printArea').innerHTML = `
     <h2>Terme-Check-Nummern ${esc(t.label || '')} – zum Ausschneiden</h2>
-    ${slipPages(t.numbers.map(n => `<td class="slip"><span class="sliplbl">Terme-Check-Nummer</span><b>${n}</b><small>Ins Heft kleben · Üben: ${esc(url.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</small></td>`))}
+    ${slipPages(t.numbers.map(n => `<div class="slip"><span class="sliplbl">Terme-Check-Nummer</span><b>${n}</b><small>Ins Heft kleben · Üben: ${esc(url.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</small></div>`))}
     <table class="keylist"><thead><tr><th colspan="2">Lehrerliste ${esc(t.label || '')} – Name von Hand eintragen, nicht in die App! Getrennt aufbewahren.</th></tr><tr><th>Nr.</th><th>Name</th></tr></thead>
     <tbody>${t.numbers.map(n => `<tr><td>${n}</td><td></td></tr>`).join('')}</tbody></table>`;
   window.print();

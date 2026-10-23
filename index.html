@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261022f">
+<link rel="stylesheet" href="style.css?v=20261023a">
 </head>
 <body>
 <main>
@@ -86,11 +86,14 @@
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261022f"></script>
+<script src="aufgaben.js?v=20261023a"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
-function show(v) { VIEWS.forEach(x => $(x).classList.toggle('hidden', x !== v)); window.scrollTo(0, 0); if (typeof keepAwake === 'function') keepAwake(v === 'vTest' || v === 'vDone'); }
+function show(v) {
+  if (v !== 'vPractice') $('pCard').innerHTML = '';   // keine unsichtbaren Eingabefelder zurücklassen
+  if (v !== 'vTest') $('tCard').innerHTML = '';
+  VIEWS.forEach(x => $(x).classList.toggle('hidden', x !== v)); window.scrollTo(0, 0); if (typeof keepAwake === 'function') keepAwake(v === 'vTest' || v === 'vDone'); }
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -142,7 +145,7 @@ function inputHtml(t, a = {}) {
     const keys = [...(t.vars || ['x']), '²', '(', ')', '+', '−', '·'];
     return `<div class="answer term"><input id="a1" class="termin" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Dein Term" placeholder="Term eintippen" value="${v(a.a1)}"></div>
       <div class="keys">${keys.map(k => `<button type="button" class="key" data-ins="${k}">${k}</button>`).join('')}<button type="button" class="key del" data-ins="⌫" aria-label="Löschen">⌫</button></div>
-      <div class="tprev" id="tprev"></div>`;
+      <div class="tprev" ></div>`;
   }
   if (t.type === 'mc') return `<div class="mc">${t.options.map((o, k) => `<button class="opt ${a.k === k ? 'sel' : ''}" data-k="${k}">${o}</button>`).join('')}</div>`;
 }
@@ -169,11 +172,11 @@ function wireBegriffe(root) {
 }
 /* Term-Eingabe: Tasten fügen an der Schreibmarke ein (ohne dass die Tastatur zugeht), darunter die Vorschau */
 function wireTerm(root, onChange) {
-  const inp = root.querySelector('.termin');
+  const inp = root.querySelector('.termin'), pv = root.querySelector('.tprev');
   if (!inp) return;
   const prev = () => {
     const r = termParse(inp.value);
-    $('tprev').innerHTML = r.empty ? '<small class="muted">Zahlen über die Tastatur, x, ² und Klammern auch über die Tasten. Statt ² kannst du auch x2 tippen.</small>'
+    pv.innerHTML = r.empty ? '<small class="muted">Zahlen über die Tastatur, x, ² und Klammern auch über die Tasten. Statt ² kannst du auch x2 tippen.</small>'
       : r.error ? '<small class="err">⚠ Das kann ich noch nicht lesen – fehlt eine Klammer oder ein Rechenzeichen?</small>'
       : `<small class="muted">So lese ich deine Eingabe:</small> <span class="prevterm">${termHtml(inp.value)}</span>`;
   };
@@ -190,7 +193,10 @@ function wireTerm(root, onChange) {
   inp.addEventListener('input', () => { prev(); if (onChange) onChange(); });
   prev();
 }
-const readInputs = () => ({ a1: $('a1') ? $('a1').value : '', a2: $('a2') ? $('a2').value : '' });
+/* Eingaben IMMER aus der jeweiligen Karte lesen: Übung (pCard) und Test (tCard) erzeugen Felder mit denselben ids.
+   Früher las der Test per $('a1') das unsichtbare Feld einer zuvor geöffneten Übungsaufgabe (Fehler 23.10.2026 im Wurzel-Check). */
+const inField = (root, id) => root.querySelector('#' + id);
+const readInputs = root => ({ a1: inField(root, 'a1') ? inField(root, 'a1').value : '', a2: inField(root, 'a2') ? inField(root, 'a2').value : '' });
 
 /* ================= STARTSEITE ================= */
 function renderHome() {
@@ -281,13 +287,14 @@ function renderPractice() {
     $('pCheck').onclick = () => practiceCheck();
   }
   else {
-    $('pCheck').onclick = () => { P.a = readInputs(); practiceCheck(); };
+    $('pCheck').onclick = () => { P.a = readInputs($('pCard')); practiceCheck(); };
     $('pCard').querySelectorAll('input').forEach(inp => inp.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
-      if (inp.id === 'a1' && $('a2') && $('a2').value.trim() === '') { e.preventDefault(); $('a2').focus(); return; }   // erst ins zweite Feld
-      P.a = readInputs(); practiceCheck();
+      const a2 = inField($('pCard'), 'a2');
+      if (inp.id === 'a1' && a2 && a2.value.trim() === '') { e.preventDefault(); a2.focus(); return; }   // erst ins zweite Feld
+      P.a = readInputs($('pCard')); practiceCheck();
     }));
-    setTimeout(() => $('a1') && $('a1').focus({ preventScroll: true }), 50);
+    setTimeout(() => { const a1 = inField($('pCard'), 'a1'); if (a1) a1.focus({ preventScroll: true }); }, 50);
   }
   $('pHint').onclick = () => { if (!P.done) $('fb').innerHTML = `<div class="fb hint">💡 ${t.hint}</div>`; };
 }
@@ -410,7 +417,7 @@ function answered(a) { return a && (a.k != null || String(a.a1 || '').trim() !==
 function captureCurrent() {
   if (!T || T.st.submitted) return;
   const t = T.tasks[T.st.cur];
-  if (t.type !== 'mc' && $('a1')) { T.st.answers[T.st.cur] = readInputs(); saveT(); }
+  if (t.type !== 'mc' && inField($('tCard'), 'a1')) { T.st.answers[T.st.cur] = readInputs($('tCard')); saveT(); }
 }
 function renderTest() {
   const st = T.st, t = T.tasks[st.cur];
@@ -434,7 +441,7 @@ function renderTest() {
   });
   else if (t.type === 'term') {
     wireTerm($('tCard'), () => { captureCurrent(); $('tNav').children[st.cur].classList.toggle('done', answered(st.answers[st.cur])); $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`; });
-    $('a1').addEventListener('keydown', e => { if (e.key === 'Enter' && $('tNext')) $('tNext').click(); });
+    inField($('tCard'), 'a1').addEventListener('keydown', e => { if (e.key === 'Enter' && $('tNext')) $('tNext').click(); });
   }
   else $('tCard').querySelectorAll('input').forEach(inp => {
     inp.addEventListener('input', () => { captureCurrent(); $('tNav').children[st.cur].classList.toggle('done', answered(st.answers[st.cur])); $('tCount').textContent = `${st.answers.filter(answered).length} von ${SLOTS.length} beantwortet`; });
@@ -497,6 +504,21 @@ function overviewHtml(o) {
     <p class="ovnext">👉 ${o.next}</p>
     ${o.areas.length ? `<h3>Diese Punkte im Kompetenzraster solltest du dir noch einmal anschauen</h3>${o.areas.map(areaRow).join('')}` : '<h3>🎉 Im Test war alles richtig.</h3>'}
   </div>`;
+}
+/* Nach dem Test: jede falsche bzw. halbe Aufgabe mit Aufgabe, eigener Eingabe und richtiger Lösung (Wunsch der Schüler) */
+function mistakesHtml(tasks, grades, answers) {
+  const wrong = tasks.map((t, i) => [t, i]).filter(([, i]) => grades[i] !== 2);
+  if (!wrong.length) return '';
+  return `<div class="mistakes"><h2 style="margin-top:0">Deine Fehler im Detail</h2>
+    <p class="muted" style="margin-top:0">Schau dir an, was du eingegeben hast und was richtig gewesen wäre. Tipp: Rechne die Aufgabe danach noch einmal selbst.</p>
+    ${wrong.map(([t, i]) => `<div class="mistake ${SLOTS[t.slot].review ? 'rev' : ''}">
+      <div class="qtitle">Aufgabe ${i + 1} · ${SLOTS[t.slot].area.replace(/^S\.\s*\d+\s*[–-]\s*\d+\s*/, '')} · ${grades[i] === 1 ? '<span class="g1">½ Punkt</span>' : '<span class="g0">0 Punkte</span>'}</div>
+      <div class="mq">${t.q}</div>
+      <div class="mrow"><span class="mlab">Deine Eingabe:</span> <span class="mbad">${grades[i] === -1 || !answers[i] ? 'keine Antwort' : answerText(t, answers[i])}</span></div>
+      <div class="mrow"><span class="mlab">Richtig wäre:</span> <span class="mgood">${correctText(t)}</span></div>
+      ${grades[i] === 1 ? `<div class="muted"><small>Dein Term ist gleichwertig, aber noch nicht fertig: ${HALF_TIP[t.form] || ''}</small></div>` : ''}
+      <details class="msol"><summary>Lösungsweg anzeigen</summary><ol class="sol">${t.sol.map(x => `<li>${x}</li>`).join('')}</ol></details>
+    </div>`).join('')}</div>`;
 }
 /* Übersicht als Bild (PNG) zeichnen – ohne Zusatzbibliothek, direkt auf ein Canvas */
 function overviewCanvas(o) {
@@ -567,6 +589,7 @@ function renderDone() {
     ${overviewHtml(ov)}
     <div class="btns" style="justify-content:center"><button class="primary" id="dSave">📥 Übersicht als Bild speichern</button></div>
     <p class="muted" style="margin:.2rem 0 0"><small>Oder einfach einen Screenshot machen (obere Taste + Lauter-Taste gleichzeitig).</small></p>
+    ${mistakesHtml(T.tasks, grades, st.answers)}
     <h2 style="margin-top:18px">Alle Aufgaben im Überblick</h2>
     ${rasterReport(T.tasks, grades)}
     <p class="muted"><small>½ = Term gleichwertig, aber noch nicht fertig umgeformt (nicht zusammengefasst bzw. nicht vollständig ausgeklammert).</small></p>
