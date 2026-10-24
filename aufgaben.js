@@ -262,9 +262,11 @@ const G = {
   },
 
   /* ===== I.2 Summen multiplizieren ===== */
-  summenXX() {
+  summenXXneg() { return G.summenXX(true); },
+  summenXYneg() { return G.summenXY(true); },
+  summenXX(neg = false) {   // neg: mindestens eine negative Zahl (Test)
     let a, b;
-    do { a = R(1, 9) * sgn(); b = R(1, 9) * sgn(); } while (Math.abs(a) === Math.abs(b));
+    do { a = R(1, 9) * sgn(); b = R(1, 9) * sgn(); } while (Math.abs(a) === Math.abs(b) || (neg && a > 0 && b > 0));
     const v = pick(['x', 'a', 'y']), res = poly([1, X2(v)], [a + b, v], [a * b, '']);
     return termTask({
       title: 'Summen multiplizieren', q: `Multipliziere aus und fasse zusammen.${big(`(${poly([1, v], [a, ''])}) · (${poly([1, v], [b, ''])})`)}`, form: 'sum', vars: [v], ansHtml: res,
@@ -272,8 +274,10 @@ const G = {
       sol: [`= ${v} · ${v} + ${v} · ${pk(b)} + ${pk(a)} · ${v} + ${pk(a)} · ${pk(b)}`, `= ${poly([1, X2(v)], [b, v], [a, v], [a * b, ''])}`, `= ${res}`]
     });
   },
-  summenXY() {
-    const a = R(1, 9) * sgn(), b = R(1, 9) * sgn(), res = poly([1, 'xy'], [b, 'x'], [a, 'y'], [a * b, '']);
+  summenXY(neg = false) {
+    let a, b;
+    do { a = R(1, 9) * sgn(); b = R(1, 9) * sgn(); } while (neg && a > 0 && b > 0);
+    const res = poly([1, 'xy'], [b, 'x'], [a, 'y'], [a * b, '']);
     return termTask({
       title: 'Summen multiplizieren', q: `Multipliziere aus.${big(`(${poly([1, 'x'], [a, ''])}) · (${poly([1, 'y'], [b, ''])})`)}`, form: 'sum', vars: ['x', 'y'], ansHtml: res,
       hint: 'Jeder Teil der ersten Klammer wird mit jedem Teil der zweiten Klammer multipliziert – vier Bögen, vier Felder. Ein Minus gehört zur Zahl dahinter.',
@@ -443,9 +447,9 @@ const MIT_TR = new Set();
    gens = im Test (nur Grundlagen), practiceGens = in der Übung zusätzlich schwierigere Varianten.
    Die „Ich kann …“-Sätze stehen in RASTER und müssen WORTGLEICH im Kompetenzraster stehen. */
 const SLOTS = [
-  { area: 'I.1a Ausmultiplizieren', name: 'Ausmultiplizieren', gens: ['ausmultZahl', 'ausmultVar'] },
+  { area: 'I.1a Ausmultiplizieren', name: 'Ausmultiplizieren', gens: ['ausmultZahl'], practiceGens: ['ausmultZahl', 'ausmultVar'] },   // Test verschlankt (Zeit, Malte 24.10.)
   { area: 'I.1b Ausklammern', name: 'Ausklammern', gens: ['ausklZahl', 'ausklVar'], practiceGens: ['ausklZahl', 'ausklVar', 'ausklZwei'] },
-  { area: 'I.2 Summen multiplizieren', name: 'Summen multiplizieren', gens: ['summenXX', 'summenXY'], practiceGens: ['summenXX', 'summenXY', 'summen2'] },
+  { area: 'I.2 Summen multiplizieren', name: 'Summen multiplizieren', gens: ['summenXXneg', 'summenXYneg'], practiceGens: ['summenXX', 'summenXY', 'summen2'] },   // im Test immer mit einer negativen Zahl
   { area: 'I.3a Erste binomische Formel', name: '1. binomische Formel', gens: ['binom1', 'kopf1'], practiceGens: ['binom1', 'binom1k', 'kopf1'] },
   { area: 'I.3b Zweite binomische Formel', name: '2. binomische Formel', gens: ['binom2', 'kopf2'], practiceGens: ['binom2', 'binom2k', 'kopf2'] },
   { area: 'I.3c Dritte binomische Formel', name: '3. binomische Formel', gens: ['binom3', 'kopf3'], practiceGens: ['binom3', 'binom3k', 'kopf3'] },
@@ -598,7 +602,7 @@ function decPractice(s) {
 const SALT = 'Hoeri-Terme';
 /* Stand der Aufgaben: bei jeder Änderung an Generatoren/SLOTS erhöhen (und ?v= in index.html/lehrer.html anpassen).
    Steckt im Ergebnis-Code, damit die Lehrerseite merkt, wenn ein Schülergerät eine andere Fassung hatte. */
-const APPV = '20261022d';
+const APPV = '20261024a';
 const sig = s => hash32(SALT + '|' + s).toString(36).toUpperCase().padStart(7, '0').slice(-5);
 function encAnswers(answers) {
   return answers.map(a => !a ? '' : a.k != null ? '#' + a.k : [a.a1 || '', a.a2 || ''].map(x => encodeURIComponent(String(x).trim()).replace(/!/g, '%21').replace(/~/g, '%7E')).join('~')).join('!');
