@@ -231,3 +231,16 @@ button.mini{padding:.3rem .9rem;font-size:.95rem;min-height:40px}
 .mbad{color:var(--bad);font-weight:700}
 .mgood{color:var(--ok);font-weight:700}
 .msol summary{cursor:pointer;color:var(--sea);margin-top:.3rem;min-height:32px}
+
+/* Grafische Tipps (4.11.2026) */
+.tippgrafik{margin:.5rem 0 .2rem;padding:8px 10px;background:#fff;border:1px solid #e5d3b3;border-radius:10px;overflow-x:auto}
+.tippgrafik .vorsp{font-size:.95rem;margin:.1rem 0 .3rem}
+.bogen{position:relative;display:inline-block;padding:104px 6px 0;font-size:1.9rem;font-weight:700;white-space:nowrap}
+.bogen .bt{padding:0 .12em}
+.bogen .bogsvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.boglab{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1.2rem;font-weight:700;margin-top:8px}
+.flsvg{width:100%;max-width:260px;height:auto;display:block}
+.bzeile{font-size:1.2rem;margin:.25rem 0}
+.bzeile .bname{font-weight:700}
+.bst{display:inline-block;min-width:1.4em;text-align:center;padding:0 .25em;border:1px solid #c9d6e5;border-radius:6px;background:#f4f7fb}
+.bst.gem{background:#fde7c8;border-color:#c0700f;color:#7a4a08;font-weight:700}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261104a">
+<link rel="stylesheet" href="style.css?v=20261104b">
 </head>
 <body>
 <main>
@@ -86,7 +86,7 @@
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261104a"></script>
+<script src="aufgaben.js?v=20261104b"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
@@ -296,7 +296,7 @@ function renderPractice() {
     }));
     setTimeout(() => { const a1 = inField($('pCard'), 'a1'); if (a1) a1.focus({ preventScroll: true }); }, 50);
   }
-  $('pHint').onclick = () => { if (!P.done) $('fb').innerHTML = `<div class="fb hint">💡 ${t.hint}</div>`; };
+  $('pHint').onclick = () => { if (!P.done) { $('fb').innerHTML = `<div class="fb hint">💡 ${t.hint}${t.grafik || ''}</div>`; zeichneBoegen($('fb')); } };
 }
 function practiceCheck() {
   if (P.done) return;
@@ -315,7 +315,8 @@ function practiceCheck() {
   } else if (P.tries === 0) {
     P.tries = 1; P.first[P.i] = 0;
     if (t.type === 'mc') { $('pCard').querySelectorAll('.opt').forEach(b => { if (+b.dataset.k === P.a.k) b.disabled = true; b.classList.remove('sel'); }); P.a = {}; }
-    $('fb').innerHTML = `<div class="fb bad">Leider falsch. Schau dir den Tipp an und versuche es noch einmal.</div><div class="fb hint">💡 ${t.hint}</div>`;
+    $('fb').innerHTML = `<div class="fb bad">Leider falsch. Schau dir den Tipp an und versuche es noch einmal.</div><div class="fb hint">💡 ${t.hint}${t.grafik || ''}</div>`;
+    zeichneBoegen($('fb'));
     return;
   } else {
     $('fb').innerHTML = `<div class="fb bad">Leider wieder falsch. Richtig ist: <b>${correctText(t)}</b>${solHtml}</div>${next}`;

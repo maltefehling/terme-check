@@ -202,6 +202,56 @@ const pk = n => n < 0 ? `(${MI}${fmt(-n)})` : fmt(n);           // Zahl in einer
 const tgt = html => html.replace(/<sup>(\d)<\/sup>/g, '^$1');   // Anzeige → Eingabe-Schreibweise für die Bewertung
 const sgn = () => pick([1, -1]);
 const big = s => `<div class="big">${s}</div>`;
+/* ---------- Grafische Tipps (Malte 4.11.2026): Bögen wie im Skript, Flächenbild, Bausteine ----------
+   Die Grafik zeigt, WIE gerechnet wird (Malaufgaben, Felder, Bausteine) – nie das fertige Ergebnis. */
+const BOGF = ['#2e5d9f', '#3f8f3a', '#7b4fa0', '#c0700f'];   // Skriptfarben: blau, grün, lila, orange
+const NUMS = '①②③④';
+// teile: Strings oder [index, text]; paare: [[i, j], …]; labels: Malaufgabe je Bogen (ohne Ergebnis)
+function bogenGrafik(teile, paare, labels, vorspann = '') {
+  const ausdr = teile.map(p => Array.isArray(p) ? `<span class="bt" data-i="${p[0]}">${p[1]}</span>` : p).join('');
+  return `<div class="tippgrafik">${vorspann ? `<div class="vorsp">${vorspann}</div>` : ''}<div class="bogen" data-paare="${paare.map(p => p.join('-')).join(',')}"><svg class="bogsvg" aria-hidden="true"></svg><span class="ausdr">${ausdr}</span></div>
+    <div class="boglab">${labels.map((l, i) => `<span style="color:${BOGF[i % 4]}">${NUMS[i]}&nbsp;${l}</span>`).join('')}</div></div>`;
+}
+// nach dem Einfügen ins Dokument aufrufen: zeichnet die Bögen über die markierten Teile
+function zeichneBoegen(root) {
+  root.querySelectorAll('.bogen').forEach(b => {
+    const svg = b.querySelector('svg'), box = b.getBoundingClientRect();
+    if (!box.width) return;
+    svg.setAttribute('width', box.width); svg.setAttribute('height', box.height);
+    const pos = i => { const e = b.querySelector(`.bt[data-i="${i}"]`).getBoundingClientRect(); return [e.left - box.left + e.width / 2, e.top - box.top]; };
+    svg.innerHTML = b.dataset.paare.split(',').map((p, k) => {
+      const [i, j] = p.split('-'), [x1, y] = pos(i), [x2] = pos(j), h = 18 + Math.min(40, Math.abs(x2 - x1) * 0.25) + k * 13, c = BOGF[k % 4];
+      return `<path d="M${x1},${y - 2} Q${(x1 + x2) / 2},${y - 2 - 2 * h} ${x2},${y - 2}" fill="none" stroke="${c}" stroke-width="3"/>
+        <circle cx="${(x1 + x2) / 2}" cy="${y - 2 - h}" r="11" fill="#fff" stroke="${c}" stroke-width="1.5"/><text x="${(x1 + x2) / 2}" y="${y - 2 - h}" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="${c}">${k + 1}</text>`;
+    }).join('');
+  });
+}
+// Flächenbild (a + b)²: Seiten s1 (groß) und s2 (klein), vier Felder; Farben wie im Skript (a² blau, ab grün, b² orange)
+function flaechenGrafik(s1, s2, felder, titel = '') {
+  const A = 120, B = 62, x0 = 46, y0 = 34, F = [['#dbe7f7', '#2e5d9f'], ['#dcefd9', '#3f8f3a'], ['#dcefd9', '#3f8f3a'], ['#fde7c8', '#c0700f']];
+  const r = [[x0, y0, A, A], [x0 + A, y0, B, A], [x0, y0 + A, A, B], [x0 + A, y0 + A, B, B]];
+  const t = (x, y, s, o = '') => `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" ${o}>${String(s).replace(/<sup>2<\/sup>/g, '²')}</text>`;   // im SVG kein <sup>
+  return `<div class="tippgrafik">${titel ? `<div class="vorsp">${titel}</div>` : ''}<svg viewBox="0 0 ${x0 + A + B + 14} ${y0 + A + B + 10}" class="flsvg" font-family="system-ui,sans-serif" font-size="15" font-weight="700">
+    ${r.map((q, i) => `<rect x="${q[0]}" y="${q[1]}" width="${q[2]}" height="${q[3]}" fill="${F[i][0]}" stroke="${F[i][1]}" stroke-width="2"/>${t(q[0] + q[2] / 2, q[1] + q[3] / 2, felder[i], `fill="${F[i][1]}"`)}`).join('')}
+    ${t(x0 + A / 2, y0 - 14, s1)}${t(x0 + A + B / 2, y0 - 14, s2)}${t(x0 - 18, y0 + A / 2, s1)}${t(x0 - 18, y0 + A + B / 2, s2)}</svg></div>`;
+}
+// Bausteine (Ausklammern): jeder Teil in kleinste Malaufgaben zerlegt, Gemeinsames orange
+const zerlege = n => { const f = []; for (let d = 2; n > 1; d++) while (n % d === 0) { f.push(String(d)); n /= d; } return f; };
+function bausteinGrafik(teile) {   // teile: [{c: Zahl mit Vorzeichen, v: ['x', 'x', 'y']}]
+  const listen = teile.map(t => [...zerlege(Math.abs(t.c)), ...t.v]);
+  const rest = listen.slice(1).map(l => l.slice());
+  const gem = listen[0].filter(s => rest.every(l => { const i = l.indexOf(s); if (i < 0) return false; l.splice(i, 1); return true; }));
+  const zeile = (t, l) => { const g = gem.slice(); const name = poly([t.c, t.v.join('').replace(/(.)\1/, '$1<sup>2</sup>')]);
+    return `<div class="bzeile"><span class="bname">${name}</span> = ${t.c < 0 ? MI + ' ' : ''}${l.map(s => { const i = g.indexOf(s); if (i >= 0) { g.splice(i, 1); return `<span class="bst gem">${s}</span>`; } return `<span class="bst">${s}</span>`; }).join(' · ')}</div>`; };
+  return `<div class="tippgrafik">${teile.map((t, i) => zeile(t, listen[i])).join('')}<div class="vorsp">Orange = steckt in <b>beiden</b> Teilen → kommt vor die Klammer.</div></div>`;
+}
+// vier Bögen für (p + a)(q + b) – Reihenfolge wie im Skript: ① blau ② grün ③ lila ④ orange
+function vierBoegen(p, a, q, b, nachsatz = '', vorspann = '') {
+  const op = z => z < 0 ? ` ${MI} ` : ' + ';
+  const g = bogenGrafik(['(', [0, p], op(a), [1, Math.abs(a)], ') · (', [2, q], op(b), [3, Math.abs(b)], ')'], [[0, 2], [0, 3], [1, 2], [1, 3]],
+    [`${p} · ${q}`, `${p} · ${pk(b)}`, `${pk(a)} · ${q}`, `${pk(a)} · ${pk(b)}`], vorspann);
+  return nachsatz ? g.replace(/<\/div>$/, `<div class="vorsp">${nachsatz}</div></div>`) : g;
+}
 const termTask = (o) => Object.assign({ type: 'term', target: tgt(o.ansHtml) }, o);
 
 /* ---------- Aufgabengeneratoren ----------
@@ -214,6 +264,7 @@ const G = {
     const res = poly([k * a, v], [k * b, '']);
     return termTask({
       title: 'Ausmultiplizieren', q: `Multipliziere aus.${big(`${glied(k, '', true)} · (${poly([a, v], [b, ''])})`)}`, form: 'sum', vars: [v], ansHtml: res,
+      grafik: bogenGrafik([[0, glied(k, '', true)], ' · (', [1, a + v], b < 0 ? ` ${MI} ` : ' + ', [2, Math.abs(b)], ')'], [[0, 1], [0, 2]], [`${pk(k)} · ${a}${v}`, `${pk(k)} · ${pk(b)}`]),
       hint: 'Die Zahl vor der Klammer wird mit jedem Teil in der Klammer multipliziert. Ein Minus gehört zur Zahl dahinter: plus · minus = minus, minus · minus = plus.',
       sol: [`= ${pk(k)} · ${a}${v} + ${pk(k)} · ${pk(b)}`, `= ${res}`]
     });
@@ -224,6 +275,8 @@ const G = {
     const res = poly([k * a, X2(v)], [k * b, v + (zwei ? w : '')]);
     return termTask({
       title: 'Ausmultiplizieren', q: `Multipliziere aus.${big(`${glied(k, v, true)} · (${inner})`)}`, form: 'sum', vars: zwei ? [v, w] : [v], ansHtml: res,
+      grafik: bogenGrafik([[0, glied(k, v, true)], ' · (', [1, a + v], b < 0 ? ` ${MI} ` : ' + ', [2, glied(Math.abs(b), zwei ? w : '', true)], ')'], [[0, 1], [0, 2]],
+        [`${k < 0 ? `(${glied(k, v, true)})` : glied(k, v, true)} · ${a}${v}`, `${k < 0 ? `(${glied(k, v, true)})` : glied(k, v, true)} · ${b < 0 ? `(${glied(b, zwei ? w : '', true)})` : glied(b, zwei ? w : '', true)}`]),
       hint: `Multipliziere ${glied(k, v, true)} mit jedem Teil in der Klammer. ${v} · ${v} = ${X2(v)}. Achte auf die Vorzeichen.`,
       sol: [`= ${k < 0 ? `(${glied(k, v, true)})` : glied(k, v, true)} · ${a}${v} + ${k < 0 ? `(${glied(k, v, true)})` : glied(k, v, true)} · ${b < 0 ? `(${glied(b, zwei ? w : '', true)})` : glied(b, zwei ? w : '', true)}`, `= ${res}`]
     });
@@ -237,6 +290,7 @@ const G = {
     const ans = `${g} · (${poly([a, v], [s * b, ''])})`;
     return termTask({
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, v], [s * g * b, '']))}`, form: 'factor', vars: [v], ansHtml: ans,
+      grafik: bausteinGrafik([{ c: g * a, v: [v] }, { c: s * g * b, v: [] }]),
       hint: 'Suche die größte Zahl, durch die beide Zahlen teilbar sind. Sie kommt vor die Klammer, der Rest in die Klammer. Probe: Rechne die Klammer wieder aus.',
       sol: [`${glied(g * a, v, true)} = ${g} · ${glied(a, v, true)}   und   ${g * b} = ${g} · ${b}`, `= ${ans}`]
     });
@@ -248,6 +302,7 @@ const G = {
     const ans = `${glied(g, v, true)} · (${poly([a, v], [s * b, ''])})`;
     return termTask({
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, X2(v)], [s * g * b, v]))}`, form: 'factor', vars: [v], ansHtml: ans,
+      grafik: bausteinGrafik([{ c: g * a, v: [v, v] }, { c: s * g * b, v: [v] }]),
       hint: `In beiden Teilen steckt eine Zahl und ein ${v}. Klammere beides aus: die größte gemeinsame Zahl und ${v}.`,
       sol: [`${glied(g * a, X2(v), true)} = ${g} · ${v} · ${glied(a, v, true)}   und   ${g * b}${v} = ${g} · ${v} · ${b}`, `= ${ans}`]
     });
@@ -259,6 +314,7 @@ const G = {
     const ans = `${g}x · (${poly([a, ''], [s * b, 'y'])})`;
     return termTask({
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, 'x'], [s * g * b, 'xy']))}`, form: 'factor', vars: ['x', 'y'], ansHtml: ans,
+      grafik: bausteinGrafik([{ c: g * a, v: ['x'] }, { c: s * g * b, v: ['x', 'y'] }]),
       hint: 'Zerlege beide Teile in kleine Malaufgaben. Was in beiden steckt, kommt vor die Klammer – so viel wie möglich. Bleibt nur eine Zahl übrig, steht sie allein in der Klammer.',
       sol: [`${g * a}x = ${g} · ${a} · x   und   ${g * b}xy = ${g} · ${b} · x · y`, `= ${ans}`]
     });
@@ -273,6 +329,7 @@ const G = {
     const v = pick(['x', 'a', 'y']), res = poly([1, X2(v)], [a + b, v], [a * b, '']);
     return termTask({
       title: 'Summen multiplizieren', q: `Multipliziere aus und fasse zusammen.${big(`(${poly([1, v], [a, ''])}) · (${poly([1, v], [b, ''])})`)}`, form: 'sum', vars: [v], ansHtml: res,
+      grafik: vierBoegen(v, a, v, b),
       hint: 'Jeder Teil der ersten Klammer wird mit jedem Teil der zweiten Klammer multipliziert – vier Bögen, vier Felder. Danach gleiche Glieder zusammenfassen.',
       sol: [`= ${v} · ${v} + ${v} · ${pk(b)} + ${pk(a)} · ${v} + ${pk(a)} · ${pk(b)}`, `= ${poly([1, X2(v)], [b, v], [a, v], [a * b, ''])}`, `= ${res}`]
     });
@@ -283,6 +340,7 @@ const G = {
     const res = poly([1, 'xy'], [b, 'x'], [a, 'y'], [a * b, '']);
     return termTask({
       title: 'Summen multiplizieren', q: `Multipliziere aus.${big(`(${poly([1, 'x'], [a, ''])}) · (${poly([1, 'y'], [b, ''])})`)}`, form: 'sum', vars: ['x', 'y'], ansHtml: res,
+      grafik: vierBoegen('x', a, 'y', b),
       hint: 'Jeder Teil der ersten Klammer wird mit jedem Teil der zweiten Klammer multipliziert – vier Bögen, vier Felder. Ein Minus gehört zur Zahl dahinter.',
       sol: [`= x · y + x · ${pk(b)} + ${pk(a)} · y + ${pk(a)} · ${pk(b)}`, `= ${res}`]
     });
@@ -293,6 +351,7 @@ const G = {
     const v = pick(['x', 'a']), res = poly([k, X2(v)], [k * b + a, v], [a * b, '']);
     return termTask({
       title: 'Summen multiplizieren', q: `Multipliziere aus und fasse zusammen.${big(`(${poly([k, v], [a, ''])}) · (${poly([1, v], [b, ''])})`)}`, form: 'sum', vars: [v], ansHtml: res,
+      grafik: vierBoegen(k + v, a, v, b),
       hint: 'Vier Bögen: jeder Teil der ersten Klammer mal jeder Teil der zweiten. Dann die beiden Glieder mit ' + v + ' zusammenfassen.',
       sol: [`= ${k}${v} · ${v} + ${k}${v} · ${pk(b)} + ${pk(a)} · ${v} + ${pk(a)} · ${pk(b)}`, `= ${poly([k, X2(v)], [k * b, v], [a, v], [a * b, ''])}`, `= ${res}`]
     });
@@ -416,11 +475,14 @@ function binomTask(nr, k) {
     const res = poly([k * k, X2(v)], [-a * a, '']), first = rand() < .5;
     const f1 = `(${kv} + ${a})`, f2 = `(${kv} ${MI} ${a})`;
     return termTask({ title: titles[3], q: `Forme mit einer binomischen Formel um.${big(first ? `${f1} · ${f2}` : `${f2} · ${f1}`)}`, form: 'sum', vars: [v], ansHtml: res,
+      grafik: vierBoegen(kv, first ? a : -a, kv, first ? -a : a, 'Die Bögen ② und ③ heben sich auf – darum gibt es kein Mittelstück.'),
       hint: '(a + b) · (a − b) = a² − b². Es gibt kein Mittelstück – die beiden Rechtecke heben sich auf.',
       sol: [`= ${kvq} ${MI} ${a}²`, `= ${res}`] });
   }
   const s = nr === 1 ? 1 : -1, res = poly([k * k, X2(v)], [s * 2 * k * a, v], [a * a, '']);
   return termTask({ title: titles[nr], q: `Forme mit einer binomischen Formel um.${big(`(${kv} ${s > 0 ? '+' : MI} ${a})<sup>2</sup>`)}`, form: 'sum', vars: [v], ansHtml: res,
+    grafik: nr === 1 ? flaechenGrafik(kv, a, [`${kv} · ${kv}`, `${kv} · ${a}`, `${a} · ${kv}`, `${a} · ${a}`], `Flächenbild: Die Seite ist ${kv} + ${a}. Vier Felder – zwei davon sind gleich (das Mittelstück).`)
+      : vierBoegen(kv, -a, kv, -a, '', `(${kv} ${MI} ${a})<sup>2</sup> = (${kv} ${MI} ${a}) · (${kv} ${MI} ${a})`),
     hint: nr === 1 ? '(a + b)² = a² + 2ab + b². Vergiss das Mittelstück 2ab nicht – (a + b)² ist nicht a² + b²!' : '(a − b)² = a² − 2ab + b². Das Mittelstück bekommt ein Minus, b² bleibt plus.',
     sol: [`= ${kvq} ${s > 0 ? '+' : MI} 2 · ${kv} · ${a} + ${a}²`, `= ${res}`] });
 }
@@ -429,6 +491,7 @@ function faktorTask(a, k) {
   const term = poly([k * k, X2(v)], [s * 2 * k * a, v], [a * a, '']);
   const ans = `(${kv} ${s > 0 ? '+' : MI} ${a})<sup>2</sup>`;
   return termTask({ title: 'Faktorisieren', q: `Faktorisiere mit einer binomischen Formel.${big(term)}`, form: 'binom', vars: [v], ansHtml: ans,
+    grafik: flaechenGrafik('?', '?', [glied(k * k, X2(v), true), '?', '?', String(a * a)], `Die zwei Quadrate kennst du. Welche Seiten haben sie? Jedes Mittelfeld ist Seite · Seite.`),
     hint: 'Suche die zwei Quadrate und lies ihre Seiten ab. Prüfe das Mittelstück: Ist es genau 2 · Seite · Seite? Plus in der Mitte → (a + b)², Minus → (a − b)².',
     sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}   und   ${a * a} = ${a} · ${a}`, `Mittelstück: 2 · ${kv} · ${a} = ${glied(2 * k * a, v, true)} ✓`, `= ${ans}`] });
 }
