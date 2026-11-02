@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261024a">
+<link rel="stylesheet" href="style.css?v=20261104a">
 </head>
 <body>
 <main>
@@ -86,7 +86,7 @@
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261024a"></script>
+<script src="aufgaben.js?v=20261104a"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
@@ -176,9 +176,9 @@ function wireTerm(root, onChange) {
   if (!inp) return;
   const prev = () => {
     const r = termParse(inp.value);
-    pv.innerHTML = r.empty ? '<small class="muted">Zahlen über die Tastatur, x, ² und Klammern auch über die Tasten. Statt ² kannst du auch x2 tippen.</small>'
+    pv.innerHTML = r.empty ? '<small class="muted"><b>Tippe nur das Ergebnis ein</b> – den Rechenweg schreibst du ins Heft. Zahlen über die Tastatur, x, ² und Klammern auch über die Tasten (statt ² geht auch x2).</small>'
       : r.error ? '<small class="err">⚠ Das kann ich noch nicht lesen – fehlt eine Klammer oder ein Rechenzeichen?</small>'
-      : `<small class="muted">So lese ich deine Eingabe:</small> <span class="prevterm">${termHtml(inp.value)}</span>`;
+      : `<small class="muted">${inp.value.includes('=') ? 'Ich werte nur das Ergebnis nach dem letzten =:' : 'So lese ich deine Eingabe:'}</small> <span class="prevterm">${termHtml(inp.value)}</span>`;
   };
   root.querySelectorAll('.key').forEach(b => {
     b.addEventListener('pointerdown', e => e.preventDefault());   // Fokus im Eingabefeld behalten

@@ -39,8 +39,11 @@ function fmt(x) {
   if (i.length > 4) i = i.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   return (neg ? '−' : '') + i + (d ? ',' + d : '');
 }
+/* Nachsichtig bei „=“ (Schülerfeedback 4.11.2026: Rechenweg „4 · 5y + 4 · (−5) = 20y − 20“ oder „x = 12“ wurde nicht gelesen):
+   gewertet wird, was nach dem letzten „=“ steht (steht danach nichts, das Stück davor). */
+function nachGleich(s) { const p = String(s).split('='); for (let i = p.length - 1; i >= 0; i--) if (p[i].trim()) return p[i]; return ''; }
 function parseNum(s) {
-  s = String(s).trim().replace(/[\s  ']/g, '').replace(/^[−–]/, '-').replace(/^\+/, '');
+  s = nachGleich(s).trim().replace(/[\s  ']/g, '').replace(/^[−–]/, '-').replace(/^\+/, '');
   if (!s) return NaN;
   if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
   else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
@@ -55,7 +58,7 @@ const ggT = (a, b) => b ? ggT(b, a % b) : Math.abs(a);
    Danach wird die FORM geprüft: ausmultipliziert und zusammengefasst ('sum'),
    möglichst großer Faktor ausgeklammert ('factor') oder als binomische Klammer geschrieben ('binom'). */
 function termNorm(src) {
-  return String(src).replace(/<sup>(\d+)<\/sup>/g, '^$1').replace(/\s+/g, '').replace(/[−–—]/g, '-').replace(/[·×∙•*]/g, '*')
+  return nachGleich(src).replace(/<sup>(\d+)<\/sup>/g, '^$1').replace(/\s+/g, '').replace(/[−–—]/g, '-').replace(/[·×∙•*]/g, '*')
     .replace(/,/g, '.').replace(/²/g, '^2').replace(/³/g, '^3').toLowerCase()
     .replace(/([a-z])(\d+)/g, '$1^$2')                 // iPads haben keine Hochzahl-Taste: x2 heißt x²
     .replace(/\)([23])(?![\d.^])/g, ')^$1');          // (x+3)2 heißt (x+3)²
@@ -602,7 +605,7 @@ function decPractice(s) {
 const SALT = 'Hoeri-Terme';
 /* Stand der Aufgaben: bei jeder Änderung an Generatoren/SLOTS erhöhen (und ?v= in index.html/lehrer.html anpassen).
    Steckt im Ergebnis-Code, damit die Lehrerseite merkt, wenn ein Schülergerät eine andere Fassung hatte. */
-const APPV = '20261024a';
+const APPV = '20261104a';
 const sig = s => hash32(SALT + '|' + s).toString(36).toUpperCase().padStart(7, '0').slice(-5);
 function encAnswers(answers) {
   return answers.map(a => !a ? '' : a.k != null ? '#' + a.k : [a.a1 || '', a.a2 || ''].map(x => encodeURIComponent(String(x).trim()).replace(/!/g, '%21').replace(/~/g, '%7E')).join('~')).join('!');
