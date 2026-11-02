@@ -244,3 +244,8 @@ button.mini{padding:.3rem .9rem;font-size:.95rem;min-height:40px}
 .bzeile .bname{font-weight:700}
 .bst{display:inline-block;min-width:1.4em;text-align:center;padding:0 .25em;border:1px solid #c9d6e5;border-radius:6px;background:#f4f7fb}
 .bst.gem{background:#fde7c8;border-color:#c0700f;color:#7a4a08;font-weight:700}
+
+.bst.alt{opacity:.45;text-decoration:line-through}
+.korbbox{margin:.4rem 0;padding:6px 10px;background:#fdf6ea;border:2px solid #fbd9a8;border-radius:12px;font-size:1.2rem}
+.korbbox .klbl{font-size:.85rem;color:#5b6b7c;font-weight:600;margin-right:6px}
+.teilz{font-size:1.2rem;margin:.3rem 0}

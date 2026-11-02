@@ -245,6 +245,23 @@ function bausteinGrafik(teile) {   // teile: [{c: Zahl mit Vorzeichen, v: ['x', 
     return `<div class="bzeile"><span class="bname">${name}</span> = ${t.c < 0 ? MI + ' ' : ''}${l.map(s => { const i = g.indexOf(s); if (i >= 0) { g.splice(i, 1); return `<span class="bst gem">${s}</span>`; } return `<span class="bst">${s}</span>`; }).join(' · ')}</div>`; };
   return `<div class="tippgrafik">${teile.map((t, i) => zeile(t, listen[i])).join('')}<div class="vorsp">Orange = steckt in <b>beiden</b> Teilen → kommt vor die Klammer.</div></div>`;
 }
+/* Korb-Tipp für Bruchgleichungen (Malte 4.11.2026): wie die Animation „Geht es auch kleiner?“ –
+   Nenner in Bausteine zerlegen, in den Hauptnenner-Korb legen, was schon drin liegt, bleibt (grau) liegen. */
+const zerlegeNenner = n => { const m = String(n).match(/^(\d*)(x?)$/); const f = m[1] ? zerlege(+m[1]) : []; if (m[2]) f.push('x'); return f.length ? f : ['1']; };
+function korbGrafik(nenner, teile = null) {
+  const korb = [];
+  const zeilen = nenner.map(n => {
+    const rest = korb.slice();
+    const chips = zerlegeNenner(n).map(b => { const i = rest.indexOf(b); if (i >= 0) { rest.splice(i, 1); return `<span class="bst alt" title="schon im Korb">${b}</span>`; } korb.push(b); return `<span class="bst gem">${b}</span>`; });
+    return `<div class="bzeile">Nenner <b>${n}</b> = ${chips.join(' · ')}</div>`;
+  });
+  const hn = korb.filter(b => b !== 'x').reduce((p, b) => p * +b, 1), mitX = korb.includes('x');
+  return `<div class="tippgrafik">${zeilen.join('')}${nenner.length > 1 ? '<div class="vorsp">Grau = liegt schon im Korb, wird nicht noch einmal genommen.</div>' : ''}
+    <div class="korbbox"><span class="klbl">Hauptnenner-Korb</span> ${korb.map(b => `<span class="bst gem">${b}</span>`).join(' · ')} = <b>${hn === 1 && mitX ? '' : hn}${mitX ? 'x' : ''}</b></div>
+    <div class="vorsp">Dann <b>jeden Teil</b> mal den Hauptnenner – auch die Zahl ohne Bruch. Der Hauptnenner kommt in den Zähler, dann kürzen.</div>
+    ${teile ? `<div class="teilz">${teile.map((x, i) => `${i === teile.length - 1 ? '= ' : i ? '+ ' : ''}<span class="bst${x === 'Zahl' ? ' gem' : ''}">${x}</span> · <b>${hn === 1 && mitX ? '' : hn}${mitX ? 'x' : ''}</b>`).join(' ')}</div><div class="vorsp">Orange: Auch die Zahlen ohne Bruch werden mal genommen!</div>` : ''}</div>`;
+}
+const KORB = { bruchX: [['x'], ['Bruch', 'Zahl', 'Zahl']], bruchBeide: [['x'], ['Bruch', 'Zahl', 'Bruch']], bruch2x: [['2x'], ['Bruch', 'Zahl', 'Zahl']], bruchMix: [['x', '2x']] };
 // vier Bögen für (p + a)(q + b) – Reihenfolge wie im Skript: ① blau ② grün ③ lila ④ orange
 function vierBoegen(p, a, q, b, nachsatz = '', vorspann = '') {
   const op = z => z < 0 ? ` ${MI} ` : ' + ';
@@ -543,7 +560,7 @@ const CAN = [
 const RASTER = {};
 SLOTS.forEach((s, i) => [...new Set([...s.gens, ...(s.practiceGens || [])])].forEach(g => RASTER[g] = CAN[i]));
 
-function makeTask(gen) { const t = G[gen](); t.gen = gen; t.tr = MIT_TR.has(gen); t.can = RASTER[gen]; return t; }
+function makeTask(gen) { const t = G[gen](); t.gen = gen; t.tr = MIT_TR.has(gen); t.can = RASTER[gen]; if (!t.grafik && (t.nenner || KORB[gen])) t.grafik = t.nenner ? korbGrafik(t.nenner) : korbGrafik(...KORB[gen]); return t; }
 
 /* Rückmeldung in der Sprache des Kompetenzrasters: nach Abschnitten geordnet, je Aufgabe der „Ich kann …“-Satz */
 function rasterReport(tasks, grades, withButtons = false) {
