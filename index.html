@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261105a">
+<link rel="stylesheet" href="style.css?v=20261103b">
 </head>
 <body>
 <main>
@@ -86,7 +86,7 @@
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261105a"></script>
+<script src="aufgaben.js?v=20261103b"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
@@ -269,10 +269,9 @@ function renderPractice() {
   $('pScore').textContent = `✓ beim 1. Versuch: ${P.first.filter(x => x === 2).length}`;
   P.tries = 0; P.done = false; P.a = {}; P.t0 = Date.now();
   const head = `${SLOTS[t.slot].area} · ${SLOTS[t.slot].name}`;
-  const tausch = P.slot === null && SLOTS[t.slot].tauschbar ? '<button id="pSwap">🔄 Aufgabe tauschen</button>' : '';
+  const tausch = '';   // Tausch-Knopf entfernt (Malte 3.11.2026: Bruchgleichungen sind besprochen)
   $('pCard').innerHTML = taskHtml(t, head, {},
     `${tausch ? '<p class="muted" style="margin:.2rem 0 0"><small>Bruchgleichungen kannst du im Probetest gegen eine andere Aufgabe tauschen.</small></p>' : ''}${t.type === 'mc' ? '<p class="muted" style="margin:.2rem 0 0"><small>Tippe deine Antwort an und bestätige dann mit „Prüfen“.</small></p>' : ''}<div class="btns"><button class="primary" id="pCheck">Prüfen ✓</button><button id="pHint">💡 Tipp</button>${tausch}</div><div id="fb"></div>`);
-  if ($('pSwap')) $('pSwap').onclick = () => { P.tasks[P.i] = swapTask(); renderPractice(); };
   $('pCard').classList.toggle('review', !!SLOTS[t.slot].review);
   wireBegriffe($('pCard'));
   wireTerm($('pCard'), () => { if ($('fb').querySelector('.warn')) $('fb').innerHTML = ''; });

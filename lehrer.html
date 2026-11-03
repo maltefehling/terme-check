@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Terme-Check · Lehrkraft</title>
-<link rel="stylesheet" href="style.css?v=20261105a">
+<link rel="stylesheet" href="style.css?v=20261103b">
 </head>
 <body>
 <main>
@@ -26,7 +26,7 @@
     <label for="selCopy">Nummernliste</label>
     <div class="row"><select id="selCopy" style="font:inherit;padding:.4rem;border-radius:8px;border:1px solid var(--line);max-width:100%"></select>
       <button class="primary" id="btnCreate">Test anlegen</button></div>
-    <label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-weight:400"><input type="checkbox" id="chkOhneBruch" style="width:22px;height:22px"> Bruchgleichungen noch nicht im Test – stattdessen eine Aufgabe aus I.5</label>
+    <!-- Häkchen „ohne Bruchgleichungen“ entfernt (3.11.2026): neue Tests immer mit Bruchgleichungen; alte Testcodes werden weiter richtig gelesen -->
   </div>
   <div id="oldWarn"></div>
   <div id="nrBox"></div>
@@ -84,7 +84,7 @@
 
 <script src="lib/qrcode.js"></script>
 <script src="lib/jsQR.js"></script>
-<script src="aufgaben.js?v=20261105a"></script>
+<script src="aufgaben.js?v=20261103b"></script>
 <script>
 "use strict";
 const LKEY = 'termecheck.lehrer';
@@ -272,7 +272,7 @@ function printNumbers(t) {
   window.print();
 }
 $('btnCreate').onclick = () => {
-  let code; do { code = newTestCode($('chkOhneBruch').checked); } while (D.tests.some(t => t.code === code));
+  let code; do { code = newTestCode(false); } while (D.tests.some(t => t.code === code));
   const src = D.tests.find(t => t.code === $('selCopy').value);
   D.tests.push({ code, label: $('inLabel').value.trim(), created: Date.now(), results: {}, practice: {}, numbers: src ? src.numbers.slice() : [] });
   D.active = code; saveD();
