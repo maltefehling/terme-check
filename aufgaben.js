@@ -245,21 +245,18 @@ function bausteinGrafik(teile) {   // teile: [{c: Zahl mit Vorzeichen, v: ['x', 
     return `<div class="bzeile"><span class="bname">${name}</span> = ${t.c < 0 ? MI + ' ' : ''}${l.map(s => { const i = g.indexOf(s); if (i >= 0) { g.splice(i, 1); return `<span class="bst gem">${s}</span>`; } return `<span class="bst">${s}</span>`; }).join(' · ')}</div>`; };
   return `<div class="tippgrafik">${teile.map((t, i) => zeile(t, listen[i])).join('')}<div class="vorsp">Orange = steckt in <b>beiden</b> Teilen → kommt vor die Klammer.</div></div>`;
 }
-/* Korb-Tipp für Bruchgleichungen (Malte 4.11.2026): wie die Animation „Geht es auch kleiner?“ –
-   Nenner in Bausteine zerlegen, in den Hauptnenner-Korb legen, was schon drin liegt, bleibt (grau) liegen. */
-const zerlegeNenner = n => { const m = String(n).match(/^(\d*)(x?)$/); const f = m[1] ? zerlege(+m[1]) : []; if (m[2]) f.push('x'); return f.length ? f : ['1']; };
+/* Tipp-Grafik für Bruchgleichungen (Malte 5.11.2026): gemeinsamer Nenner mit der Vielfachen-Methode wie im Skript –
+   größte Zahl in den Nennern, verdoppeln/verdreifachen bis alle passen, x einmal dazu. Kein kgV per Zerlegung. */
 function korbGrafik(nenner, teile = null) {
-  const korb = [];
-  const zeilen = nenner.map(n => {
-    const rest = korb.slice();
-    const chips = zerlegeNenner(n).map(b => { const i = rest.indexOf(b); if (i >= 0) { rest.splice(i, 1); return `<span class="bst alt" title="schon im Korb">${b}</span>`; } korb.push(b); return `<span class="bst gem">${b}</span>`; });
-    return `<div class="bzeile">Nenner <b>${n}</b> = ${chips.join(' · ')}</div>`;
-  });
-  const hn = korb.filter(b => b !== 'x').reduce((p, b) => p * +b, 1), mitX = korb.includes('x');
-  return `<div class="tippgrafik">${zeilen.join('')}${nenner.length > 1 ? '<div class="vorsp">Grau = liegt schon im Korb, wird nicht noch einmal genommen.</div>' : ''}
-    <div class="korbbox"><span class="klbl">Hauptnenner-Korb</span> ${korb.map(b => `<span class="bst gem">${b}</span>`).join(' · ')} = <b>${hn === 1 && mitX ? '' : hn}${mitX ? 'x' : ''}</b></div>
-    <div class="vorsp">Dann <b>jeden Teil</b> mal den Hauptnenner – auch die Zahl ohne Bruch. Der Hauptnenner kommt in den Zähler, dann kürzen.</div>
-    ${teile ? `<div class="teilz">${teile.map((x, i) => `${i === teile.length - 1 ? '= ' : i ? '+ ' : ''}<span class="bst${x === 'Zahl' ? ' gem' : ''}">${x}</span> · <b>${hn === 1 && mitX ? '' : hn}${mitX ? 'x' : ''}</b>`).join(' ')}</div><div class="vorsp">Orange: Auch die Zahlen ohne Bruch werden mal genommen!</div>` : ''}</div>`;
+  const zahl = n => { const m = String(n).match(/^(\d*)(x?)$/); return m[1] ? +m[1] : 1; }, mitX = nenner.some(n => /x/.test(n));
+  const zs = nenner.map(zahl), g = Math.max(...zs); let k = 1; while (!zs.every(z => (g * k) % z === 0)) k++;
+  const hn = g * k, hnT = `${hn === 1 && mitX ? '' : hn}${mitX ? 'x' : ''}`;
+  const zeilen = nenner.map(n => `<div class="bzeile">Nenner <b>${n}</b></div>`);
+  const schritt = zs.length > 1 ? `<div class="vorsp">Zahlen in den Nennern: ${zs.join(', ')} → größte Zahl ${g}${k > 1 ? `, passt nicht überall → ${k} · ${g} = ${hn}` : ' – die anderen passen hinein ✓'}</div>` : '';
+  return `<div class="tippgrafik">${zeilen.join('')}${schritt}${mitX ? '<div class="vorsp">x steht im Nenner → x kommt <b>einmal</b> dazu.</div>' : ''}
+    <div class="korbbox"><span class="klbl">Gemeinsamer Nenner</span> <b>${hnT}</b></div>
+    <div class="vorsp">Dann <b>jeden Teil</b> mal den gemeinsamen Nenner – auch die Zahl ohne Bruch. Er kommt in den Zähler, dann kürzen.</div>
+    ${teile ? `<div class="teilz">${teile.map((x, i) => `${i === teile.length - 1 ? '= ' : i ? '+ ' : ''}<span class="bst${x === 'Zahl' ? ' gem' : ''}">${x}</span> · <b>${hnT}</b>`).join(' ')}</div><div class="vorsp">Orange: Auch die Zahlen ohne Bruch werden mal genommen!</div>` : ''}</div>`;
 }
 const KORB = { bruchX: [['x'], ['Bruch', 'Zahl', 'Zahl']], bruchBeide: [['x'], ['Bruch', 'Zahl', 'Bruch']], bruch2x: [['2x'], ['Bruch', 'Zahl', 'Zahl']], bruchMix: [['x', '2x']] };
 // vier Bögen für (p + a)(q + b) – Reihenfolge wie im Skript: ① blau ② grün ③ lila ④ orange
@@ -458,20 +455,20 @@ const G = {
   bruchX() {   // k/x + a = b
     const x0 = R(2, 6), a = R(1, 4), m = R(1, 4), b = a + m, k = m * x0;
     return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, 'x')} + ${a} = ${b}`)}`, type: 'num', ans: x0, pre: 'x =',
-      hint: 'x darf nicht 0 sein. Der Hauptnenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
-      sol: ['x darf nicht 0 sein. Hauptnenner: x', `${k} + ${glied(a, 'x', true)} = ${b}x`, `${k} = ${glied(m, 'x', true)}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${b} ✓`] };
+      hint: 'x darf nicht 0 sein. Der gemeinsame Nenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
+      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${b}x`, `${k} = ${glied(m, 'x', true)}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${b} ✓`] };
   },
   bruchBeide() {   // k/x + a = m/x
     const x0 = R(2, 6), a = R(1, 4), k = R(1, 9), m = k + a * x0;
     return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, 'x')} + ${a} = ${frac(m, 'x')}`)}`, type: 'num', ans: x0, pre: 'x =',
-      hint: 'x darf nicht 0 sein. Der Hauptnenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
-      sol: ['x darf nicht 0 sein. Hauptnenner: x', `${k} + ${glied(a, 'x', true)} = ${m}`, `${glied(a, 'x', true)} = ${m - k}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${fmt(m / x0)} ✓`] };
+      hint: 'x darf nicht 0 sein. Der gemeinsame Nenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
+      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${m}`, `${glied(a, 'x', true)} = ${m - k}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${fmt(m / x0)} ✓`] };
   },
   bruch2x() {   // k/(2x) + a = b
     const x0 = R(1, 5), a = R(1, 3), m = R(1, 3), b = a + m, k = 2 * m * x0;
     return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, '2x')} + ${a} = ${b}`)}`, type: 'num', ans: x0, pre: 'x =',
-      hint: 'x darf nicht 0 sein. Hauptnenner: 2x. Nimm jeden Teil mal 2x und kürze.',
-      sol: ['x darf nicht 0 sein. Hauptnenner: 2x', `${k} + ${2 * a}x = ${2 * b}x`, `${k} = ${2 * m}x`, `x = ${x0}`] };
+      hint: 'x darf nicht 0 sein. Gemeinsamer Nenner: 2x. Nimm jeden Teil mal 2x und kürze.',
+      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: 2x', `${k} + ${2 * a}x = ${2 * b}x`, `${k} = ${2 * m}x`, `x = ${x0}`] };
   },
 
   /* ===== Wiederholung (Klasse 7): Dreisatz ===== */
@@ -554,7 +551,7 @@ const CAN = [
   'Terme mit der 3. binomischen Formel faktorisieren.',
   'Gleichungen mit Klammern lösen und die Probe machen.',
   'ein Minus vor einer Klammer mit Hochzahl richtig auflösen.',
-  'Bruchgleichungen mit dem Hauptnenner lösen und angeben, welche Zahl x nicht sein darf.',
+  'Bruchgleichungen mit einem gemeinsamen Nenner lösen und angeben, welche Zahl x nicht sein darf.',
   'mit dem Dreisatz rechnen.'
 ];
 const RASTER = {};
