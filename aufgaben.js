@@ -381,19 +381,19 @@ const G = {
   /* Kopfrechnen: Taschenrechner ist erlaubt – darum wird der Schritt der Formel gefragt, nicht das Ergebnis */
   kopf1() {
     const t = R(2, 9) * 10, u = R(1, 3), n = t + u;
-    return { title: 'Kopfrechnen mit der 1. binomischen Formel', q: `So rechnet man ${n}² mit der 1. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} + ${u})<sup>2</sup> = ${fmt(t * t)} + □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
+    return { title: 'Kopfrechnen mit der 1. binomischen Formel', q: `So rechnet man ${n}² mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} + ${u})<sup>2</sup> = ${fmt(t * t)} + □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
       hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}.`,
       sol: [`(${t} + ${u})² = ${t}² + 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} + ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf2() {
     const t = R(2, 10) * 10, u = R(1, 3), n = t - u;
-    return { title: 'Kopfrechnen mit der 2. binomischen Formel', q: `So rechnet man ${n}² mit der 2. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} − ${u})<sup>2</sup> = ${fmt(t * t)} − □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
+    return { title: 'Kopfrechnen mit der 2. binomischen Formel', q: `So rechnet man ${n}² mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} − ${u})<sup>2</sup> = ${fmt(t * t)} − □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
       hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}. Das Minus steht schon davor.`,
       sol: [`(${t} − ${u})² = ${t}² − 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} − ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf3() {
     const t = R(2, 10) * 10, u = R(2, 4);
-    return { title: 'Kopfrechnen mit der 3. binomischen Formel', q: `So rechnet man ${t + u} · ${t - u} mit der 3. binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${t + u} · ${t - u} = (${t} + ${u}) · (${t} − ${u}) = ${fmt(t * t)} − □`)}`, type: 'num', ans: u * u, pre: '□ =',
+    return { title: 'Kopfrechnen mit der 3. binomischen Formel', q: `So rechnet man ${t + u} · ${t - u} mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${t + u} · ${t - u} = (${t} + ${u}) · (${t} − ${u}) = ${fmt(t * t)} − □`)}`, type: 'num', ans: u * u, pre: '□ =',
       hint: `(a + b) · (a − b) = a² − b². Hier ist b = ${u}.`,
       sol: [`(${t} + ${u}) · (${t} − ${u}) = ${t}² − ${u}²`, `= ${fmt(t * t)} − ${u * u} = ${fmt(t * t - u * u)}`, `□ = ${u * u}`] };
   },
@@ -456,13 +456,13 @@ const G = {
     const x0 = R(2, 6), a = R(1, 4), m = R(1, 4), b = a + m, k = m * x0;
     return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, 'x')} + ${a} = ${b}`)}`, type: 'num', ans: x0, pre: 'x =',
       hint: 'x darf nicht 0 sein. Der gemeinsame Nenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
-      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${b}x`, `${k} = ${glied(m, 'x', true)}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${b} ✓`] };
+      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${b}x`, `${k} = ${glied(m, 'x', true)}`, `x = ${x0}`] };
   },
   bruchBeide() {   // k/x + a = m/x
     const x0 = R(2, 6), a = R(1, 4), k = R(1, 9), m = k + a * x0;
     return { title: 'Bruchgleichung', q: `Löse die Gleichung.${big(`${frac(k, 'x')} + ${a} = ${frac(m, 'x')}`)}`, type: 'num', ans: x0, pre: 'x =',
       hint: 'x darf nicht 0 sein. Der gemeinsame Nenner ist x: Nimm jeden Teil der Gleichung mal x – auch die Zahl ohne Bruch. Dann wie gewohnt lösen.',
-      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${m}`, `${glied(a, 'x', true)} = ${m - k}`, `x = ${x0}`, `Probe: ${fmt(k / x0)} + ${a} = ${fmt(m / x0)} ✓`] };
+      sol: ['x darf nicht 0 sein. Gemeinsamer Nenner: x', `${k} + ${glied(a, 'x', true)} = ${m}`, `${glied(a, 'x', true)} = ${m - k}`, `x = ${x0}`] };
   },
   bruch2x() {   // k/(2x) + a = b
     const x0 = R(1, 5), a = R(1, 3), m = R(1, 3), b = a + m, k = 2 * m * x0;
@@ -540,6 +540,9 @@ const SLOTS = [
   { area: 'I.6 Bruchgleichungen', name: 'Bruchgleichungen', gens: ['bruchX', 'bruchBeide'], practiceGens: ['bruchX', 'bruchBeide', 'bruch2x'], tauschbar: true },
   { area: 'Wiederholung: Zuordnungen (Klasse 7)', name: 'Dreisatz', gens: ['dreisatz'], review: true }   // bei künftigen Tests hier ein anderes altes Thema eintragen
 ];
+/* Überschrift im Test und Probetest (Malte 5.11.2026): nicht verraten, welche binomische Formel es ist */
+const testArea = s => /^I\.3[abc]/.test(s.area) ? 'I.3 Binomische Formeln' : s.area;
+const testKopf = s => /^I\.3[abc]/.test(s.area) ? 'I.3 Binomische Formeln' : /^I\.4/.test(s.area) ? s.area : `${s.area} · ${s.name}`;
 const CAN = [
   'Terme durch Ausmultiplizieren umformen – auch mit Minus.',
   'einen möglichst großen gemeinsamen Faktor ausklammern.',
