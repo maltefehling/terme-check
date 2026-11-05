@@ -447,9 +447,9 @@ const G = {
   },
   minusLinear() {   // (x + a)² − (x² + b x)
     const a = R(1, 6), b = R(1, 9), v = 'x', res = poly([2 * a - b, v], [a * a, '']);
-    return termTask({ title: 'Minus vor einer Klammer', q: `Vereinfache so weit wie möglich.${big(`(x + ${a})<sup>2</sup> ${MI} (${X2(v)} + ${b}x)`)}`, form: 'sum', vars: [v], ansHtml: res,
+    return termTask({ title: 'Minus vor einer Klammer', q: `Vereinfache so weit wie möglich.${big(`(x + ${a})<sup>2</sup> ${MI} (${X2(v)} + ${b === 1 ? '' : b}x)`)}`, form: 'sum', vars: [v], ansHtml: res,
       hint: 'Löse die erste Klammer mit der binomischen Formel auf. Das Minus vor der zweiten Klammer dreht jedes Vorzeichen darin um.',
-      sol: [`= ${poly([1, X2(v)], [2 * a, v], [a * a, ''])} ${MI} ${X2(v)} ${MI} ${b}x`, `= ${res}`] });
+      sol: [`= ${poly([1, X2(v)], [2 * a, v], [a * a, ''])} ${MI} ${X2(v)} ${MI} ${b === 1 ? '' : b}x`, `= ${res}`] });
   },
   /* ===== I.6 Bruchgleichungen ===== */
   bruchX() {   // k/x + a = b
