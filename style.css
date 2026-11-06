@@ -249,3 +249,12 @@ button.mini{padding:.3rem .9rem;font-size:.95rem;min-height:40px}
 .korbbox{margin:.4rem 0;padding:6px 10px;background:#fdf6ea;border:2px solid #fbd9a8;border-radius:12px;font-size:1.2rem}
 .korbbox .klbl{font-size:.85rem;color:#5b6b7c;font-weight:600;margin-right:6px}
 .teilz{font-size:1.2rem;margin:.3rem 0}
+
+/* großer Haken beim Einscannen (Lehrerseite, 6.11.2026) */
+.bigMark{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:70;background:#fff;border-radius:28px;padding:28px 48px 24px;box-shadow:0 12px 40px rgba(0,0,0,.3);text-align:center;min-width:min(520px,90vw);border:6px solid #2e8b57;cursor:pointer}
+.bigMark .bmSym{width:180px;height:180px;margin:0 auto 12px;border-radius:50%;background:#2e8b57;color:#fff;font-size:130px;line-height:180px;font-weight:900}
+.bigMark .bmTxt{font-size:2.2rem;font-weight:800;color:#1d2b36}
+.bigMark.bad{border-color:#c0392b}.bigMark.bad .bmSym{background:#c0392b}
+.bigMark.warn{border-color:#b7791f}.bigMark.warn .bmSym{background:#b7791f}
+.bigMark:not(.hidden){animation:bmPop .25s ease-out}
+@keyframes bmPop{from{transform:translate(-50%,-50%) scale(.6);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Terme-Check · Lehrkraft</title>
-<link rel="stylesheet" href="style.css?v=20261105b">
+<link rel="stylesheet" href="style.css?v=20261106b">
 </head>
 <body>
 <main>
@@ -79,12 +79,13 @@
   </div>
   <div id="stFlash" class="stFlash hidden"></div>
 </div>
+<div id="bigMark" class="bigMark hidden" role="status" aria-live="assertive"><div class="bmSym"></div><div class="bmTxt"></div></div>
 <footer>Terme-Check · Lehrerseite</footer>
 </main>
 
 <script src="lib/qrcode.js"></script>
 <script src="lib/jsQR.js"></script>
-<script src="aufgaben.js?v=20261105b"></script>
+<script src="aufgaben.js?v=20261106b"></script>
 <script>
 "use strict";
 const LKEY = 'termecheck.lehrer';
@@ -298,10 +299,19 @@ function showBeamer() {
 let station = false;
 function say(msg, kind = 'ok', pub = '') {
   beep(kind === 'ok');
-  if (!station) return toast(msg, kind !== 'ok');
+  if (!station) { toast(msg, kind !== 'ok'); return bigMark(kind, pub || msg); }
   const f = $('stFlash'); f.className = 'stFlash' + (kind === 'ok' ? '' : ' ' + kind); f.textContent = pub || msg;
   clearTimeout(say.t); say.t = setTimeout(() => f.classList.add('hidden'), kind === 'ok' ? 1600 : 3200);
   renderStation();
+}
+/* Großer Haken bzw. Kreuz beim Einscannen am Laptop (Malte 6.11.2026: die kleine Meldung unten sah man kaum).
+   Zeigt nur den kurzen Text ohne Punkte; die Details stehen weiter in der Meldung unten. Antippen schließt sofort. */
+function bigMark(kind, txt) {
+  const b = $('bigMark'); b.className = 'bigMark ' + kind;
+  b.querySelector('.bmSym').textContent = kind === 'ok' ? '✓' : kind === 'warn' ? '⚠' : '✗';
+  b.querySelector('.bmTxt').textContent = String(txt).replace(/^[✓✗⚠]\s*/, '');
+  clearTimeout(bigMark.t); bigMark.t = setTimeout(() => b.classList.add('hidden'), kind === 'ok' ? 2000 : 4000);
+  b.onclick = () => b.classList.add('hidden');
 }
 let lastText = '', lastAt = 0;
 function handleScan(text) {
