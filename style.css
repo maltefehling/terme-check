@@ -258,3 +258,11 @@ button.mini{padding:.3rem .9rem;font-size:.95rem;min-height:40px}
 .bigMark.warn{border-color:#b7791f}.bigMark.warn .bmSym{background:#b7791f}
 .bigMark:not(.hidden){animation:bmPop .25s ease-out}
 @keyframes bmPop{from{transform:translate(-50%,-50%) scale(.6);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+/* PDF der Schüler-Übersicht (6.11.2026) */
+@media print{
+  .printOv{font-size:11pt}
+  .printOv .overview,.printOv .mistakes{box-shadow:none;border:1px solid #ccc;margin:0 0 8mm}
+  .printOv .mistake,.printOv .ovrow{break-inside:avoid;page-break-inside:avoid}
+  .printOv details>summary{display:none}
+}

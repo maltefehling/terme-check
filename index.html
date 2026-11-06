@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terme-Check</title>
-<link rel="stylesheet" href="style.css?v=20261106b">
+<link rel="stylesheet" href="style.css?v=20261106c">
 </head>
 <body>
 <main>
@@ -83,10 +83,11 @@
 </section>
 
 <footer>Terme-Check · eigene Aufgaben, zufällig erzeugt · keine Namen, kein Konto, kein Server – Ergebnisse gibst du per QR-Code direkt an deine Lehrkraft</footer>
+<div id="printArea"></div>
 </main>
 
 <script src="lib/qrcode.js"></script>
-<script src="aufgaben.js?v=20261106b"></script>
+<script src="aufgaben.js?v=20261106c"></script>
 <script>
 "use strict";
 const VIEWS = ['vHome', 'vPractice', 'vLogin', 'vTest', 'vDone', 'vProof'];
@@ -565,6 +566,16 @@ async function saveOverview(o) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
 }
 
+/* PDF (Malte 6.11.2026, Wunsch der Neuner): Note, Themen zum Üben und alle falschen Eingaben mit Lösungsweg auf einem Blatt.
+   Über den Druckdialog – auf dem iPad „In Dateien sichern“, am Laptop „Als PDF sichern“. QR-Code und Knöpfe kommen nicht mit. */
+function printOverview(o, tasks, grades, answers) {
+  const pa = $('printArea'), alt = document.title;
+  pa.innerHTML = `<div class="printOv">${overviewHtml(o).replace('id="overview"', '')}${mistakesHtml(tasks, grades, answers).replace(/<details class="msol">/g, '<details class="msol" open>')}</div>`;
+  document.title = `Terme-Check Übersicht Nr. ${o.nr}`;
+  const fertig = () => { document.title = alt; pa.innerHTML = ''; window.removeEventListener('afterprint', fertig); };
+  window.addEventListener('afterprint', fertig);
+  window.print();
+}
 function renderDone() {
   const st = T.st, grades = T.tasks.map((t, i) => grade(t, st.answers[i]));
   // Liste für die Startseite nur einmal pro Test anlegen (beim erneuten Öffnen des Ergebnisses nicht zurücksetzen)
@@ -587,8 +598,8 @@ function renderDone() {
     <p class="muted" style="margin:.2rem 0">Falls der Scan nicht klappt, diesen Code ansagen:</p>
     <div class="shortcode">${short}</div>
     ${overviewHtml(ov)}
-    <div class="btns" style="justify-content:center"><button class="primary" id="dSave">📥 Übersicht als Bild speichern</button></div>
-    <p class="muted" style="margin:.2rem 0 0"><small>Oder einfach einen Screenshot machen (obere Taste + Lauter-Taste gleichzeitig).</small></p>
+    <div class="btns" style="justify-content:center"><button class="primary" id="dPdf">📄 Übersicht mit meinen Fehlern als PDF</button><button id="dSave">📥 Nur die Übersicht als Bild</button></div>
+    <p class="muted" style="margin:.2rem 0 0"><small>PDF auf dem iPad: Im Druckfenster oben auf das Teilen-Symbol tippen → „In Dateien sichern“.</small></p>
     ${mistakesHtml(T.tasks, grades, st.answers)}
     <h2 style="margin-top:18px">Alle Aufgaben im Überblick</h2>
     ${rasterReport(T.tasks, grades)}
@@ -597,6 +608,7 @@ function renderDone() {
     <div id="dWipeAsk"></div>`;
   $('dHome').onclick = renderHome;
   $('dSave').onclick = () => saveOverview(ov);
+  $('dPdf').onclick = () => printOverview(ov, T.tasks, grades, st.answers);
   $('dWipe').onclick = () => {
     $('dWipeAsk').innerHTML = `<div class="fb warn" style="margin-top:12px">Hat deine Lehrkraft deinen QR-Code schon gescannt? Danach ist alles weg: Test, Nummer und Übungsstatistik.
       <div class="btns" style="justify-content:center"><button class="danger" id="dWipeYes">Ja, gescannt – jetzt löschen</button><button id="dWipeNo">Nein, noch nicht</button></div></div>`;
