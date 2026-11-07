@@ -621,7 +621,7 @@ function grade(t, ans) {
 const HALF_TIP = {
   sum: 'Der Term stimmt, ist aber noch nicht fertig: Löse alle Klammern auf und fasse gleiche Glieder zusammen.',
   factor: 'Richtig umgeformt – aber in der Klammer steckt noch ein gemeinsamer Faktor. Klammere so viel wie möglich aus.',
-  binomK: 'Gleichwertig – aber noch nicht fertig: Klammere zuerst die gemeinsame Zahl aus und schreibe den Rest als binomische Klammer.',
+  binomK: 'Gleichwertig – aber noch nicht fertig: Erst die gemeinsame Zahl ausklammern, dann den Rest in der Klammer mit einer binomischen Formel faktorisieren, z. B. 2 · (x + 3) · (x − 3).',
   binom: 'Gleichwertig – aber noch nicht als binomische Klammer geschrieben. Schreibe das Ergebnis als (… + …)², (… − …)² oder (… + …) · (… − …).'
 };
 const points = g => g === 2 ? 1 : g === 1 ? 0.5 : 0;
