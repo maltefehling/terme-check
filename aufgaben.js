@@ -306,7 +306,7 @@ const G = {
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, v], [s * g * b, '']))}`, form: 'factor', vars: [v], ansHtml: ans,
       grafik: bausteinGrafik([{ c: g * a, v: [v] }, { c: s * g * b, v: [] }]),
       hint: 'Suche die größte Zahl, durch die beide Zahlen teilbar sind. Sie kommt vor die Klammer, der Rest in die Klammer. Probe: Rechne die Klammer wieder aus.',
-      sol: [`${glied(g * a, v, true)} = ${g} · ${glied(a, v, true)}   und   ${g * b} = ${g} · ${b}`, `= ${ans}`]
+      sol: [`${glied(g * a, v, true)} = ${g} · ${glied(a, v, true)}`, `${g * b} = ${g} · ${b}`, `= ${ans}`]
     });
   },
   ausklVar() {
@@ -318,7 +318,7 @@ const G = {
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, X2(v)], [s * g * b, v]))}`, form: 'factor', vars: [v], ansHtml: ans,
       grafik: bausteinGrafik([{ c: g * a, v: [v, v] }, { c: s * g * b, v: [v] }]),
       hint: `In beiden Teilen steckt eine Zahl und ein ${v}. Klammere beides aus: die größte gemeinsame Zahl und ${v}.`,
-      sol: [`${glied(g * a, X2(v), true)} = ${g} · ${v} · ${glied(a, v, true)}   und   ${g * b}${v} = ${g} · ${v} · ${b}`, `= ${ans}`]
+      sol: [`${glied(g * a, X2(v), true)} = ${g} · ${v} · ${glied(a, v, true)}`, `${g * b}${v} = ${g} · ${v} · ${b}`, `= ${ans}`]
     });
   },
   ausklZwei() {   // wie im Skript: 8x − 14xy = 2x · (4 − 7y)
@@ -330,7 +330,7 @@ const G = {
       title: 'Ausklammern', q: `Klammere einen möglichst großen Faktor aus.${big(poly([g * a, 'x'], [s * g * b, 'xy']))}`, form: 'factor', vars: ['x', 'y'], ansHtml: ans,
       grafik: bausteinGrafik([{ c: g * a, v: ['x'] }, { c: s * g * b, v: ['x', 'y'] }]),
       hint: 'Zerlege beide Teile in kleine Malaufgaben. Was in beiden steckt, kommt vor die Klammer – so viel wie möglich. Bleibt nur eine Zahl übrig, steht sie allein in der Klammer.',
-      sol: [`${g * a}x = ${g} · ${a} · x   und   ${g * b}xy = ${g} · ${b} · x · y`, `= ${ans}`]
+      sol: [`${g * a}x = ${g} · ${a} · x`, `${g * b}xy = ${g} · ${b} · x · y`, `= ${ans}`]
     });
   },
 
@@ -383,19 +383,19 @@ const G = {
     const t = R(2, 9) * 10, u = R(1, 3), n = t + u;
     return { title: 'Kopfrechnen mit der 1. binomischen Formel', q: `So rechnet man ${n}² mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} + ${u})<sup>2</sup> = ${fmt(t * t)} + □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
       hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}.`,
-      sol: [`(${t} + ${u})² = ${t}² + 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} + ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
+      sol: [`(${t} + ${u})² = ${t}² + 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} + ${2 * t * u} + ${u * u}`, `= ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf2() {
     const t = R(2, 10) * 10, u = R(1, 3), n = t - u;
     return { title: 'Kopfrechnen mit der 2. binomischen Formel', q: `So rechnet man ${n}² mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${n}<sup>2</sup> = (${t} − ${u})<sup>2</sup> = ${fmt(t * t)} − □ + ${u * u}`)}`, type: 'num', ans: 2 * t * u, pre: '□ =',
       hint: `Das Mittelstück ist 2 · a · b – hier also 2 · ${t} · ${u}. Das Minus steht schon davor.`,
-      sol: [`(${t} − ${u})² = ${t}² − 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} − ${2 * t * u} + ${u * u} = ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
+      sol: [`(${t} − ${u})² = ${t}² − 2 · ${t} · ${u} + ${u}²`, `= ${fmt(t * t)} − ${2 * t * u} + ${u * u}`, `= ${fmt(n * n)}`, `□ = ${2 * t * u}`] };
   },
   kopf3() {
     const t = R(2, 10) * 10, u = R(2, 4);
     return { title: 'Kopfrechnen mit der 3. binomischen Formel', q: `So rechnet man ${t + u} · ${t - u} mit einer binomischen Formel im Kopf. Welche Zahl gehört in das Kästchen?${big(`${t + u} · ${t - u} = (${t} + ${u}) · (${t} − ${u}) = ${fmt(t * t)} − □`)}`, type: 'num', ans: u * u, pre: '□ =',
       hint: `(a + b) · (a − b) = a² − b². Hier ist b = ${u}.`,
-      sol: [`(${t} + ${u}) · (${t} − ${u}) = ${t}² − ${u}²`, `= ${fmt(t * t)} − ${u * u} = ${fmt(t * t - u * u)}`, `□ = ${u * u}`] };
+      sol: [`(${t} + ${u}) · (${t} − ${u}) = ${t}² − ${u}²`, `= ${fmt(t * t)} − ${u * u}`, `= ${fmt(t * t - u * u)}`, `□ = ${u * u}`] };
   },
 
   /* ===== I.4 Faktorisieren mit binomischen Formeln ===== */
@@ -407,7 +407,7 @@ const G = {
     const opts = shuffle([right, poly([1, X2(v)], [2 * a, v], [(a + 1) * (a + 1), '']), poly([1, X2(v)], [a, v], [a * a, '']), poly([1, X2(v)], [a * a, ''])]);
     return { title: 'Passt das Mittelstück?', q: 'Welcher Term lässt sich mit einer binomischen Formel faktorisieren?', type: 'mc', options: opts, ans: right,
       hint: 'Suche bei jedem Term die zwei Quadrate und lies ihre Seiten ab. Prüfe dann: Ist das Mittelstück genau 2 · Seite · Seite?',
-      sol: [`${right}: Quadrate ${X2(v)} und ${a * a} = ${a}², Mittelstück 2 · ${v} · ${a} = ${2 * a}${v} ✓`, `= (${v} + ${a})<sup>2</sup>`, 'Bei den anderen passt das Mittelstück nicht (oder es fehlt).'] };
+      sol: [`${right}`, `${X2(v)} = ${v} · ${v}`, `${a * a} = ${a} · ${a}`, `Mittelstück: 2 · ${v} · ${a} = ${2 * a}${v} ✓`, `= (${v} + ${a})<sup>2</sup>`, 'Bei den anderen passt das Mittelstück nicht (oder es fehlt).'] };
   },
   faktor3() { return faktor3Task(R(2, 10), 1); },
   faktor3k() { let k, a; do { k = R(2, 3); a = R(1, 7); } while (ggT(k, a) !== 1); return faktor3Task(a, k); },
@@ -422,7 +422,7 @@ const G = {
     return { title: 'Gleichung mit Klammern', q: `Löse die Gleichung.${big(`${L} = ${Rt}`)}`, type: 'num', ans: x0, pre: 'x =',
       hint: 'Löse zuerst die Klammer mit der binomischen Formel auf. Dann fällt x² auf beiden Seiten weg. Danach wie gewohnt umformen, bis x allein steht.',
       sol: [`${exp} = ${Rt}`, `${poly([s * 2 * a, 'x'], [a * a, ''])} = ${fmt(d)}   | x² auf beiden Seiten weg`, `${poly([s * 2 * a, 'x'])} = ${fmt(d - a * a)}`, `x = ${x0}`,
-        `Probe: (${x0} ${plus ? '+' : MI} ${a})² = ${(x0 + s * a) ** 2}  und  ${x0}² ${d < 0 ? MI : '+'} ${Math.abs(d)} = ${x0 * x0 + d} ✓`] };
+        `Probe links: (${x0} ${plus ? '+' : MI} ${a})² = ${(x0 + s * a) ** 2}`, `Probe rechts: ${x0}² ${d < 0 ? MI : '+'} ${Math.abs(d)} = ${x0 * x0 + d} ✓`] };
   },
   gleichungLinear() {   // a · (x − b) − (x + c) = r
     const k = R(2, 5), b = R(1, 6), c = R(1, 9), x0 = R(2, 10), r = k * (x0 - b) - (x0 + c);
@@ -507,14 +507,14 @@ function faktorTask(a, k) {
   return termTask({ title: 'Faktorisieren', q: `Faktorisiere mit einer binomischen Formel.${big(term)}`, form: 'binom', vars: [v], ansHtml: ans,
     grafik: flaechenGrafik('?', '?', [glied(k * k, X2(v), true), '?', '?', String(a * a)], `Die zwei Quadrate kennst du. Welche Seiten haben sie? Jedes Mittelfeld ist Seite · Seite.`),
     hint: 'Suche die zwei Quadrate und lies ihre Seiten ab. Prüfe das Mittelstück: Ist es genau 2 · Seite · Seite? Plus in der Mitte → (a + b)², Minus → (a − b)².',
-    sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}   und   ${a * a} = ${a} · ${a}`, `Mittelstück: 2 · ${kv} · ${a} = ${glied(2 * k * a, v, true)} ✓`, `= ${ans}`] });
+    sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}`, `${a * a} = ${a} · ${a}`, `Mittelstück: 2 · ${kv} · ${a} = ${glied(2 * k * a, v, true)} ✓`, `= ${ans}`] });
 }
 function faktor3Task(a, k) {
   const v = pick(['x', 'a', 'y']), kv = glied(k, v, true);
   const term = poly([k * k, X2(v)], [-a * a, '']), ans = `(${kv} + ${a}) · (${kv} ${MI} ${a})`;
   return termTask({ title: 'Faktorisieren', q: `Faktorisiere mit einer binomischen Formel.${big(term)}`, form: 'binom', vars: [v], ansHtml: ans,
     hint: 'Zwei Quadrate mit Minus dazwischen: a² − b² = (a + b) · (a − b). Lies die Seiten der beiden Quadrate ab.',
-    sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}   und   ${a * a} = ${a} · ${a}`, `= ${ans}`] });
+    sol: [`Quadrate: ${glied(k * k, X2(v), true)} = ${k === 1 ? `${v} · ${v}` : `(${kv})²`}`, `${a * a} = ${a} · ${a}`, `= ${ans}`] });
 }
 
 /* Taschenrechner: in Übung und Test erlaubt (Malte 22.10.2026) – es gibt deshalb keine reinen Rechen-Ergebnisse beim Kopfrechnen. */

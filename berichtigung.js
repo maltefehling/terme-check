@@ -18,19 +18,19 @@ const ORIG = {
       ['= (−3) · 2a + (−3) · (−5)', 'Die −3 wird mit <b>jedem</b> Teil der Klammer multipliziert. Das Minus gehört zur Zahl dahinter.'],
       ['= −6a + 15', 'Minus mal Minus gibt Plus: (−3) · (−5) = +15.']]],
     '1b': ['Klammere einen möglichst großen Faktor aus: 8a² − 12a', [
-      ['8a² = 4a · 2a   und   12a = 4a · 3', 'Größte gemeinsame Zahl von 8 und 12 ist 4 – und in beiden Teilen steckt ein a. Also 4a.'],
+      ['8a² = 4a · 2a', 'Größte gemeinsame Zahl von 8 und 12 ist 4 – und in beiden Teilen steckt ein a. Also 4a.'], ['12a = 4a · 3', ''],
       ['= 4a · (2a − 3)', '4a kommt vor die Klammer, der Rest in die Klammer.'],
-      ['Probe: 4a · 2a − 4a · 3 = 8a² − 12a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
+      ['Probe: 4a · 2a − 4a · 3'], ['= 8a² − 12a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
     '2': ['Multipliziere aus und fasse zusammen: (2a − 3) · (a + 5)', [
       ['= 2a · a + 2a · 5 + (−3) · a + (−3) · 5', 'Vier Bögen: <b>jeder</b> Teil der ersten Klammer mal <b>jeder</b> Teil der zweiten.'],
       ['= 2a² + 10a − 3a − 15', 'Die vier Produkte – Vorzeichen mitnehmen: (−3) · 5 = −15.'],
       ['= 2a² + 7a − 15', 'Gleichartige Glieder zusammenfassen: 10a − 3a = 7a. a² und a sind <b>nicht</b> gleichartig.']]],
     '3a': ['Faktorisiere mit einer binomischen Formel: x² + 8x + 16', [
-      ['x² = x · x   und   16 = 4 · 4', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 4.'],
+      ['x² = x · x', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 4.'], ['16 = 4 · 4', ''],
       ['Mittelstück: 2 · x · 4 = 8x ✓', 'Passt das Mittelstück? Ja. Plus in der Mitte → 1. Formel.'],
       ['= (x + 4)²', 'Das ² an der Klammer nicht vergessen.']]],
     '3b': ['Faktorisiere mit einer binomischen Formel: 4x² − 81', [
-      ['4x² = (2x)²   und   81 = 9²', 'Zwei Quadrate, dazwischen ein Minus, kein Mittelstück → 3. Formel.'],
+      ['4x² = (2x)²', 'Zwei Quadrate, dazwischen ein Minus, kein Mittelstück → 3. Formel.'], ['81 = 9²', ''],
       ['= (2x + 9) · (2x − 9)', 'a² − b² = (a + b) · (a − b). Nicht (2x − 9)² – das wäre 4x² − 36x + 81.']]],
     '4a': ['Wende eine binomische Formel an: (x + 5)²', [
       ['= x² + 2 · x · 5 + 5²', '1. Formel: a² + 2ab + b². Das Mittelstück 2ab nicht vergessen!'],
@@ -50,15 +50,15 @@ const ORIG = {
       ['x² + 6x + 9 = x² + 33   | − x²', 'Klammer mit der 1. Formel auflösen. Die rechte Seite bleibt stehen!'],
       ['6x + 9 = 33   | − 9', 'x² fällt auf beiden Seiten weg.'],
       ['6x = 24   | : 6', 'Gegenoperation: + 9 wird mit − 9 weggemacht – auf beiden Seiten.'],
-      ['x = 4', 'Probe: (4 + 3)² = 49 und 4² + 33 = 49 ✓']]],
+      ['x = 4', 'Probe links: (4 + 3)² = 49<br>Probe rechts: 4² + 33 = 49 ✓']]],
     '6': ['Löse die Gleichung: (x + 5) · (x − 2) = x² + 11', [
       ['x² − 2x + 5x − 10 = x² + 11', 'Vier Produkte: x · x, x · (−2), 5 · x, 5 · (−2). Rechte Seite mitschreiben!'],
       ['x² + 3x − 10 = x² + 11   | − x²', 'Zusammenfassen: −2x + 5x = 3x.'],
       ['3x − 10 = 11   | + 10', '− 10 wird mit + 10 weggemacht.'],
       ['3x = 21   | : 3', ''],
-      ['x = 7', 'Probe: (7 + 5) · (7 − 2) = 60 und 7² + 11 = 60 ✓']]],
+      ['x = 7', 'Probe links: (7 + 5) · (7 − 2) = 60<br>Probe rechts: 7² + 11 = 60 ✓']]],
     '7a': ['Lässt sich x² + 14x + 36 mit einer binomischen Formel faktorisieren? Begründe.', [
-      ['x² = x · x   und   36 = 6 · 6', 'Seiten der beiden Quadrate: x und 6.'],
+      ['x² = x · x', 'Seiten der beiden Quadrate: x und 6.'], ['36 = 6 · 6', ''],
       ['Das Mittelstück müsste 2 · x · 6 = 12x sein.', 'Jetzt prüfen: Passt das Mittelstück?'],
       ['Im Term steht aber 14x. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
     '7b': ['Tom rechnet: (x − 3)² = x² − 9. Erkläre seinen Fehler.', [
@@ -70,52 +70,52 @@ const ORIG = {
       [`${F(12, 'x')} + 1 = 4   | · x`, 'Der gemeinsame Nenner ist x. <b>Jeder</b> Teil wird mal x genommen – auch die 1 und die 4!'],
       ['12 + x = 4x   | − x', `${F(12, 'x')} · x = 12 – das x kürzt sich weg.`],
       ['12 = 3x   | : 3', ''],
-      ['x = 4', `Probe: ${F(12, 4)} + 1 = 3 + 1 = 4 ✓`]]],
+      ['x = 4', `Probe: ${F(12, 4)} + 1<br>= 3 + 1<br>= 4 ✓`]]],
     '8b': [`Löse die Gleichung: ${F(3, 'x')} + ${F(1, '2x')} = ${F(7, 8)}`, [
       D0,
       ['Nenner x, 2x und 8 → gemeinsamer Nenner 8x', 'Die kleinste Zahl mit x, in der x, 2x und 8 stecken.'],
       [`${F(3, 'x')} · 8x + ${F(1, '2x')} · 8x = ${F(7, 8)} · 8x`, '<b>Jeden</b> Bruch mal 8x – auf beiden Seiten.'],
-      ['24 + 4 = 7x', '3 · 8 = 24;   8x : 2x = 4;   8x : 8 = x, mal 7 = 7x.'],
+      ['24 + 4 = 7x', `${F(3, 'x')} · 8x = 24<br>${F(1, '2x')} · 8x = 4<br>${F(7, 8)} · 8x = 7x`],
       ['28 = 7x   | : 7', ''],
-      ['x = 4', `Probe: ${F(3, 4)} + ${F(1, 8)} = ${F(6, 8)} + ${F(1, 8)} = ${F(7, 8)} ✓`]]],
+      ['x = 4', `Probe: ${F(3, 4)} + ${F(1, 8)}<br>= ${F(6, 8)} + ${F(1, 8)}<br>= ${F(7, 8)} ✓`]]],
     '9': ['Vereinfache so weit wie möglich: x² − (x − 4)²', [
       ['= x² − (x² − 8x + 16)', 'Zuerst das Binom (2. Formel) – und das Ergebnis <b>in Klammern</b> schreiben!'],
       ['= x² − x² + 8x − 16', 'Das Minus vor der Klammer dreht <b>jedes</b> Vorzeichen in der Klammer um.'],
       ['= 8x − 16', 'x² − x² = 0.']]],
     '10a': ['Ergänze die Lücken: 4x² + 28x + □ = (□ + □)²', [
-      ['4x² = (2x)²  →  1. Kästchen: 2x', 'Der erste Term ist die Seite des ersten Quadrats.'],
-      ['28x : (2 · 2x) = 7  →  2. Kästchen: 7', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'],
-      ['7² = 49  →  erstes Kästchen: 49', 'Das letzte Glied ist das Quadrat des 2. Terms.'],
+      ['4x² = (2x)²', 'Der erste Term ist die Seite des ersten Quadrats.'], ['→ 1. Kästchen: 2x', ''],
+      ['28x : (2 · 2x) = 7', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'], ['→ 2. Kästchen: 7', ''],
+      ['7² = 49', 'Das letzte Glied ist das Quadrat des 2. Terms.'], ['→ erstes Kästchen: 49', ''],
       ['4x² + 28x + 49 = (2x + 7)²', '']]],
     '10b': ['Faktorisiere: 9x² − 30xy + 25y²', [
-      ['9x² = (3x)²   und   25y² = (5y)²', 'Seiten der beiden Quadrate: 3x und 5y.'],
+      ['9x² = (3x)²', 'Seiten der beiden Quadrate: 3x und 5y.'], ['25y² = (5y)²', ''],
       ['Mittelstück: 2 · 3x · 5y = 30xy ✓', 'Es passt. Minus in der Mitte → 2. Formel.'],
       ['= (3x − 5y)²', '']]],
     '11': [`Löse die Gleichung: ${F(4, 'x')} + 3 = ${F(5, '2x')}`, [
       D0,
       [`${F(4, 'x')} + 3 = ${F(5, '2x')}   | · 2x`, 'Gemeinsamer Nenner von x und 2x ist 2x. Alles mal 2x – <b>auch die 3</b>.'],
-      ['8 + 6x = 5   | − 8', `${F(4, 'x')} · 2x = 8;   3 · 2x = 6x;   ${F(5, '2x')} · 2x = 5.`],
+      ['8 + 6x = 5   | − 8', `${F(4, 'x')} · 2x = 8<br>3 · 2x = 6x<br>${F(5, '2x')} · 2x = 5`],
       ['6x = −3   | : 6', ''],
-      ['x = −0,5', 'Eine Lösung darf negativ sein. Probe: 4 : (−0,5) + 3 = −5 und 5 : (−1) = −5 ✓']]]
+      ['x = −0,5', 'Eine Lösung darf negativ sein. Probe links: 4 : (−0,5) + 3 = −5<br>Probe rechts: 5 : (−1) = −5 ✓']]]
   },
   B: {
     '1a': ['Multipliziere aus: −4 · (3a − 2)', [
       ['= (−4) · 3a + (−4) · (−2)', 'Die −4 wird mit <b>jedem</b> Teil der Klammer multipliziert. Das Minus gehört zur Zahl dahinter.'],
       ['= −12a + 8', 'Minus mal Minus gibt Plus: (−4) · (−2) = +8.']]],
     '1b': ['Klammere einen möglichst großen Faktor aus: 9a² − 15a', [
-      ['9a² = 3a · 3a   und   15a = 3a · 5', 'Größte gemeinsame Zahl von 9 und 15 ist 3 – und in beiden Teilen steckt ein a. Also 3a.'],
+      ['9a² = 3a · 3a', 'Größte gemeinsame Zahl von 9 und 15 ist 3 – und in beiden Teilen steckt ein a. Also 3a.'], ['15a = 3a · 5', ''],
       ['= 3a · (3a − 5)', '3a kommt vor die Klammer, der Rest in die Klammer.'],
-      ['Probe: 3a · 3a − 3a · 5 = 9a² − 15a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
+      ['Probe: 3a · 3a − 3a · 5'], ['= 9a² − 15a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
     '2': ['Multipliziere aus und fasse zusammen: (3a − 2) · (a + 4)', [
       ['= 3a · a + 3a · 4 + (−2) · a + (−2) · 4', 'Vier Bögen: <b>jeder</b> Teil der ersten Klammer mal <b>jeder</b> Teil der zweiten.'],
       ['= 3a² + 12a − 2a − 8', 'Die vier Produkte – Vorzeichen mitnehmen: (−2) · 4 = −8.'],
       ['= 3a² + 10a − 8', 'Gleichartige Glieder zusammenfassen: 12a − 2a = 10a. a² und a sind <b>nicht</b> gleichartig.']]],
     '3a': ['Faktorisiere mit einer binomischen Formel: x² + 10x + 25', [
-      ['x² = x · x   und   25 = 5 · 5', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 5.'],
+      ['x² = x · x', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 5.'], ['25 = 5 · 5', ''],
       ['Mittelstück: 2 · x · 5 = 10x ✓', 'Passt das Mittelstück? Ja. Plus in der Mitte → 1. Formel.'],
       ['= (x + 5)²', 'Das ² an der Klammer nicht vergessen.']]],
     '3b': ['Faktorisiere mit einer binomischen Formel: 9x² − 25', [
-      ['9x² = (3x)²   und   25 = 5²', 'Zwei Quadrate, dazwischen ein Minus, kein Mittelstück → 3. Formel.'],
+      ['9x² = (3x)²', 'Zwei Quadrate, dazwischen ein Minus, kein Mittelstück → 3. Formel.'], ['25 = 5²', ''],
       ['= (3x + 5) · (3x − 5)', 'a² − b² = (a + b) · (a − b). Nicht (3x − 5)² und nicht (9x − 25) · (9x + 25)!']]],
     '4a': ['Wende eine binomische Formel an: (x + 7)²', [
       ['= x² + 2 · x · 7 + 7²', '1. Formel: a² + 2ab + b². Das Mittelstück 2ab nicht vergessen!'],
@@ -135,15 +135,15 @@ const ORIG = {
       ['x² + 4x + 4 = x² + 28   | − x²', 'Klammer mit der 1. Formel auflösen. Die rechte Seite bleibt stehen!'],
       ['4x + 4 = 28   | − 4', 'x² fällt auf beiden Seiten weg.'],
       ['4x = 24   | : 4', 'Gegenoperation: + 4 wird mit − 4 weggemacht – auf beiden Seiten.'],
-      ['x = 6', 'Probe: (6 + 2)² = 64 und 6² + 28 = 64 ✓']]],
+      ['x = 6', 'Probe links: (6 + 2)² = 64<br>Probe rechts: 6² + 28 = 64 ✓']]],
     '6': ['Löse die Gleichung: (x + 6) · (x − 2) = x² + 8', [
       ['x² − 2x + 6x − 12 = x² + 8', 'Vier Produkte: x · x, x · (−2), 6 · x, 6 · (−2). Rechte Seite mitschreiben!'],
       ['x² + 4x − 12 = x² + 8   | − x²', 'Zusammenfassen: −2x + 6x = 4x.'],
       ['4x − 12 = 8   | + 12', '− 12 wird mit + 12 weggemacht.'],
       ['4x = 20   | : 4', ''],
-      ['x = 5', 'Probe: (5 + 6) · (5 − 2) = 33 und 5² + 8 = 33 ✓']]],
+      ['x = 5', 'Probe links: (5 + 6) · (5 − 2) = 33<br>Probe rechts: 5² + 8 = 33 ✓']]],
     '7a': ['Lässt sich x² + 12x + 25 mit einer binomischen Formel faktorisieren? Begründe.', [
-      ['x² = x · x   und   25 = 5 · 5', 'Seiten der beiden Quadrate: x und 5.'],
+      ['x² = x · x', 'Seiten der beiden Quadrate: x und 5.'], ['25 = 5 · 5', ''],
       ['Das Mittelstück müsste 2 · x · 5 = 10x sein.', 'Jetzt prüfen: Passt das Mittelstück?'],
       ['Im Term steht aber 12x. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
     '7b': ['Lena rechnet: (x − 6)² = x² − 36. Erkläre ihren Fehler.', [
@@ -155,33 +155,33 @@ const ORIG = {
       [`${F(18, 'x')} + 2 = 5   | · x`, 'Der gemeinsame Nenner ist x. <b>Jeder</b> Teil wird mal x genommen – auch die 2 und die 5!'],
       ['18 + 2x = 5x   | − 2x', `${F(18, 'x')} · x = 18 – das x kürzt sich weg.`],
       ['18 = 3x   | : 3', ''],
-      ['x = 6', `Probe: ${F(18, 6)} + 2 = 3 + 2 = 5 ✓`]]],
+      ['x = 6', `Probe: ${F(18, 6)} + 2<br>= 3 + 2<br>= 5 ✓`]]],
     '8b': [`Löse die Gleichung: ${F(5, 'x')} + ${F(1, '2x')} = ${F(11, 6)}`, [
       D0,
       ['Nenner x, 2x und 6 → gemeinsamer Nenner 6x', 'Die kleinste Zahl mit x, in der x, 2x und 6 stecken.'],
       [`${F(5, 'x')} · 6x + ${F(1, '2x')} · 6x = ${F(11, 6)} · 6x`, '<b>Jeden</b> Bruch mal 6x – auf beiden Seiten.'],
-      ['30 + 3 = 11x', '5 · 6 = 30;   6x : 2x = 3;   6x : 6 = x, mal 11 = 11x.'],
+      ['30 + 3 = 11x', `${F(5, 'x')} · 6x = 30<br>${F(1, '2x')} · 6x = 3<br>${F(11, 6)} · 6x = 11x`],
       ['33 = 11x   | : 11', ''],
-      ['x = 3', `Probe: ${F(5, 3)} + ${F(1, 6)} = ${F(10, 6)} + ${F(1, 6)} = ${F(11, 6)} ✓`]]],
+      ['x = 3', `Probe: ${F(5, 3)} + ${F(1, 6)}<br>= ${F(10, 6)} + ${F(1, 6)}<br>= ${F(11, 6)} ✓`]]],
     '9': ['Vereinfache so weit wie möglich: x² − (x − 5)²', [
       ['= x² − (x² − 10x + 25)', 'Zuerst das Binom (2. Formel) – und das Ergebnis <b>in Klammern</b> schreiben!'],
       ['= x² − x² + 10x − 25', 'Das Minus vor der Klammer dreht <b>jedes</b> Vorzeichen in der Klammer um.'],
       ['= 10x − 25', 'x² − x² = 0.']]],
     '10a': ['Ergänze die Lücken: 9x² − 24x + □ = (□ − □)²', [
-      ['9x² = (3x)²  →  1. Kästchen: 3x', 'Der erste Term ist die Seite des ersten Quadrats.'],
-      ['24x : (2 · 3x) = 4  →  2. Kästchen: 4', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'],
-      ['4² = 16  →  erstes Kästchen: 16', 'Das letzte Glied ist das Quadrat des 2. Terms.'],
+      ['9x² = (3x)²', 'Der erste Term ist die Seite des ersten Quadrats.'], ['→ 1. Kästchen: 3x', ''],
+      ['24x : (2 · 3x) = 4', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'], ['→ 2. Kästchen: 4', ''],
+      ['4² = 16', 'Das letzte Glied ist das Quadrat des 2. Terms.'], ['→ erstes Kästchen: 16', ''],
       ['9x² − 24x + 16 = (3x − 4)²', '']]],
     '10b': ['Faktorisiere: 9x² − 12xy + 4y²', [
-      ['9x² = (3x)²   und   4y² = (2y)²', 'Seiten der beiden Quadrate: 3x und 2y.'],
+      ['9x² = (3x)²', 'Seiten der beiden Quadrate: 3x und 2y.'], ['4y² = (2y)²', ''],
       ['Mittelstück: 2 · 3x · 2y = 12xy ✓', 'Es passt. Minus in der Mitte → 2. Formel.'],
       ['= (3x − 2y)²', '']]],
     '11': [`Löse die Gleichung: ${F(5, 'x')} + 3 = ${F(1, '2x')}`, [
       D0,
       [`${F(5, 'x')} + 3 = ${F(1, '2x')}   | · 2x`, 'Gemeinsamer Nenner von x und 2x ist 2x. Alles mal 2x – <b>auch die 3</b>.'],
-      ['10 + 6x = 1   | − 10', `${F(5, 'x')} · 2x = 10;   3 · 2x = 6x;   ${F(1, '2x')} · 2x = 1.`],
+      ['10 + 6x = 1   | − 10', `${F(5, 'x')} · 2x = 10<br>3 · 2x = 6x<br>${F(1, '2x')} · 2x = 1`],
       ['6x = −9   | : 6', ''],
-      ['x = −1,5', `Eine Lösung darf negativ sein. Probe: 5 : (−1,5) + 3 = −${F(1, 3)} und 1 : (−3) = −${F(1, 3)} ✓`]]]
+      ['x = −1,5', `Eine Lösung darf negativ sein.<br>Probe links: 5 : (−1,5) + 3 = −${F(1, 3)}<br>Probe rechts: 1 : (−3) = −${F(1, 3)} ✓`]]]
   }
 };
 
@@ -273,7 +273,7 @@ function m7a() {
     ok ? `Nein: ${a * a} ist kein Quadrat.` : `Ja: Man kann immer faktorisieren, wenn vorne x² steht.`, `Nein: Es gibt kein Minus in der Mitte.`]);
   return { title: 'Begründen', q: `Lässt sich <b>${term}</b> mit einer binomischen Formel faktorisieren? Wähle die richtige Begründung.`, type: 'mc', options: opts, ans: R0,
     hint: 'Lies die Seiten der beiden Quadrate ab. Prüfe dann: Ist das Mittelstück genau 2 · Seite · Seite?',
-    sol: [`Quadrate: x² = x · x und ${a * a} = ${a} · ${a}`, `Mittelstück müsste 2 · x · ${a} = ${2 * a}x sein – im Term steht ${b}x.`, ok ? `Passt → (x + ${a})²` : 'Passt nicht → Nein.'] };
+    sol: ['x² = x · x', `${a * a} = ${a} · ${a}`, `Mittelstück müsste 2 · x · ${a} = ${2 * a}x sein.`, `Im Term steht ${b}x.`, ok ? `Passt → (x + ${a})²` : 'Passt nicht → Nein.'] };
 }
 function m7b() {
   const a = R(2, 9), name = pick(['Ben', 'Nina', 'Noah', 'Emma']);
@@ -281,7 +281,7 @@ function m7b() {
   const opts = shuffle([R0, `Nur das Vorzeichen ist falsch: Es heißt x² + ${a * a}.`, `Es ist richtig, denn (x − ${a})² = (x + ${a}) · (x − ${a}).`, `${name} hätte x² − ${2 * a} rechnen müssen.`]);
   return { title: 'Fehler erklären', q: `${name} rechnet: <b>(x − ${a})² = x² − ${a * a}</b>. Was ist der Fehler?`, type: 'mc', options: opts, ans: R0,
     hint: `(x − ${a})² heißt (x − ${a}) · (x − ${a}). Rechne mit der 2. Formel nach.`,
-    sol: [`(x − ${a})² = (x − ${a}) · (x − ${a})`, `= x² − 2 · x · ${a} + ${a}² = x² − ${2 * a}x + ${a * a}`, `${name} hat das Mittelstück −${2 * a}x vergessen.`] };
+    sol: [`(x − ${a})² = (x − ${a}) · (x − ${a})`, `= x² − 2 · x · ${a} + ${a}²`, `= x² − ${2 * a}x + ${a * a}`, `${name} hat das Mittelstück −${2 * a}x vergessen.`] };
 }
 function br8b() {   // a/x + 1/(2x) = n/d
   let a, x0; do { a = R(2, 6); x0 = R(2, 6); } while (false);
@@ -306,14 +306,14 @@ function erg10a() {
   return termTask({ title: 'Lücken ergänzen', q: `Ergänze die Lücken.${big(`${k * k}x<sup>2</sup> ${op} ${2 * k * a}x + □ = (□ ${op} □)<sup>2</sup>`)}<p class="muted" style="font-size:1rem">Tippe die fertige Klammer ein, z. B. (2x+7)².</p>`,
     form: 'binom', vars: ['x'], ansHtml: ans,
     hint: `1. Kästchen: die Seite von ${k * k}x². 2. Kästchen: Mittelstück : (2 · 1. Term). Die Zahl vorne: das Quadrat des 2. Terms.`,
-    sol: [`${k * k}x² = (${kv})²  → 1. Term ${kv}`, `${2 * k * a}x : (2 · ${kv}) = ${a}  → 2. Term ${a}`, `${a}² = ${a * a}`, `${k * k}x² ${op} ${2 * k * a}x + ${a * a} = ${ans}`] });
+    sol: [`${k * k}x² = (${kv})²`, `→ 1. Term: ${kv}`, `${2 * k * a}x : (2 · ${kv}) = ${a}`, `→ 2. Term: ${a}`, `${a}² = ${a * a}`, `${k * k}x² ${op} ${2 * k * a}x + ${a * a} = ${ans}`] });
 }
 function fak10b() {
   let k, l; do { k = R(2, 5); l = R(2, 5); } while (ggT(k, l) !== 1);
   const s = sgn(), op = s > 0 ? '+' : MI, ans = `(${k}x ${op} ${l}y)<sup>2</sup>`;
   return termTask({ title: 'Faktorisieren', q: `Faktorisiere mit einer binomischen Formel.${big(`${k * k}x<sup>2</sup> ${op} ${2 * k * l}xy + ${l * l}y<sup>2</sup>`)}`, form: 'binom', vars: ['x', 'y'], ansHtml: ans,
     hint: 'Lies die Seiten der beiden Quadrate ab (mit Variable!). Prüfe das Mittelstück: 2 · Seite · Seite.',
-    sol: [`${k * k}x² = (${k}x)²   und   ${l * l}y² = (${l}y)²`, `Mittelstück: 2 · ${k}x · ${l}y = ${2 * k * l}xy ✓`, `= ${ans}`] });
+    sol: [`${k * k}x² = (${k}x)²`, `${l * l}y² = (${l}y)²`, `Mittelstück: 2 · ${k}x · ${l}y = ${2 * k * l}xy ✓`, `= ${ans}`] });
 }
 function minus9() { let t, n = 0; do { t = G.minusBinom(); } while (/· \(/.test(t.q) && ++n < 30); return t; }
 const ERSATZ = {
