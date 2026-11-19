@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Berichtigung KA 1</title>
+<link rel="stylesheet" href="style.css?v=20261107a">
+<style>
+  .grp, .tasks { display:flex; flex-wrap:wrap; gap:8px; margin:.4rem 0 }
+  .grp button { font-size:1.2rem; min-width:7rem; min-height:52px }
+  .tasks button { font-size:1.15rem; min-width:3.6rem; min-height:48px }
+  .grp button.sel { background:#dbeafe; border-color:var(--blue); outline:2px solid var(--blue) }
+  .tasks button.erledigt { background:#e7f6ec; border-color:#86c99a }
+  .tasks button.erledigt::after { content:' ✓'; color:#1a7f37 }
+  .steps { padding-left:1.4rem; margin:.4rem 0 }
+  .steps li { margin:.5rem 0 }
+  .steps .z { font-size:1.25rem; font-weight:600 }
+  .steps .e { color:#555; margin-top:.15rem }
+  .fehler { display:flex; flex-direction:column; gap:6px }
+  .fopt { display:flex; gap:.6rem; align-items:flex-start; padding:.5rem .7rem; border:1px solid var(--line); border-radius:10px; cursor:pointer; font-size:1.05rem }
+  .fopt input { width:1.3rem; height:1.3rem; margin-top:.15rem; flex:none }
+  .fopt:has(input:checked) { background:#fff7e6; border-color:#f5d59a }
+  .heft { margin-top:12px; padding:12px 16px; border:2px dashed #7b4fa0; border-radius:12px; background:#fbf7ff }
+  .heft .hk { font-weight:700; color:#7b4fa0; margin-bottom:.3rem }
+  .heft .hl { font-size:1.15rem; margin:.25rem 0; font-family: "Bradley Hand", "Segoe Print", cursive }
+  .mcl { flex-direction:column; align-items:stretch }
+  .mcl button { text-align:left; font-size:1.05rem }
+  .big2 { font-size:1.3rem; font-weight:700 }
+  #doneBar { margin:.3rem 0 }
+  .dchip { display:inline-block; background:#e7f6ec; border:1px solid #b6e2c4; border-radius:999px; padding:.1rem .6rem; margin:.1rem }
+  .hidden { display:none }
+</style>
+</head>
+<body>
+<main>
+  <h1>Berichtigung Klassenarbeit 1</h1>
+  <p class="muted" style="margin-top:0">Terme und Gleichungen · Klasse 8</p>
+  <div class="card">
+    <b>So geht's</b>
+    <ol style="margin:.3rem 0 0">
+      <li>Wähle deine Gruppe und eine Aufgabe, bei der du Punkte verloren hast.<br><small class="muted">Welche Aufgaben du berichtigst, sagt dir deine Lehrkraft – sonst nimm die zwei Aufgaben, bei denen du die meisten Punkte verloren hast.</small></li>
+      <li>Schau dir Schritt für Schritt an, wie die Aufgabe gerechnet wird.</li>
+      <li>Kreuze an, welcher Fehler dir passiert ist, und schreib die Sätze ins Heft.</li>
+      <li>Löse die Ersatzaufgabe im Heft und gib dein Ergebnis ein. Erst wenn sie richtig ist, ist die Aufgabe berichtigt.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>Deine Gruppe</h2>
+    <div class="grp" id="grp"><button data-g="A">Gruppe A</button><button data-g="B">Gruppe B</button></div>
+    <div id="auf" class="hidden"><h2 style="margin-top:.8rem">Welche Aufgabe berichtigst du?</h2><div class="tasks"></div><div id="doneBar"></div></div>
+  </div>
+  <div id="work"></div>
+</main>
+<script src="aufgaben.js?v=20261119a"></script>
+<script src="berichtigung.js?v=20261119a"></script>
+</body>
+</html>
