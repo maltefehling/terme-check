@@ -23,8 +23,8 @@ const ORIG = {
       ['Probe: 4a · 2a − 4a · 3'], ['= 8a² − 12a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
     '2': ['Multipliziere aus und fasse zusammen: (2a − 3) · (a + 5)', [
       ['= 2a · a + 2a · 5 + (−3) · a + (−3) · 5', 'Vier Bögen: <b>jeder</b> Teil der ersten Klammer mal <b>jeder</b> Teil der zweiten.'],
-      ['= 2a² + 10a − 3a − 15', 'Die vier Produkte – Vorzeichen mitnehmen: (−3) · 5 = −15.'],
-      ['= 2a² + 7a − 15', 'Gleichartige Glieder zusammenfassen: 10a − 3a = 7a. a² und a sind <b>nicht</b> gleichartig.']]],
+      ['= 2a² + 10a − 3a − 15', 'Die vier Ergebnisse. Das Minus gehört zur Zahl: (−3) · 5 = −15.'],
+      ['= 2a² + 7a − 15', 'Gleiche Sorten zusammenzählen: 10a − 3a = 7a. a² und a sind <b>verschiedene</b> Sorten.']]],
     '3a': ['Faktorisiere mit einer binomischen Formel: x² + 8x + 16', [
       ['x² = x · x', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 4.'], ['16 = 4 · 4', ''],
       ['Mittelstück: 2 · x · 4 = 8x ✓', 'Passt das Mittelstück? Ja. Plus in der Mitte → 1. Formel.'],
@@ -49,10 +49,10 @@ const ORIG = {
     '5': ['Löse die Gleichung: (x + 3)² = x² + 33', [
       ['x² + 6x + 9 = x² + 33   | − x²', 'Klammer mit der 1. Formel auflösen. Die rechte Seite bleibt stehen!'],
       ['6x + 9 = 33   | − 9', 'x² fällt auf beiden Seiten weg.'],
-      ['6x = 24   | : 6', 'Gegenoperation: + 9 wird mit − 9 weggemacht – auf beiden Seiten.'],
+      ['6x = 24   | : 6', 'Umkehr-Rechnung: + 9 wird mit − 9 weggemacht – auf beiden Seiten.'],
       ['x = 4', 'Probe links: (4 + 3)² = 49<br>Probe rechts: 4² + 33 = 49 ✓']]],
     '6': ['Löse die Gleichung: (x + 5) · (x − 2) = x² + 11', [
-      ['x² − 2x + 5x − 10 = x² + 11', 'Vier Produkte: x · x, x · (−2), 5 · x, 5 · (−2). Rechte Seite mitschreiben!'],
+      ['x² − 2x + 5x − 10 = x² + 11', 'Vier Malaufgaben: x · x, x · (−2), 5 · x, 5 · (−2). Rechte Seite mitschreiben!'],
       ['x² + 3x − 10 = x² + 11   | − x²', 'Zusammenfassen: −2x + 5x = 3x.'],
       ['3x − 10 = 11   | + 10', '− 10 wird mit + 10 weggemacht.'],
       ['3x = 21   | : 3', ''],
@@ -60,7 +60,7 @@ const ORIG = {
     '7a': ['Lässt sich x² + 14x + 36 mit einer binomischen Formel faktorisieren? Begründe.', [
       ['x² = x · x', 'Seiten der beiden Quadrate: x und 6.'], ['36 = 6 · 6', ''],
       ['Das Mittelstück müsste 2 · x · 6 = 12x sein.', 'Jetzt prüfen: Passt das Mittelstück?'],
-      ['Im Term steht aber 14x. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
+      ['Es steht aber 14x da. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
     '7b': ['Tom rechnet: (x − 3)² = x² − 9. Erkläre seinen Fehler.', [
       ['(x − 3)² = (x − 3) · (x − 3)', 'Das Quadrat heißt: die Klammer mal sich selbst – nicht (x − 3) · (x + 3).'],
       ['= x² − 6x + 9', '2. Formel: Mittelstück 2 · x · 3 = 6x mit Minus, und (−3)² = +9.'],
@@ -83,9 +83,9 @@ const ORIG = {
       ['= x² − x² + 8x − 16', 'Das Minus vor der Klammer dreht <b>jedes</b> Vorzeichen in der Klammer um.'],
       ['= 8x − 16', 'x² − x² = 0.']]],
     '10a': ['Ergänze die Lücken: 4x² + 28x + □ = (□ + □)²', [
-      ['4x² = (2x)²', 'Der erste Term ist die Seite des ersten Quadrats.'], ['→ 1. Kästchen: 2x', ''],
-      ['28x : (2 · 2x) = 7', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'], ['→ 2. Kästchen: 7', ''],
-      ['7² = 49', 'Das letzte Glied ist das Quadrat des 2. Terms.'], ['→ erstes Kästchen: 49', ''],
+      ['4x² = (2x)²', 'Ins erste Kästchen kommt, was mal sich selbst den ersten Teil ergibt.'], ['→ 1. Kästchen: 2x', ''],
+      ['28x : (2 · 2x) = 7', 'Das Mittelstück ist 2 · erstes Kästchen · zweites Kästchen. Rückwärts heißt das: teilen.'], ['→ 2. Kästchen: 7', ''],
+      ['7² = 49', 'Die Zahl ist das zweite Kästchen mal sich selbst.'], ['→ erstes Kästchen: 49', ''],
       ['4x² + 28x + 49 = (2x + 7)²', '']]],
     '10b': ['Faktorisiere: 9x² − 30xy + 25y²', [
       ['9x² = (3x)²', 'Seiten der beiden Quadrate: 3x und 5y.'], ['25y² = (5y)²', ''],
@@ -108,8 +108,8 @@ const ORIG = {
       ['Probe: 3a · 3a − 3a · 5'], ['= 9a² − 15a ✓', 'Rechne die Klammer wieder aus – kommt die Aufgabe heraus?']]],
     '2': ['Multipliziere aus und fasse zusammen: (3a − 2) · (a + 4)', [
       ['= 3a · a + 3a · 4 + (−2) · a + (−2) · 4', 'Vier Bögen: <b>jeder</b> Teil der ersten Klammer mal <b>jeder</b> Teil der zweiten.'],
-      ['= 3a² + 12a − 2a − 8', 'Die vier Produkte – Vorzeichen mitnehmen: (−2) · 4 = −8.'],
-      ['= 3a² + 10a − 8', 'Gleichartige Glieder zusammenfassen: 12a − 2a = 10a. a² und a sind <b>nicht</b> gleichartig.']]],
+      ['= 3a² + 12a − 2a − 8', 'Die vier Ergebnisse. Das Minus gehört zur Zahl: (−2) · 4 = −8.'],
+      ['= 3a² + 10a − 8', 'Gleiche Sorten zusammenzählen: 12a − 2a = 10a. a² und a sind <b>verschiedene</b> Sorten.']]],
     '3a': ['Faktorisiere mit einer binomischen Formel: x² + 10x + 25', [
       ['x² = x · x', 'Suche die zwei Quadrate und lies ihre Seiten ab: x und 5.'], ['25 = 5 · 5', ''],
       ['Mittelstück: 2 · x · 5 = 10x ✓', 'Passt das Mittelstück? Ja. Plus in der Mitte → 1. Formel.'],
@@ -134,10 +134,10 @@ const ORIG = {
     '5': ['Löse die Gleichung: (x + 2)² = x² + 28', [
       ['x² + 4x + 4 = x² + 28   | − x²', 'Klammer mit der 1. Formel auflösen. Die rechte Seite bleibt stehen!'],
       ['4x + 4 = 28   | − 4', 'x² fällt auf beiden Seiten weg.'],
-      ['4x = 24   | : 4', 'Gegenoperation: + 4 wird mit − 4 weggemacht – auf beiden Seiten.'],
+      ['4x = 24   | : 4', 'Umkehr-Rechnung: + 4 wird mit − 4 weggemacht – auf beiden Seiten.'],
       ['x = 6', 'Probe links: (6 + 2)² = 64<br>Probe rechts: 6² + 28 = 64 ✓']]],
     '6': ['Löse die Gleichung: (x + 6) · (x − 2) = x² + 8', [
-      ['x² − 2x + 6x − 12 = x² + 8', 'Vier Produkte: x · x, x · (−2), 6 · x, 6 · (−2). Rechte Seite mitschreiben!'],
+      ['x² − 2x + 6x − 12 = x² + 8', 'Vier Malaufgaben: x · x, x · (−2), 6 · x, 6 · (−2). Rechte Seite mitschreiben!'],
       ['x² + 4x − 12 = x² + 8   | − x²', 'Zusammenfassen: −2x + 6x = 4x.'],
       ['4x − 12 = 8   | + 12', '− 12 wird mit + 12 weggemacht.'],
       ['4x = 20   | : 4', ''],
@@ -145,7 +145,7 @@ const ORIG = {
     '7a': ['Lässt sich x² + 12x + 25 mit einer binomischen Formel faktorisieren? Begründe.', [
       ['x² = x · x', 'Seiten der beiden Quadrate: x und 5.'], ['25 = 5 · 5', ''],
       ['Das Mittelstück müsste 2 · x · 5 = 10x sein.', 'Jetzt prüfen: Passt das Mittelstück?'],
-      ['Im Term steht aber 12x. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
+      ['Es steht aber 12x da. → Nein.', 'Zwei Quadrate allein reichen nicht – das Mittelstück muss passen.']]],
     '7b': ['Lena rechnet: (x − 6)² = x² − 36. Erkläre ihren Fehler.', [
       ['(x − 6)² = (x − 6) · (x − 6)', 'Das Quadrat heißt: die Klammer mal sich selbst – nicht (x − 6) · (x + 6).'],
       ['= x² − 12x + 36', '2. Formel: Mittelstück 2 · x · 6 = 12x mit Minus, und (−6)² = +36.'],
@@ -168,9 +168,9 @@ const ORIG = {
       ['= x² − x² + 10x − 25', 'Das Minus vor der Klammer dreht <b>jedes</b> Vorzeichen in der Klammer um.'],
       ['= 10x − 25', 'x² − x² = 0.']]],
     '10a': ['Ergänze die Lücken: 9x² − 24x + □ = (□ − □)²', [
-      ['9x² = (3x)²', 'Der erste Term ist die Seite des ersten Quadrats.'], ['→ 1. Kästchen: 3x', ''],
-      ['24x : (2 · 3x) = 4', 'Mittelstück = 2 · 1. Term · 2. Term. Rückwärts: teilen.'], ['→ 2. Kästchen: 4', ''],
-      ['4² = 16', 'Das letzte Glied ist das Quadrat des 2. Terms.'], ['→ erstes Kästchen: 16', ''],
+      ['9x² = (3x)²', 'Ins erste Kästchen kommt, was mal sich selbst den ersten Teil ergibt.'], ['→ 1. Kästchen: 3x', ''],
+      ['24x : (2 · 3x) = 4', 'Das Mittelstück ist 2 · erstes Kästchen · zweites Kästchen. Rückwärts heißt das: teilen.'], ['→ 2. Kästchen: 4', ''],
+      ['4² = 16', 'Die Zahl ist das zweite Kästchen mal sich selbst.'], ['→ erstes Kästchen: 16', ''],
       ['9x² − 24x + 16 = (3x − 4)²', '']]],
     '10b': ['Faktorisiere: 9x² − 12xy + 4y²', [
       ['9x² = (3x)²', 'Seiten der beiden Quadrate: 3x und 2y.'], ['4y² = (2y)²', ''],
@@ -185,73 +185,135 @@ const ORIG = {
   }
 };
 
-/* ===== ② Typische Fehler zum Ankreuzen (aus der Korrektur der Klasse) – f = mein Fehler, r = so geht es richtig ===== */
-const FL = { f: 'Ich habe mich verrechnet oder etwas falsch abgeschrieben.', r: 'Ich rechne langsamer und mache am Ende die Probe.', k: 'Flüchtigkeitsfehler (verrechnet, falsch abgeschrieben)' };
-const LEER = { f: 'Ich habe die Aufgabe nicht bearbeitet.', r: 'Ich lerne den Lösungsweg mit der Ersatzaufgabe.', k: 'Ich habe die Aufgabe nicht bearbeitet' };
-const VZ = { k: 'Vorzeichenfehler: Minus mal Minus', f: 'Ich habe Minus mal Minus nicht als Plus gerechnet.', r: 'Minus mal Minus gibt Plus, Plus mal Minus gibt Minus.' };
-const BINOM = [
-  { k: 'Das Mittelstück fehlt', f: 'Ich habe das Mittelstück vergessen.', r: '(a + b)² = a² + 2ab + b² – das Mittelstück 2ab gehört immer dazu.' },
-  { k: 'Mittelstück nicht verdoppelt (nur a · b statt 2 · a · b)', f: 'Ich habe beim Mittelstück das „2 ·“ vergessen.', r: 'Das Mittelstück ist 2 · a · b.' },
-  { k: '(3x)² bzw. (2x)² falsch gerechnet', f: 'Ich habe die Zahl vor dem x nicht mit quadriert.', r: '(3x)² = 3x · 3x = 9x² – die Zahl wird auch quadriert.' },
-  { k: '(a − b)² mit (a + b) · (a − b) verwechselt', f: 'Ich habe die 2. und die 3. binomische Formel verwechselt.', r: '(a − b)² = (a − b) · (a − b), dabei gibt es ein Mittelstück. Nur (a + b) · (a − b) hat keins.' },
-  VZ];
-const BRUCH = [
-  { k: 'D falsch: Die Lösung oder eine andere Zahl eingetragen', f: 'Ich habe in D die falsche Zahl eingetragen.', r: 'In D steht die Zahl, die x nicht sein darf: 0, weil man nicht durch 0 teilen darf.' },
-  { k: 'Gemeinsamen Nenner (Hauptnenner) nicht gefunden', f: 'Ich habe den gemeinsamen Nenner nicht gefunden.', r: 'Der gemeinsame Nenner ist der kleinste Term, in dem alle Nenner stecken (z. B. x, 2x und 8 → 8x).' },
-  { k: 'Nicht alle Teile mit dem Nenner multipliziert (auch die Zahl ohne Bruch!)', f: 'Ich habe nicht jeden Teil der Gleichung mit dem Nenner multipliziert.', r: 'Jeder Teil der Gleichung wird mit dem gemeinsamen Nenner multipliziert – auch die Zahl ohne Bruch.' },
-  { k: 'Nur eine Seite der Gleichung multipliziert', f: 'Ich habe nur eine Seite der Gleichung multipliziert.', r: 'Was ich auf der einen Seite mache, mache ich auch auf der anderen Seite.' },
-  { k: 'Falsch gekürzt (z. B. 12/x · x = 12x statt 12)', f: 'Ich habe beim Malnehmen falsch gekürzt.', r: 'Bruch mal Nenner: Das x kürzt sich weg, z. B. 12/x · x = 12.' },
-  { k: 'Bruch falsch gelesen (12/x als 12 · x oder x : 12)', f: 'Ich habe den Bruch falsch gelesen.', r: '12/x heißt 12 geteilt durch x.' },
-  { k: 'Beim Umformen die falsche Gegenoperation genommen', f: 'Ich habe beim Umformen die falsche Gegenoperation genommen.', r: '+ wird mit −, · wird mit : weggemacht – auf beiden Seiten.' },
-  { k: 'Durch Probieren gelöst statt umgeformt', f: 'Ich habe nur probiert.', r: 'Ich forme mit dem gemeinsamen Nenner um, bis x allein steht.' }];
-const GLEICH = [
-  { k: 'Die rechte Seite der Gleichung weggelassen', f: 'Ich habe die rechte Seite der Gleichung weggelassen.', r: 'Eine Gleichung schreibe ich immer ganz: linke Seite = rechte Seite – in jeder Zeile.' },
-  { k: 'Falsche Gegenoperation (z. B. − 10 mit − 10 weggemacht)', f: 'Ich habe die falsche Gegenoperation genommen.', r: 'Die Gegenoperation von − 10 ist + 10, von · 3 ist : 3 – immer auf beiden Seiten.' },
-  { k: 'Nicht bis zum Ende gelöst (x steht nicht allein)', f: 'Ich habe die Gleichung nicht bis zum Ende gelöst.', r: 'Ich forme so lange um, bis x = … dasteht, und mache dann die Probe.' },
-  { k: 'Beim Teilen verrechnet oder falsch herum geteilt', f: 'Ich habe beim Teilen falsch gerechnet.', r: 'Bei 6x = 24 teile ich beide Seiten durch 6: x = 24 : 6.' }];
+/* ===== ② Typische Fehler zum Ankreuzen – einfache Sprache, ohne Fachwörter (Malte 19.11.2026) =====
+   k = Text zum Ankreuzen · x = so sah es in der Klasse oft aus (falsch) · f = Satz „Mein Fehler“ · r = so geht es richtig
+   y = richtiges Beispiel (eine Zeile pro Schritt). x und y: {A, B} oder für beide Gruppen gleich. */
+const gx = (v, g) => v == null ? null : (typeof v === 'object' && !Array.isArray(v) && (v.A !== undefined || v.B !== undefined)) ? v[g] : v;
+const FL = { k: 'Ich habe mich verrechnet oder etwas falsch abgeschrieben', f: 'Ich habe mich verrechnet oder etwas falsch abgeschrieben.', r: 'Ich rechne langsam und mache am Ende die Probe.' };
+const LEER = { k: 'Ich habe die Aufgabe nicht gemacht', f: 'Ich habe die Aufgabe nicht gemacht.', r: 'Ich lerne den Weg mit der Ersatzaufgabe.' };
+const RECHTS = (A, B) => ({ k: 'Ich habe die rechte Seite der Gleichung weggelassen', x: { A, B }, f: 'Ich habe nur die linke Seite weitergeschrieben.', r: 'Eine Gleichung hat zwei Seiten. In jede Zeile gehört: links = rechts.' });
+const ZUENDE = (A, B) => ({ k: 'Ich habe nicht zu Ende gerechnet', x: { A, B }, f: 'Ich habe aufgehört, bevor x allein dastand.', r: 'Ich rechne weiter, bis x = … dasteht. Dann mache ich die Probe.' });
+const UMKEHR = (xA, xB, yA, yB) => ({ k: 'Ich habe zum Rüberbringen die falsche Rechnung genommen', x: { A: xA, B: xB }, f: 'Ich habe die falsche Umkehr-Rechnung genommen.', r: '+ mache ich mit − weg. Mal mache ich mit geteilt weg. Immer auf beiden Seiten.', y: { A: yA, B: yB } });
+const BRUCH = (n) => {   // n: Daten je Aufgabe 8a / 8b / 11
+  const L = [
+    { k: 'Bei D habe ich eine falsche Zahl eingetragen', x: n.dx, f: 'Ich habe bei D die falsche Zahl eingetragen.', r: 'Bei D steht die Zahl, die x nicht sein darf. Das ist immer die 0, weil man nicht durch 0 teilen darf.', y: 'D = ℚ \\ {0}' },
+    { k: 'Ich wusste nicht, womit ich malnehmen muss', x: n.hx, f: 'Ich habe nicht gefunden, womit ich malnehmen muss.', r: 'Ich suche die kleinste Zahl mit x, in der alle Nenner stecken.', y: n.hy },
+    { k: 'Ich habe nicht jeden Teil malgenommen', x: n.ax, f: 'Ich habe einen Teil der Gleichung nicht malgenommen.', r: 'Jeder Teil wird malgenommen – auch die Zahl ohne Bruch und die rechte Seite.', y: n.ay },
+    { k: 'Beim Malnehmen habe ich falsch gekürzt', x: n.kx, f: 'Ich habe beim Malnehmen falsch gekürzt.', r: 'Das x unten und das x beim Malnehmen heben sich weg.', y: n.ky },
+    { k: 'Ich habe den Bruch falsch gelesen', x: n.lx, f: 'Ich habe den Bruch falsch gelesen.', r: 'Ein Bruch heißt: oben geteilt durch unten.', y: n.ly },
+    UMKEHR(n.ux.A, n.ux.B, n.uy.A, n.uy.B),
+    { k: 'Ich habe nur Zahlen ausprobiert', x: 'Zahlen eingesetzt, bis es passt – ohne Rechenweg', f: 'Ich habe nur ausprobiert.', r: 'Ich nehme mit dem Nenner mal und rechne, bis x allein steht.' },
+    FL, LEER];
+  return L;
+};
 const FEHLER = {
-  '1a': [VZ, { k: 'Nur den ersten Teil der Klammer multipliziert', f: 'Ich habe nicht jeden Teil der Klammer multipliziert.', r: 'Die Zahl vor der Klammer wird mit jedem Teil in der Klammer multipliziert.' },
-    { k: 'Das Minus vor der Zahl verloren', f: 'Ich habe das Minus vor der Zahl verloren.', r: 'Das Minus gehört zur Zahl dahinter und wird mitmultipliziert.' }, FL],
-  '1b': [{ k: 'Nicht den größten Faktor ausgeklammert (nur die Zahl oder nur a)', f: 'Ich habe nicht den größten Faktor ausgeklammert.', r: 'Ich klammere die größte gemeinsame Zahl UND die Variable aus, z. B. 4a.' },
-    { k: 'Den Faktor nicht vor die Klammer geschrieben', f: 'Ich habe den Faktor nicht vor die Klammer geschrieben.', r: 'Der Faktor steht vor der Klammer: 4a · (2a − 3).' },
-    { k: 'In der Klammer steht etwas Falsches', f: 'In meiner Klammer stand etwas Falsches.', r: 'Ich mache die Probe: Klammer wieder ausrechnen.' },
-    { k: 'Mit einer binomischen Formel verwechselt', f: 'Ich habe Ausklammern mit einer binomischen Formel verwechselt.', r: 'Ausklammern: Was in beiden Teilen steckt, kommt vor die Klammer.' }, FL, LEER],
-  '2': [{ k: 'Nicht alle vier Produkte gebildet', f: 'Ich habe nicht alle vier Produkte gebildet.', r: 'Jeder Teil der ersten Klammer wird mit jedem Teil der zweiten multipliziert – vier Produkte.' },
-    { k: 'Vorzeichen bei einem Produkt falsch', f: 'Ich habe bei einem Produkt das Vorzeichen falsch.', r: 'Das Vorzeichen gehört zur Zahl dahinter: (−3) · 5 = −15.' },
-    { k: 'Falsch zusammengefasst (z. B. a² und a addiert)', f: 'Ich habe Glieder zusammengefasst, die nicht gleichartig sind.', r: 'Nur gleichartige Glieder werden zusammengefasst: 10a − 3a = 7a, aber a² bleibt allein.' },
-    { k: 'Mal statt plus zwischen die Produkte geschrieben', f: 'Ich habe die Produkte mit „mal“ verbunden.', r: 'Zwischen den vier Produkten steht plus oder minus.' }, FL, LEER],
-  '3a': [{ k: 'Die Quadrate nicht erkannt', f: 'Ich habe die Quadrate nicht erkannt.', r: 'Ich suche die zwei Quadrate und lese ihre Seiten ab: 16 = 4 · 4.' },
-    { k: 'Das ² an der Klammer vergessen', f: 'Ich habe das ² an der Klammer vergessen.', r: 'x² + 8x + 16 = (x + 4)² – mit Hochzahl.' }, FL, LEER],
-  '3b': [{ k: 'Falsche Formel: (… − …)² statt (… + …) · (… − …)', f: 'Ich habe die falsche binomische Formel genommen.', r: 'Minus zwischen zwei Quadraten, kein Mittelstück: a² − b² = (a + b) · (a − b).' },
-    { k: 'Die Seiten falsch abgelesen (z. B. 9x statt 3x)', f: 'Ich habe die Seiten der Quadrate falsch abgelesen.', r: '9x² = (3x)², also ist die Seite 3x – nicht 9x.' }, FL, LEER],
-  '4a': [...BINOM, FL], '4b': [{ k: 'Ein Mittelstück hingeschrieben, obwohl es keins gibt', f: 'Ich habe ein Mittelstück geschrieben.', r: '(a + b) · (a − b) = a² − b² – die beiden Mittelteile heben sich auf.' }, VZ, FL],
-  '4c': [...BINOM, FL],
-  '4d': [{ k: 'Ungeeignet zerlegt (z. B. 50 − 1 oder 30,5 + 30,5)', f: 'Ich habe die Zahl ungeschickt zerlegt.', r: 'Zerlegen in eine glatte Zehnerzahl plus eine kleine Zahl: 61 = 60 + 1.' },
-    { k: 'Nur das Ergebnis aus dem Taschenrechner', f: 'Ich habe nur das Ergebnis hingeschrieben.', r: 'Gefragt ist der Weg: (60 + 1)² = 3600 + 120 + 1.' },
-    { k: 'Das Mittelstück vergessen', f: 'Ich habe das Mittelstück vergessen.', r: 'Auch bei Zahlen gibt es das Mittelstück 2 · a · b.' },
-    { k: 'Das Ergebnis nicht ausgerechnet', f: 'Ich habe das Ergebnis nicht fertig ausgerechnet.', r: 'Am Ende alles zusammenzählen.' }, LEER],
-  '5': [{ k: 'Das Binom falsch aufgelöst', f: 'Ich habe die binomische Formel falsch angewendet.', r: '(x + 3)² = x² + 6x + 9 – mit Mittelstück.' }, ...GLEICH, FL, LEER],
-  '6': [{ k: 'Nicht alle vier Produkte gebildet', f: 'Ich habe beim Ausmultiplizieren nicht alle vier Produkte gebildet.', r: 'Klammer mal Klammer: vier Produkte.' },
-    { k: 'Vorzeichenfehler beim Ausmultiplizieren', f: 'Ich habe beim Ausmultiplizieren ein Vorzeichen falsch.', r: 'x · (−2) = −2x und 5 · (−2) = −10.' }, ...GLEICH, FL, LEER],
-  '7a': [{ k: '„Ja“, weil es zwei Quadrate gibt – Mittelstück nicht geprüft', f: 'Ich habe nur auf die Quadrate geschaut.', r: 'Ich prüfe immer das Mittelstück: Es muss 2 · Seite · Seite sein.' },
-    { k: 'Begründung fehlt oder passt nicht', f: 'Meine Begründung hat nicht gepasst.', r: 'Die Begründung geht über das Mittelstück: „Es müsste 2 · x · 6 = 12x sein, es steht aber 14x da.“' },
-    { k: 'Das Mittelstück falsch ausgerechnet', f: 'Ich habe das Mittelstück falsch ausgerechnet.', r: 'Mittelstück = 2 · Seite · Seite.' }, LEER],
-  '7b': [{ k: 'Nur das Vorzeichen genannt, das Mittelstück nicht', f: 'Ich habe nur das Vorzeichen genannt.', r: 'Der Hauptfehler ist das fehlende Mittelstück: (x − 3)² = x² − 6x + 9.' },
-    { k: '(x − 3)² mit (x + 3) · (x − 3) verwechselt', f: 'Ich habe die 2. und die 3. binomische Formel verwechselt.', r: '(x − 3)² = (x − 3) · (x − 3), mit Mittelstück.' },
-    { k: 'Erklärung passt nicht zur Aufgabe', f: 'Meine Erklärung hat nicht gepasst.', r: 'Ich rechne es richtig aus und vergleiche mit der falschen Rechnung.' }, LEER],
-  '8a': [...BRUCH, FL, LEER], '8b': [...BRUCH, FL, LEER], '11': [...BRUCH, FL, LEER],
-  '9': [{ k: 'Das Minus vor der Klammer nicht auf alle Glieder angewendet', f: 'Ich habe das Minus vor der Klammer nicht auf alle Glieder angewendet.', r: 'Das Minus vor der Klammer dreht jedes Vorzeichen in der Klammer um.' },
-    { k: 'Das Binom nicht in Klammern geschrieben', f: 'Ich habe das Binom ohne Klammer geschrieben.', r: 'Erst das Binom ausrechnen und das Ergebnis in Klammern schreiben, dann das Minus anwenden.' },
-    { k: 'Das Binom selbst falsch (Vorzeichen in (x − 4)²)', f: 'Ich habe das Binom falsch ausgerechnet.', r: '(x − 4)² = x² − 8x + 16 – die Zahl am Ende ist plus.' },
-    { k: 'Aufgabe falsch abgeschrieben (z. B. + statt −)', f: 'Ich habe die Aufgabe falsch abgeschrieben.', r: 'Ich vergleiche meine erste Zeile mit der Aufgabe.' }, FL, LEER],
-  '10a': [{ k: 'Den 1. Term falsch (Seite des Quadrats)', f: 'Ich habe den ersten Term falsch.', r: 'Der 1. Term ist die Seite des ersten Quadrats: 4x² = (2x)².' },
-    { k: 'Den 2. Term falsch (Mittelstück rückwärts)', f: 'Ich habe den zweiten Term falsch.', r: '2. Term = Mittelstück : (2 · 1. Term).' },
-    { k: 'Die Zahl falsch (nicht das Quadrat des 2. Terms)', f: 'Ich habe die Zahl falsch.', r: 'Die fehlende Zahl ist das Quadrat des 2. Terms.' },
-    { k: 'Das ² an der Klammer vergessen', f: 'Ich habe das ² an der Klammer vergessen.', r: 'Die Klammer bekommt ein ².' }, FL, LEER],
-  '10b': [{ k: 'Nicht als binomische Formel erkannt', f: 'Ich habe die binomische Formel nicht erkannt.', r: 'Zwei Quadrate und ein passendes Mittelstück → 1. oder 2. Formel.' },
-    { k: 'Die Seiten falsch abgelesen (z. B. 9x statt 3x)', f: 'Ich habe die Seiten der Quadrate falsch abgelesen.', r: '9x² = (3x)² und 25y² = (5y)².' },
-    { k: 'Vorzeichen oder Formel falsch', f: 'Ich habe die falsche Formel genommen.', r: 'Minus in der Mitte → (… − …)².' },
-    { k: 'Ausgeklammert statt faktorisiert', f: 'Ich habe ausgeklammert statt die binomische Formel zu nehmen.', r: 'Ohne gemeinsamen Faktor hilft nur die binomische Formel.' }, FL, LEER]
+  '1a': [
+    { k: 'Minus mal Minus habe ich als Minus gerechnet', x: { A: '−3 · (−5) = −15', B: '−4 · (−2) = −8' }, f: 'Ich habe Minus mal Minus falsch gerechnet.', r: 'Minus mal Minus gibt Plus.', y: { A: '−3 · (−5) = +15', B: '−4 · (−2) = +8' } },
+    { k: 'Ich habe nur mit der ersten Zahl in der Klammer malgenommen', x: { A: '−3 · (2a − 5) = −6a − 5', B: '−4 · (3a − 2) = −12a − 2' }, f: 'Ich habe nicht alles in der Klammer malgenommen.', r: 'Die Zahl vor der Klammer wird mit allem in der Klammer malgenommen.', y: { A: ['−3 · 2a = −6a', '−3 · (−5) = +15'], B: ['−4 · 3a = −12a', '−4 · (−2) = +8'] } },
+    { k: 'Ich habe das Minus vor der Zahl vergessen', x: { A: '3 · 2a = 6a', B: '4 · 3a = 12a' }, f: 'Ich habe das Minus vor der Zahl vergessen.', r: 'Das Minus gehört zur Zahl und wird mitgerechnet.', y: { A: '−3 · 2a = −6a', B: '−4 · 3a = −12a' } },
+    FL, LEER],
+  '1b': [
+    { k: 'Ich habe zu wenig vor die Klammer geschrieben', x: { A: '4 · (2a² − 3a)  oder  2a · (4a − 6)', B: '3 · (3a² − 5a)' }, f: 'Ich habe nicht alles vor die Klammer geschrieben, was in beiden Teilen steckt.', r: 'Vor die Klammer kommt die größte Zahl UND das a.', y: { A: '4a · (2a − 3)', B: '3a · (3a − 5)' } },
+    { k: 'Ich habe geteilt, aber nichts vor die Klammer geschrieben', x: { A: '(2a² − 3a)', B: '(3a² − 5a)' }, f: 'Ich habe vergessen, was vor die Klammer gehört.', r: 'Was ich herausziehe, schreibe ich vor die Klammer.', y: { A: '4a · (2a − 3)', B: '3a · (3a − 5)' } },
+    { k: 'In meiner Klammer stimmt etwas nicht', x: { A: '4a · (2a − 12)', B: '3a · (3a − 15)' }, f: 'In meiner Klammer stand etwas Falsches.', r: 'Probe: Ich rechne die Klammer wieder aus. Dann muss die Aufgabe herauskommen.', y: { A: ['4a · 2a = 8a²', '4a · (−3) = −12a'], B: ['3a · 3a = 9a²', '3a · (−5) = −15a'] } },
+    { k: 'Ich habe eine binomische Formel benutzt', x: { A: '(8a − 12)²', B: '(3a − 5)²' }, f: 'Ich habe eine binomische Formel benutzt, obwohl man nur herausziehen muss.', r: 'Hier ziehe ich heraus, was in beiden Teilen steckt.', y: { A: '4a · (2a − 3)', B: '3a · (3a − 5)' } },
+    FL, LEER],
+  '2': [
+    { k: 'Ich habe nicht jeden Teil mit jedem malgenommen', x: { A: '(2a − 3) · (a + 5) = 2a² − 15', B: '(3a − 2) · (a + 4) = 3a² − 8' }, f: 'Ich habe nicht alle vier Malaufgaben gerechnet.', r: 'Jeder Teil der ersten Klammer wird mit jedem Teil der zweiten Klammer malgenommen – vier Bögen.', y: { A: ['2a · a = 2a²', '2a · 5 = 10a', '−3 · a = −3a', '−3 · 5 = −15'], B: ['3a · a = 3a²', '3a · 4 = 12a', '−2 · a = −2a', '−2 · 4 = −8'] } },
+    { k: 'Bei einer Malaufgabe ist Plus oder Minus falsch', x: { A: '2a² − 10a + 3a + 15', B: '3a² + 12a + 2a − 8' }, f: 'Bei einer Malaufgabe habe ich Plus und Minus vertauscht.', r: 'Das Minus gehört zur Zahl dahinter.', y: { A: '−3 · 5 = −15', B: '−2 · a = −2a' } },
+    { k: 'Ich habe a² und a zusammengezählt', x: { A: '2a² + 7a = 9a²', B: '3a² + 10a = 13a²' }, f: 'Ich habe a² und a zusammengezählt.', r: 'Zusammenzählen darf man nur gleiche Sorten: a mit a. a² bleibt allein.', y: { A: ['10a − 3a = 7a', '2a² + 7a − 15'], B: ['12a − 2a = 10a', '3a² + 10a − 8'] } },
+    { k: 'Ich habe „mal“ zwischen die vier Ergebnisse geschrieben', x: { A: '2a² · 10a · 3a · 15', B: '3a² · 12a · 2a · 8' }, f: 'Ich habe die vier Ergebnisse mit „mal“ verbunden.', r: 'Zwischen die vier Ergebnisse kommt plus oder minus.', y: { A: '2a² + 10a − 3a − 15', B: '3a² + 12a − 2a − 8' } },
+    FL, LEER],
+  '3a': [
+    { k: 'Ich habe die falsche Zahl in die Klammer geschrieben', x: { A: 'x² + 8x + 16 = (x + 8)²', B: 'x² + 10x + 25 = (x + 10)²' }, f: 'Ich habe die falsche Zahl in die Klammer geschrieben.', r: 'In die Klammer kommt die Zahl, die mal sich selbst die letzte Zahl ergibt.', y: { A: ['4 · 4 = 16', '(x + 4)²'], B: ['5 · 5 = 25', '(x + 5)²'] } },
+    { k: 'Ich habe das ² an der Klammer vergessen', x: { A: '(x + 4)', B: '(x + 5)' }, f: 'Ich habe das ² an der Klammer vergessen.', r: 'Die Klammer bekommt ein ².', y: { A: '(x + 4)²', B: '(x + 5)²' } },
+    { k: 'Ich habe die Aufgabe falsch abgeschrieben', x: { A: 'x² + 8 + 16  (das x fehlt)', B: 'x² + 10 + 25  (das x fehlt)' }, f: 'Ich habe die Aufgabe falsch abgeschrieben.', r: 'Ich vergleiche meine erste Zeile genau mit der Aufgabe.' },
+    LEER],
+  '3b': [
+    { k: 'Ich habe (… − …)² geschrieben', x: { A: '(2x − 9)²', B: '(3x − 5)²' }, f: 'Ich habe die falsche binomische Formel genommen.', r: 'Steht ein Minus zwischen zwei Quadratzahlen, schreibt man: Plus-Klammer mal Minus-Klammer.', y: { A: '(2x + 9) · (2x − 9)', B: '(3x + 5) · (3x − 5)' } },
+    { k: 'Ich habe die Zahlen aus der Aufgabe einfach übernommen', x: { A: '(4x + 81) · (4x − 81)', B: '(9x − 25) · (9x + 25)' }, f: 'Ich habe die Zahlen einfach übernommen.', r: 'Ich suche, was mal sich selbst die Zahl ergibt.', y: { A: ['2x · 2x = 4x²', '9 · 9 = 81'], B: ['3x · 3x = 9x²', '5 · 5 = 25'] } },
+    FL, LEER],
+  '4a': [
+    { k: 'Ich habe das Mittelstück vergessen', x: { A: '(x + 5)² = x² + 25', B: '(x + 7)² = x² + 49' }, f: 'Ich habe den mittleren Teil vergessen.', r: 'Bei (x + 5)² kommen immer drei Teile heraus. Der mittlere ist 2 · x · 5.', y: { A: '(x + 5)² = x² + 10x + 25', B: '(x + 7)² = x² + 14x + 49' } },
+    { k: 'In der Mitte fehlt das „2 ·“', x: { A: 'x² + 5x + 25', B: 'x² + 7x + 49' }, f: 'In der Mitte habe ich nicht verdoppelt.', r: 'Der mittlere Teil ist 2 · x · Zahl.', y: { A: '2 · x · 5 = 10x', B: '2 · x · 7 = 14x' } },
+    { k: 'Die letzte Zahl ist falsch', x: { A: 'x² + 10x + 10', B: 'x² + 14x + 14' }, f: 'Ich habe die letzte Zahl mal 2 statt mal sich selbst genommen.', r: 'Die letzte Zahl ist die Zahl mal sich selbst.', y: { A: '5 · 5 = 25', B: '7 · 7 = 49' } },
+    { k: 'Ich habe nicht fertig zusammengezählt', x: { A: 'x² + 5x + 5x + 25', B: 'x² + 7x + 7x + 49' }, f: 'Ich habe am Ende nicht zusammengezählt.', r: 'Gleiche Sorten zusammenzählen.', y: { A: '5x + 5x = 10x', B: '7x + 7x = 14x' } },
+    FL, LEER],
+  '4b': [
+    { k: 'Ich habe ein Mittelstück hingeschrieben, das es nicht gibt', x: { A: 'a² + 12a − 36', B: 'a² + 18a − 81' }, f: 'Ich habe einen mittleren Teil geschrieben.', r: 'Die beiden mittleren Teile heben sich weg. Es bleiben nur zwei Teile.', y: { A: ['+6a − 6a = 0', 'a² − 36'], B: ['+9a − 9a = 0', 'a² − 81'] } },
+    { k: 'Am Ende steht Plus statt Minus', x: { A: 'a² + 36', B: 'a² + 81' }, f: 'Ich habe am Ende Plus geschrieben.', r: 'Plus mal Minus gibt Minus.', y: { A: '6 · (−6) = −36', B: '9 · (−9) = −81' } },
+    FL, LEER],
+  '4c': [
+    { k: 'Die Zahl vor dem x habe ich nicht mit hoch 2 genommen', x: { A: '(3x)² = 3x²', B: '(2x)² = 2x²  oder  4x' }, f: 'Ich habe die Zahl vor dem x nicht mit sich selbst malgenommen.', r: 'Auch die Zahl vor dem x wird mit sich selbst malgenommen.', y: { A: ['(3x)² = 3x · 3x', '= 9x²'], B: ['(2x)² = 2x · 2x', '= 4x²'] } },
+    { k: 'Ich habe das Mittelstück vergessen', x: { A: '(3x − 2)² = 9x² + 4', B: '(2x − 5)² = 4x² + 25' }, f: 'Ich habe den mittleren Teil vergessen.', r: 'Der mittlere Teil ist 2 · erster Teil · zweiter Teil, hier mit Minus.', y: { A: '2 · 3x · 2 = 12x', B: '2 · 2x · 5 = 20x' } },
+    { k: 'Ich habe einmal Plus und einmal Minus in die Klammern geschrieben', x: { A: '(3x − 2) · (3x + 2) = 9x² − 4', B: '(2x − 5) · (2x + 5) = 4x² − 25' }, f: 'Ich habe eine Plus-Klammer statt der zweiten Minus-Klammer genommen.', r: 'Das ² heißt: die gleiche Klammer noch einmal.', y: { A: '(3x − 2) · (3x − 2)', B: '(2x − 5) · (2x − 5)' } },
+    { k: 'Am Ende steht Minus statt Plus', x: { A: '9x² − 12x − 4', B: '4x² − 20x − 25' }, f: 'Ich habe am Ende Minus geschrieben.', r: 'Minus mal Minus gibt Plus.', y: { A: '(−2) · (−2) = +4', B: '(−5) · (−5) = +25' } },
+    FL, LEER],
+  '4d': [
+    { k: 'Ich habe die Zahl ungeschickt zerlegt', x: { A: '51² = (50 − 1)²  oder  (25,5 + 25,5)²', B: '61² = (6 + 1)²  oder  (30,5 + 30,5)²' }, f: 'Ich habe die Zahl ungeschickt zerlegt.', r: 'Ich zerlege in eine Zehnerzahl plus eine kleine Zahl.', y: { A: '51² = (50 + 1)²', B: '61² = (60 + 1)²' } },
+    { k: 'Ich habe nur das Ergebnis vom Taschenrechner hingeschrieben', x: { A: '51² = 2601  (ohne Weg)', B: '61² = 3721  (ohne Weg)' }, f: 'Ich habe nur das Ergebnis hingeschrieben.', r: 'Gefragt ist der Weg mit der Formel.', y: { A: ['(50 + 1)²', '= 2500 + 100 + 1', '= 2601'], B: ['(60 + 1)²', '= 3600 + 120 + 1', '= 3721'] } },
+    { k: 'Ich habe das Mittelstück vergessen', x: { A: '(50 + 1)² = 2500 + 1', B: '(60 + 1)² = 3600 + 1' }, f: 'Ich habe den mittleren Teil vergessen.', r: 'Auch bei Zahlen gibt es den mittleren Teil.', y: { A: '2 · 50 · 1 = 100', B: '2 · 60 · 1 = 120' } },
+    { k: 'Ich habe nicht fertig gerechnet', x: { A: '2500 + 100 + 1  (Ergebnis fehlt)', B: '3600 + 120 + 1  (Ergebnis fehlt)' }, f: 'Ich habe das Ergebnis nicht ausgerechnet.', r: 'Am Ende alles zusammenzählen.', y: { A: '= 2601', B: '= 3721' } },
+    LEER],
+  '5': [
+    { k: 'Die Klammer mit ² habe ich falsch ausgerechnet', x: { A: '(x + 3)² = x² + 9', B: '(x + 2)² = x² + 4' }, f: 'Ich habe die Klammer mit ² falsch ausgerechnet.', r: 'Das Mittelstück nicht vergessen.', y: { A: '(x + 3)² = x² + 6x + 9', B: '(x + 2)² = x² + 4x + 4' } },
+    RECHTS('x² + 6x + 9   (ohne „= x² + 33“)', 'x² + 4x + 4   (ohne „= x² + 28“)'),
+    UMKEHR('6x + 9 = 33   | + 9', '4x + 4 = 28   | + 4', ['6x + 9 = 33   | − 9', '6x = 24'], ['4x + 4 = 28   | − 4', '4x = 24']),
+    { k: 'Beim Teilen habe ich falsch gerechnet', x: { A: '6x = 24, dann x = 18', B: '4x = 24, dann x = 20' }, f: 'Ich habe minus statt geteilt gerechnet.', r: 'Steht eine Zahl vor dem x, teile ich durch diese Zahl.', y: { A: ['6x = 24   | : 6', 'x = 4'], B: ['4x = 24   | : 4', 'x = 6'] } },
+    ZUENDE('6x = 24   (x fehlt)', '4x = 24   (x fehlt)'), FL, LEER],
+  '6': [
+    { k: 'Ich habe nicht jeden Teil mit jedem malgenommen', x: { A: 'x² − 10 = x² + 11', B: 'x² − 12 = x² + 8' }, f: 'Ich habe nicht alle vier Malaufgaben gerechnet.', r: 'Klammer mal Klammer: vier Malaufgaben.', y: { A: ['x · x = x²', 'x · (−2) = −2x', '5 · x = 5x', '5 · (−2) = −10'], B: ['x · x = x²', 'x · (−2) = −2x', '6 · x = 6x', '6 · (−2) = −12'] } },
+    { k: 'Bei einer Malaufgabe ist Plus oder Minus falsch', x: { A: 'x² + 2x − 5x + 10', B: 'x² + 2x − 6x + 12' }, f: 'Bei einer Malaufgabe habe ich Plus und Minus vertauscht.', r: 'Das Minus gehört zur Zahl dahinter.', y: { A: ['x · (−2) = −2x', '5 · (−2) = −10'], B: ['x · (−2) = −2x', '6 · (−2) = −12'] } },
+    RECHTS('x² + 3x − 10   (ohne „= x² + 11“)', 'x² + 4x − 12   (ohne „= x² + 8“)'),
+    UMKEHR('3x − 10 = 11   | − 10', '4x − 12 = 8   | − 12', ['3x − 10 = 11   | + 10', '3x = 21'], ['4x − 12 = 8   | + 12', '4x = 20']),
+    ZUENDE('3x = 21   (x fehlt)', '4x = 20   (x fehlt)'), FL, LEER],
+  '7a': [
+    { k: 'Ich habe „Ja“ gesagt, weil vorne und hinten Quadratzahlen stehen', x: { A: '„Ja, x² und 36 sind Quadratzahlen.“', B: '„Ja, x² und 25 sind Quadratzahlen.“' }, f: 'Ich habe nur auf die Zahlen vorne und hinten geschaut.', r: 'Ich muss auch das Mittelstück prüfen.', y: { A: ['Das Mittelstück müsste 2 · x · 6 = 12x sein.', 'Es steht aber 14x da.', 'Also: Nein.'], B: ['Das Mittelstück müsste 2 · x · 5 = 10x sein.', 'Es steht aber 12x da.', 'Also: Nein.'] } },
+    { k: 'Meine Begründung passt nicht', x: { A: '„Nein, weil 14 keine Quadratzahl ist.“', B: '„Nein, weil 12 keine Quadratzahl ist.“' }, f: 'Meine Begründung hat nicht gepasst.', r: 'Die Begründung geht über das Mittelstück.', y: { A: ['Das Mittelstück müsste 2 · x · 6 = 12x sein.', 'Es steht aber 14x da.'], B: ['Das Mittelstück müsste 2 · x · 5 = 10x sein.', 'Es steht aber 12x da.'] } },
+    { k: 'Beim Mittelstück habe ich das „2 ·“ vergessen', x: { A: 'x · 6 = 6x', B: 'x · 5 = 5x' }, f: 'Ich habe das Mittelstück falsch ausgerechnet.', r: 'Das Mittelstück ist 2 · x · Zahl.', y: { A: '2 · x · 6 = 12x', B: '2 · x · 5 = 10x' } },
+    LEER],
+  '7b': [
+    { k: 'Ich habe nur gesagt, dass am Ende Plus stehen muss', x: { A: '„Es muss + 9 heißen.“', B: '„Es muss + 36 heißen.“' }, f: 'Ich habe nur das Plus am Ende gefunden.', r: 'Der wichtigste Fehler ist das fehlende Mittelstück.', y: { A: '(x − 3)² = x² − 6x + 9', B: '(x − 6)² = x² − 12x + 36' } },
+    { k: 'Ich habe auch mit einer Plus-Klammer gerechnet', x: { A: '„Das stimmt, (x − 3) · (x + 3) = x² − 9.“', B: '„Das stimmt, (x − 6) · (x + 6) = x² − 36.“' }, f: 'Ich habe die gleiche Verwechslung gemacht.', r: 'Das ² heißt: die gleiche Klammer noch einmal.', y: { A: '(x − 3) · (x − 3)', B: '(x − 6) · (x − 6)' } },
+    { k: 'Meine Erklärung war zu ungenau', x: '„Er hat falsch gerechnet.“', f: 'Meine Erklärung war zu ungenau.', r: 'Ich rechne es richtig aus und sage genau, was fehlt.', y: { A: 'Tom hat das Mittelstück −6x vergessen.', B: 'Lena hat das Mittelstück −12x vergessen.' } },
+    LEER],
+  '8a': BRUCH({ dx: { A: 'D = ℚ \\ {4}  (das ist die Lösung)', B: 'D = ℚ \\ {6}  (das ist die Lösung)' },
+    hx: 'mal 2  oder  gar nicht malgenommen', hy: 'Der Nenner ist x. Also mal x.',
+    ax: { A: '12 + 1 = 4x', B: '18 + 2 = 5x' }, ay: { A: '12 + x = 4x', B: '18 + 2x = 5x' },
+    kx: { A: `${F(12, 'x')} · x = 12x`, B: `${F(18, 'x')} · x = 18x` }, ky: { A: `${F(12, 'x')} · x = 12`, B: `${F(18, 'x')} · x = 18` },
+    lx: { A: `${F(12, 'x')} wie 12 · x gerechnet`, B: `${F(18, 'x')} wie x : 18 gerechnet` }, ly: { A: `${F(12, 'x')} heißt 12 : x`, B: `${F(18, 'x')} heißt 18 : x` },
+    ux: { A: '12 = 3x, dann x = 12 · 3', B: '18 = 3x, dann x = 18 · 3' }, uy: { A: ['12 = 3x   | : 3', 'x = 4'], B: ['18 = 3x   | : 3', 'x = 6'] } }),
+  '8b': BRUCH({ dx: { A: 'D = ℚ \\ {8}', B: 'D = ℚ \\ {6}' },
+    hx: { A: 'mal 3x  oder  nur mal x', B: 'mal 3x  oder  nur mal x' }, hy: { A: ['Nenner: x, 2x und 8', 'Malnehmen mit 8x'], B: ['Nenner: x, 2x und 6', 'Malnehmen mit 6x'] },
+    ax: { A: '24 + 4 = 7  (rechte Seite nicht malgenommen)', B: '30 + 3 = 11  (rechte Seite nicht malgenommen)' }, ay: { A: '24 + 4 = 7x', B: '30 + 3 = 11x' },
+    kx: { A: `${F(1, '2x')} · 8x = 16`, B: `${F(1, '2x')} · 6x = 12` }, ky: { A: `${F(1, '2x')} · 8x = 4`, B: `${F(1, '2x')} · 6x = 3` },
+    lx: { A: `${F(1, '2x')} wie 2x gerechnet`, B: `${F(1, '2x')} wie 2x gerechnet` }, ly: `${F(1, '2x')} heißt 1 : 2x`,
+    ux: { A: '28 = 7x, dann x = 28 · 7', B: '33 = 11x, dann x = 33 − 11' }, uy: { A: ['28 = 7x   | : 7', 'x = 4'], B: ['33 = 11x   | : 11', 'x = 3'] } }),
+  '11': BRUCH({ dx: { A: 'D = ℚ \\ {6}  oder  leer', B: 'D = ℚ \\ {5}  oder  leer' },
+    hx: 'nur mal x', hy: ['Nenner: x und 2x', 'Malnehmen mit 2x'],
+    ax: { A: '8 + 3 = 5  (die 3 nicht malgenommen)', B: '10 + 3 = 1  (die 3 nicht malgenommen)' }, ay: { A: '8 + 6x = 5', B: '10 + 6x = 1' },
+    kx: { A: `${F(4, 'x')} · 2x = 4`, B: `${F(5, 'x')} · 2x = 5x` }, ky: { A: `${F(4, 'x')} · 2x = 8`, B: `${F(5, 'x')} · 2x = 10` },
+    lx: { A: `${F(5, '2x')} wie 5 · 2x gerechnet`, B: `${F(1, '2x')} wie 2x gerechnet` }, ly: { A: `${F(5, '2x')} heißt 5 : 2x`, B: `${F(1, '2x')} heißt 1 : 2x` },
+    ux: { A: '6x = −3, dann x = 6 : (−3)', B: '6x = −9, dann x = 6 : (−9)' }, uy: { A: ['6x = −3   | : 6', 'x = −0,5'], B: ['6x = −9   | : 6', 'x = −1,5'] } }),
+  '9': [
+    { k: 'Das Minus vor der Klammer habe ich nicht bei allen Teilen beachtet', x: { A: 'x² − x² − 8x + 16', B: 'x² − x² − 10x + 25' }, f: 'Ich habe das Minus vor der Klammer nicht bei allen Teilen beachtet.', r: 'Das Minus vor der Klammer dreht jedes Plus und Minus in der Klammer um.', y: { A: ['x² − (x² − 8x + 16)', '= x² − x² + 8x − 16'], B: ['x² − (x² − 10x + 25)', '= x² − x² + 10x − 25'] } },
+    { k: 'Die Klammer mit ² habe ich falsch ausgerechnet', x: { A: '(x − 4)² = x² − 16  oder  x² − 8x − 16', B: '(x − 5)² = x² − 25  oder  x² − 10x − 25' }, f: 'Ich habe die Klammer mit ² falsch ausgerechnet.', r: 'Mittelstück nicht vergessen, am Ende steht Plus.', y: { A: '(x − 4)² = x² − 8x + 16', B: '(x − 5)² = x² − 10x + 25' } },
+    { k: 'Ich habe nach dem Ausrechnen keine Klammer gesetzt', x: { A: 'x² − x² − 8x + 16', B: 'x² − x² − 10x + 25' }, f: 'Ich habe die Klammer weggelassen.', r: 'Erst die Klammer mit ² ausrechnen und das Ergebnis in eine Klammer schreiben. Dann das Minus beachten.', y: { A: 'x² − (x² − 8x + 16)', B: 'x² − (x² − 10x + 25)' } },
+    { k: 'Ich habe nach x aufgelöst', x: { A: '8x − 16 = 0, dann x = 2', B: '10x − 25 = 0, dann x = 2,5' }, f: 'Ich habe nach x aufgelöst, obwohl es keine Gleichung ist.', r: 'Hier gibt es kein „=“. Ich vereinfache nur.', y: { A: '= 8x − 16', B: '= 10x − 25' } },
+    { k: 'Ich habe die Aufgabe falsch abgeschrieben', x: { A: 'x² − (x + 4)²', B: 'x² − (x + 5)²' }, f: 'Ich habe die Aufgabe falsch abgeschrieben.', r: 'Ich vergleiche meine erste Zeile genau mit der Aufgabe.' },
+    FL, LEER],
+  '10a': [
+    { k: 'Das erste Kästchen in der Klammer ist falsch', x: { A: '(4x + …)²', B: '(9x − …)²' }, f: 'Ich habe ins erste Kästchen die falsche Zahl geschrieben.', r: 'Ins erste Kästchen kommt, was mal sich selbst den ersten Teil ergibt.', y: { A: '2x · 2x = 4x²', B: '3x · 3x = 9x²' } },
+    { k: 'Das zweite Kästchen in der Klammer ist falsch', x: { A: '(2x + 14)²', B: '(3x − 8)²' }, f: 'Ich habe ins zweite Kästchen die falsche Zahl geschrieben.', r: 'Das Mittelstück ist 2 · erstes Kästchen · zweites Kästchen. Rückwärts heißt das: teilen.', y: { A: '28x : (2 · 2x) = 7', B: '24x : (2 · 3x) = 4' } },
+    { k: 'Die Zahl vorne ist falsch', x: { A: '4x² + 28x + 14', B: '9x² − 24x + 8' }, f: 'Ich habe vorne die falsche Zahl eingetragen.', r: 'Die Zahl ist das zweite Kästchen mal sich selbst.', y: { A: '7 · 7 = 49', B: '4 · 4 = 16' } },
+    { k: 'Ich habe das ² an der Klammer vergessen', x: { A: '(2x + 7)', B: '(3x − 4)' }, f: 'Ich habe das ² an der Klammer vergessen.', r: 'Die Klammer bekommt ein ².', y: { A: '(2x + 7)²', B: '(3x − 4)²' } },
+    FL, LEER],
+  '10b': [
+    { k: 'Ich dachte, das geht nicht', x: '„Das kann man nicht faktorisieren.“', f: 'Ich habe die binomische Formel nicht erkannt.', r: 'Vorne und hinten stehen Quadrate, und das Mittelstück passt. Dann geht eine binomische Formel.', y: { A: ['9x² = 3x · 3x', '25y² = 5y · 5y', '2 · 3x · 5y = 30xy'], B: ['9x² = 3x · 3x', '4y² = 2y · 2y', '2 · 3x · 2y = 12xy'] } },
+    { k: 'Ich habe die Zahlen aus der Aufgabe einfach übernommen', x: { A: '(9x − 25y)²', B: '(9x − 4y)²' }, f: 'Ich habe die Zahlen einfach übernommen.', r: 'Ich suche, was mal sich selbst den Teil ergibt.', y: { A: '(3x − 5y)²', B: '(3x − 2y)²' } },
+    { k: 'In der Klammer steht Plus statt Minus', x: { A: '(3x + 5y)²', B: '(3x + 2y)²' }, f: 'Ich habe Plus statt Minus in die Klammer geschrieben.', r: 'Minus in der Mitte heißt Minus in der Klammer.', y: { A: '(3x − 5y)²', B: '(3x − 2y)²' } },
+    { k: 'Ich habe nur etwas herausgezogen', x: { A: '3 · (3x² − 10xy + …)', B: 'x · (9x − 12y …)' }, f: 'Ich habe nur etwas vor die Klammer gezogen.', r: 'Hier passt eine binomische Formel.', y: { A: '(3x − 5y)²', B: '(3x − 2y)²' } },
+    FL, LEER]
 };
 
 /* ===== ③ Ersatzaufgaben: Generatoren aus aufgaben.js + neue für Aufg. 6, 7, 8b, 10, 11 ===== */
@@ -261,7 +323,7 @@ function gl6() {   // (x + a) · (x − b) = x² + c
   const rs = poly([1, X2('x')], [c, '']);
   return { title: 'Gleichung mit zwei Klammern', q: `Löse die Gleichung.${big(`(x + ${a}) · (x ${MI} ${b}) = ${rs}`)}`, type: 'num', ans: x0, pre: 'x =',
     grafik: vierBoegen('x', a, 'x', -b),
-    hint: 'Multipliziere die Klammern aus: vier Produkte. Schreib die rechte Seite in jeder Zeile mit! Dann fällt x² weg, und du formst um, bis x allein steht.',
+    hint: 'Multipliziere die Klammern aus: vier Malaufgaben. Schreib die rechte Seite in jeder Zeile mit! Dann fällt x² weg, und du formst um, bis x allein steht.',
     sol: [`${poly([1, X2('x')], [-b, 'x'], [a, 'x'], [-a * b, ''])} = ${rs}`, `${poly([1, X2('x')], [a - b, 'x'], [-a * b, ''])} = ${rs}   | − x²`,
       `${poly([a - b, 'x'], [-a * b, ''])} = ${fmt(c)}   | + ${a * b}`, `${poly([a - b, 'x'])} = ${fmt(c + a * b)}   | : ${a - b}`, `x = ${x0}`] };
 }
@@ -305,14 +367,14 @@ function erg10a() {
   const ans = `(${kv} ${op} ${a})<sup>2</sup>`;
   return termTask({ title: 'Lücken ergänzen', q: `Ergänze die Lücken.${big(`${k * k}x<sup>2</sup> ${op} ${2 * k * a}x + □ = (□ ${op} □)<sup>2</sup>`)}<p class="muted" style="font-size:1rem">Tippe die fertige Klammer ein, z. B. (2x+7)².</p>`,
     form: 'binom', vars: ['x'], ansHtml: ans,
-    hint: `1. Kästchen: die Seite von ${k * k}x². 2. Kästchen: Mittelstück : (2 · 1. Term). Die Zahl vorne: das Quadrat des 2. Terms.`,
-    sol: [`${k * k}x² = (${kv})²`, `→ 1. Term: ${kv}`, `${2 * k * a}x : (2 · ${kv}) = ${a}`, `→ 2. Term: ${a}`, `${a}² = ${a * a}`, `${k * k}x² ${op} ${2 * k * a}x + ${a * a} = ${ans}`] });
+    hint: `Erstes Kästchen: Was mal sich selbst ergibt ${k * k}x²? Zweites Kästchen: Mittelstück geteilt durch (2 · erstes Kästchen). Die Zahl vorne: zweites Kästchen mal sich selbst.`,
+    sol: [`${k * k}x² = (${kv})²`, `→ erstes Kästchen: ${kv}`, `${2 * k * a}x : (2 · ${kv}) = ${a}`, `→ zweites Kästchen: ${a}`, `${a}² = ${a * a}`, `${k * k}x² ${op} ${2 * k * a}x + ${a * a} = ${ans}`] });
 }
 function fak10b() {
   let k, l; do { k = R(2, 5); l = R(2, 5); } while (ggT(k, l) !== 1);
   const s = sgn(), op = s > 0 ? '+' : MI, ans = `(${k}x ${op} ${l}y)<sup>2</sup>`;
   return termTask({ title: 'Faktorisieren', q: `Faktorisiere mit einer binomischen Formel.${big(`${k * k}x<sup>2</sup> ${op} ${2 * k * l}xy + ${l * l}y<sup>2</sup>`)}`, form: 'binom', vars: ['x', 'y'], ansHtml: ans,
-    hint: 'Lies die Seiten der beiden Quadrate ab (mit Variable!). Prüfe das Mittelstück: 2 · Seite · Seite.',
+    hint: 'Was mal sich selbst ergibt den ersten Teil (mit x)? Was mal sich selbst ergibt den letzten Teil (mit y)? Prüfe dann das Mittelstück: 2 · erstes · zweites.',
     sol: [`${k * k}x² = (${k}x)²`, `${l * l}y² = (${l}y)²`, `Mittelstück: 2 · ${k}x · ${l}y = ${2 * k * l}xy ✓`, `= ${ans}`] });
 }
 function minus9() { let t, n = 0; do { t = G.minusBinom(); } while (/· \(/.test(t.q) && ++n < 30); return t; }
@@ -321,7 +383,9 @@ const ERSATZ = {
   '4a': () => G.binom1(), '4b': () => G.binom3(), '4c': () => G.binom2k(), '4d': () => G.kopf1(), '5': () => G.gleichungBinom(), '6': gl6,
   '7a': m7a, '7b': m7b, '8a': () => G.bruchX(), '8b': br8b, '9': minus9, '10a': erg10a, '10b': fak10b, '11': br11
 };
-function ersatz(key) { const t = ERSATZ[key](); if (!t.grafik && t.nenner) t.grafik = korbGrafik(t.nenner); return t; }
+function ersatz(key) { const t = ERSATZ[key](); if (!t.grafik && t.nenner) t.grafik = korbGrafik(t.nenner);
+  t.hint = t.hint.replace(/gleiche Glieder/g, 'gleiche Sorten').replace(/Glieder/g, 'Teile').replace(/einen möglichst großen Faktor/g, 'so viel wie möglich');   // einfache Sprache (Malte 19.11.)
+  return t; }
 
 /* ===== Oberfläche ===== */
 let S = { g: st.g || null, key: null, step: 0, sel: new Set(), t: null, tries: 0, done: false, a: {} };
@@ -370,7 +434,7 @@ function openTask(key) {
     <div class="btns"><button class="primary" id="nextStep">Nächster Schritt ▸</button><button id="allSteps">Alle Schritte zeigen</button></div>
   </div>
   <div class="card" id="c2"><h2>② Welcher Fehler ist dir passiert?</h2><p class="muted" style="margin:.2rem 0 .5rem">Vergleiche mit deiner Klassenarbeit. Kreuze an, was passt (auch mehreres).</p>
-    <div class="fehler">${FEHLER[key].map((e, i) => `<label class="fopt"><input type="checkbox" data-i="${i}"> ${e.k}</label>`).join('')}</div>
+    <div class="fehler">${FEHLER[key].map((e, i) => { const x = gx(e.x, S.g); return `<label class="fopt"><input type="checkbox" data-i="${i}"><span>${e.k}${x ? `<span class="bsp">So sah es oft aus: ${x} <b class="nein">✗</b></span>` : ''}</span></label>`; }).join('')}</div>
     <div id="heft"></div></div>
   <div class="card hidden" id="c3"></div>`;
   const ol = $('steps');
@@ -388,7 +452,8 @@ function renderHeft() {
   if (!sel.length) { $('heft').innerHTML = ''; $('c3').classList.add('hidden'); return; }
   $('heft').innerHTML = `<div class="heft"><div class="hk">✎ Schreib das in dein Heft:</div>
     <div class="hl"><b>Berichtigung Aufgabe ${S.key}</b></div>
-    ${sel.map(e => `<div class="hl">Mein Fehler: ${e.f}</div><div class="hl">Richtig: ${e.r}</div>`).join('')}
+    ${sel.map(e => { const y = gx(e.y, S.g); const ys = y == null ? [] : Array.isArray(y) ? y : [y];
+      return `<div class="hl">Mein Fehler: ${e.f}</div><div class="hl">Richtig: ${e.r}</div>${ys.length ? `<div class="hl">Beispiel:</div>${ys.map(z => `<div class="hl hy">${z}</div>`).join('')}` : ''}`; }).join('<div class="hsep"></div>')}
     <div class="hl">Ersatzaufgabe:</div></div>
     <div class="btns"><button class="primary" id="toErs">Ich habe es ins Heft geschrieben → Ersatzaufgabe</button></div>`;
   $('toErs').onclick = () => { if (!S.t) newErsatz(); else $('c3').scrollIntoView({ behavior: 'smooth' }); };
